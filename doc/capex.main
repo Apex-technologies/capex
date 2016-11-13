@@ -1,0 +1,113 @@
+﻿/**
+
+    Array documentation {#mainpage}
+	===================
+
+
+    Introduction {#introduction}
+	------------
+
+	Array is a simple C++ library for manipulating vectors.
+    The library is pretty small (only one class) and robust, and
+    does not depend on any other external library to compile. It is written
+    in ANSI C++ and should compile on most platforms without difficulty.
+
+
+    What is an array? {#definition}
+	-----------------
+
+    An array is a tamplate class which inherits from the class vector of
+	the standard library.
+	In the Array class are defined some additional operations and manipulations
+	for the vector class.
+
+    Compiling/installing the library {#compilation}
+	--------------------------------
+
+    Edit the Makefile to indicate the C++ compiler you want to use, the
+    options to provide to compile ANSI C, and possibly the options to pass
+    to the ar program on your machine to build a library (.a) from a set
+    of object (.o) files.
+
+    Defaults are set for the g++ compiler and the standard ar library
+    builder.
+
+    Type 'make', that should do it.
+
+    To use the library in your programs, add the following line on top
+    of your module:
+
+    @code
+    #include "array.h"
+    @endcode
+
+    See the file test/array_test.cpp for an example.
+
+    Using the Array class {#using}
+	---------------------
+    
+    For using the Array class on your program, you have to add the following line 
+	on top of your source file :
+	
+	@code
+    #include "array.h"
+    @endcode
+	
+	For creating an Array class, you call the empty constructor or the constant fill
+	constructor:
+    
+    @code
+    Array<int> *a = new Array<int> (); // Creates a pointer to an empty Array of integers
+    //or
+    Array<double> a= Array<double> (3.14, 12); // Creates an Array of double with 12 values of 3.14
+    @endcode
+	
+	You can access to the size of an array with the "size()" method:
+	
+	@code
+	Array<double> a= Array<double> (3.14, 12);
+	a.size(); // return the value 12
+	@endcode
+	
+	You can also resize an array with the "resize()" method:
+	
+	@code
+	Array<double> a= Array<double> (3.14, 12);
+	a.size(); // return the value 12
+	a.resize(15); // resize the array
+	a.size(); // return the value 15
+	@endcode
+	
+    You can add some values to an array with the "append" methods:
+	
+	@code
+	Array<int> *a = new Array<int> ();
+	Array<int> b = Array<int> (0, 10);
+	a->append(5); // Add a new value (here: 5) at the end of an array
+	a->append(b); // Add the array 'b' at the end of 'a'
+	@endcode
+	
+	You can also erase some values of an existing array with the "erase" and "pop" methods:
+	
+
+
+    A word about the implementation {#implementation}
+	-------------------------------
+
+    The dictionary structure is a pretty simple dictionary
+    implementation which might find some uses in other applications.
+    If you are curious, look into the source.
+
+
+    Known defects {#defects}
+	-------------
+
+    To be completed
+
+    Authors {#authors}
+	-------
+
+    Maxime Fontaine (maxime.fontaine AT apex-t DOT com).
+
+
+*/
