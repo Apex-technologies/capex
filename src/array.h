@@ -249,7 +249,7 @@ namespace capex
 			void CALL clear();
 
 
-	  		// ---------------------------------------------------------------------
+			// ---------------------------------------------------------------------
 			//! \brief Select a specific value in an array
 			//! \param  index  the index of the value to select
 			//! \return the selected value
@@ -284,7 +284,7 @@ namespace capex
 			T& CALL at(unsigned int index);
 
 
-	  		// ---------------------------------------------------------------------
+			// ---------------------------------------------------------------------
 			//! \brief Returns the pointer of the values table
 			//! \return a pointer pointing to the values table
 			//!
@@ -307,7 +307,7 @@ namespace capex
 			T CALL const_at(unsigned int index) const;
 
 
-	  		// ---------------------------------------------------------------------
+			// ---------------------------------------------------------------------
 			//! \brief Get the index of the first value
 			//! \param  value  index of the value to search for
 			//! \return the index of the searched value
@@ -316,10 +316,10 @@ namespace capex
 			//! If no value is find, this method returns -1
 			//!
 			// ---------------------------------------------------------------------
-	  		int CALL index(T value);
+			int CALL index(T value);
 
 
-	  		// ---------------------------------------------------------------------
+			// ---------------------------------------------------------------------
 			//! \brief Get the nearest index of the searched value
 			//! \param  value  index of the value to search for
 			//! \return the index of the nearest value
@@ -327,7 +327,7 @@ namespace capex
 			//! This method returns the nearest index of the searched value.
 			//!
 			// ---------------------------------------------------------------------
-	  		int CALL near(T value);
+			int CALL nearest(T value);
 
 
 			// ---------------------------------------------------------------------

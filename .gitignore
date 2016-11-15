@@ -1,0 +1,5 @@
+!.gitignore
+*~*
+*/*/Win32/*
+./test/simple/bin
+./test/embarcadero/__history/*

@@ -360,9 +360,9 @@ namespace capex
 
 
 	template <typename T>
-	int CALL array<T>::near(T value)
+	int CALL array<T>::nearest(T value)
 	{
-		    array<T> Sub = pow(*this - value, 2.0);
+		array<T> Sub = pow(*this - value, 2.0);
 		return Sub.index(Sub.min());
 	}
 	// -------------------------------------------------------------------
