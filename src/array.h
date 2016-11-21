@@ -17,14 +17,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#if __WIN32__
-	#define CALL __fastcall
-#elif __linux__
-	#define CALL
-#else
-	#define CALL
-#endif
-
 namespace capex
 {
 

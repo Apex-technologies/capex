@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -I/home/maxime/Programmation/Array/src -g -Wall -O
+CFLAGS = -I/usr/include/libusb-1.0 -g -Wall -O
 OPTIONS =
 EXEC = test
 

@@ -1,0 +1,13 @@
+!.gitignore
+*~*
+*/__history
+*/*/__history
+*/*/*/__history
+Release
+Debug
+Win32
+__history
+html
+latex
+test/simple/bin
+test/Qt/build*

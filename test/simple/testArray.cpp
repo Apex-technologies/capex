@@ -58,6 +58,8 @@ int main(void)
 	cout << (*T)[0][100] << endl;
 	delete T;
 
+	apexUSB dev;
+
 	return 0;
 }
 
