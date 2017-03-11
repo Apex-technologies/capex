@@ -17,7 +17,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-namespace capex
+namespace mxm
 {
 
 	// -----------------------------------------------------------------------------
@@ -34,7 +34,7 @@ namespace capex
 			// ---------------------------------------------------------------------
 			//! \brief Creates an empty array of type <T>
 			// ---------------------------------------------------------------------
-			CALL array();
+			MXM_CALL array();
 
 
 			// ---------------------------------------------------------------------
@@ -46,7 +46,7 @@ namespace capex
 			//! the value of 'value'
 			//!
 			// ---------------------------------------------------------------------
-			CALL array(T value, unsigned int number = 1);
+			MXM_CALL array(T value, unsigned int number = 1);
 
 
 			// ---------------------------------------------------------------------
@@ -57,14 +57,14 @@ namespace capex
 			//! in parameter
 			//!
 			// ---------------------------------------------------------------------
-			CALL array(const array<T> &value_array);
+			MXM_CALL array(const array<T> &value_array);
 
 
 			// ---------------------------------------------------------------------
 			//! \brief Destroys an array
 			//!
 			// ---------------------------------------------------------------------
-			CALL ~array();
+			MXM_CALL ~array();
 
 
 			// ---------------------------------------------------------------------
@@ -75,7 +75,7 @@ namespace capex
 			//! automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL zeroes(unsigned int number);
+			void MXM_CALL zeroes(unsigned int number);
 
 
 			// ---------------------------------------------------------------------
@@ -86,7 +86,7 @@ namespace capex
 			//! automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL ones(unsigned int number);
+			void MXM_CALL ones(unsigned int number);
 
 
 			// ---------------------------------------------------------------------
@@ -99,7 +99,7 @@ namespace capex
 			//! from 'start' to 'stop'. The array is automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL linspace(T start, T stop, unsigned int number);
+			void MXM_CALL linspace(T start, T stop, unsigned int number);
 
 
 			// ---------------------------------------------------------------------
@@ -112,7 +112,7 @@ namespace capex
 			//! logarithmic space. The array is automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL logspace(T start, T stop, unsigned int number);
+			void MXM_CALL logspace(T start, T stop, unsigned int number);
 
 
 			// ---------------------------------------------------------------------
@@ -125,7 +125,7 @@ namespace capex
 			//! between 'min' and 'max'. The array is automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL random(T min, T max, unsigned int number);
+			void MXM_CALL random(T min, T max, unsigned int number);
 
 
 			// ---------------------------------------------------------------------
@@ -135,7 +135,7 @@ namespace capex
 			//! This method gets the number of values in an array.
 			//!
 			// ---------------------------------------------------------------------
-			unsigned int CALL size() const;
+			unsigned int MXM_CALL size() const;
 
 
 			// ---------------------------------------------------------------------
@@ -146,7 +146,7 @@ namespace capex
 			//! before, the new values are initialized to their default values.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL resize(unsigned int new_size);
+			void MXM_CALL resize(unsigned int new_size);
 
 
 			// ---------------------------------------------------------------------
@@ -157,7 +157,7 @@ namespace capex
 			//! automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL append(T value);
+			void MXM_CALL append(T value);
 
 
 			// ---------------------------------------------------------------------
@@ -170,7 +170,7 @@ namespace capex
 			//! method generates an error
 			//!
 			// ---------------------------------------------------------------------
-			void CALL append(T values[], unsigned int number);
+			void MXM_CALL append(T values[], unsigned int number);
 
 
 			// ---------------------------------------------------------------------
@@ -181,7 +181,7 @@ namespace capex
 			//! array is automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL append(array<T> value_array);
+			void MXM_CALL append(array<T> value_array);
 
 
 			// ---------------------------------------------------------------------
@@ -192,7 +192,7 @@ namespace capex
 			//! automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL erase(unsigned int index);
+			void MXM_CALL erase(unsigned int index);
 
 
 			// ---------------------------------------------------------------------
@@ -205,7 +205,7 @@ namespace capex
 			//! The array is automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL erase(unsigned int start_index, unsigned int stop_index);
+			void MXM_CALL erase(unsigned int start_index, unsigned int stop_index);
 
 
 			// ---------------------------------------------------------------------
@@ -218,7 +218,7 @@ namespace capex
 			//! The array is automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL erase(array<bool> mask);
+			void MXM_CALL erase(array<bool> mask);
 
 
 			// ---------------------------------------------------------------------
@@ -228,7 +228,7 @@ namespace capex
 			//! automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL pop();
+			void MXM_CALL pop();
 
 
 			// ---------------------------------------------------------------------
@@ -238,10 +238,10 @@ namespace capex
 			//! automatically resized.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL clear();
+			void MXM_CALL clear();
 
 
-	  		// ---------------------------------------------------------------------
+			// ---------------------------------------------------------------------
 			//! \brief Select a specific value in an array
 			//! \param  index  the index of the value to select
 			//! \return the selected value
@@ -249,7 +249,7 @@ namespace capex
 			//! This method select a value in an array.
 			//!
 			// ---------------------------------------------------------------------
-			T& CALL operator[](unsigned int index);
+			T& MXM_CALL operator[](unsigned int index);
 
 
 			// ---------------------------------------------------------------------
@@ -262,7 +262,7 @@ namespace capex
 			//! index = -1, the last value is returned.
 			//!
 			// ---------------------------------------------------------------------
-			T& CALL operator[](int index);
+			T& MXM_CALL operator[](int index);
 
 
 			// ---------------------------------------------------------------------
@@ -273,10 +273,10 @@ namespace capex
 			//! This method select a value in an array.
 			//!
 			// ---------------------------------------------------------------------
-			T& CALL at(unsigned int index);
+			T& MXM_CALL at(unsigned int index);
 
 
-	  		// ---------------------------------------------------------------------
+			// ---------------------------------------------------------------------
 			//! \brief Returns the pointer of the values table
 			//! \return a pointer pointing to the values table
 			//!
@@ -284,7 +284,7 @@ namespace capex
 			//! The pointed value is the first
 			//!
 			// ---------------------------------------------------------------------
-			T* CALL pointer();
+			T* MXM_CALL pointer();
 
 
 			// ---------------------------------------------------------------------
@@ -296,10 +296,10 @@ namespace capex
 			//! a pointer of an array.
 			//!
 			// ---------------------------------------------------------------------
-			T CALL const_at(unsigned int index) const;
+			T MXM_CALL const_at(unsigned int index) const;
 
 
-	  		// ---------------------------------------------------------------------
+			// ---------------------------------------------------------------------
 			//! \brief Get the index of the first value
 			//! \param  value  index of the value to search for
 			//! \return the index of the searched value
@@ -308,10 +308,10 @@ namespace capex
 			//! If no value is find, this method returns -1
 			//!
 			// ---------------------------------------------------------------------
-	  		int CALL index(T value);
+			int MXM_CALL index(T value);
 
 
-	  		// ---------------------------------------------------------------------
+			// ---------------------------------------------------------------------
 			//! \brief Get the nearest index of the searched value
 			//! \param  value  index of the value to search for
 			//! \return the index of the nearest value
@@ -319,7 +319,7 @@ namespace capex
 			//! This method returns the nearest index of the searched value.
 			//!
 			// ---------------------------------------------------------------------
-	  		int CALL near(T value);
+			int MXM_CALL nearest(T value);
 
 
 			// ---------------------------------------------------------------------
@@ -332,7 +332,7 @@ namespace capex
 			//! is delimited by start_index (included) and stop_index (non-included).
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL select(unsigned int start_index, unsigned int stop_index);
+			array<T> MXM_CALL select(unsigned int start_index, unsigned int stop_index);
 
 
 			// ---------------------------------------------------------------------
@@ -345,7 +345,7 @@ namespace capex
 			//! by the threshold() and window() methods.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL select(array<bool> mask);
+			array<T> MXM_CALL select(array<bool> mask);
 
 
 			// ---------------------------------------------------------------------
@@ -358,7 +358,7 @@ namespace capex
 			//! or for doing some operations.
 			//!
 			// ---------------------------------------------------------------------
-			array<bool> CALL mask(T value);
+			array<bool> MXM_CALL mask(T value);
 
 
 			// ---------------------------------------------------------------------
@@ -373,7 +373,7 @@ namespace capex
 			//! or for doing some operations.
 			//!
 			// ---------------------------------------------------------------------
-			array<bool> CALL mask(unsigned int start_index, unsigned int stop_index);
+			array<bool> MXM_CALL mask(unsigned int start_index, unsigned int stop_index);
 
 
 	  		// ---------------------------------------------------------------------
@@ -384,7 +384,7 @@ namespace capex
 			//! The array is forced to the same size of right Array.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL operator=(array<T> right);
+			void MXM_CALL operator=(array<T> right);
 
 
 	  		// ---------------------------------------------------------------------
@@ -398,7 +398,7 @@ namespace capex
 			//! the size of each arrays are equal too.
 			//!
 			// ---------------------------------------------------------------------
-			bool CALL operator==(array<T> right);
+			bool MXM_CALL operator==(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -411,7 +411,7 @@ namespace capex
 			//! Addition is possible only if the two arrays have the same size.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL operator+(array<T> right);
+			array<T> MXM_CALL operator+(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -423,7 +423,7 @@ namespace capex
 			//! are added to the scalar.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL operator+(T right);
+			array<T> MXM_CALL operator+(T right);
 
 
 			// ---------------------------------------------------------------------
@@ -435,7 +435,7 @@ namespace capex
 			//! are added to the scalar.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL operator+=(T right);
+			void MXM_CALL operator+=(T right);
 
 
 			// ---------------------------------------------------------------------
@@ -448,7 +448,7 @@ namespace capex
 			//! Addition is possible only if the two arrays have the same size.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL operator+=(array<T> right);
+			void MXM_CALL operator+=(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -461,7 +461,7 @@ namespace capex
 			//! Product is possible only if the two arrays have the same size.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL operator*(array<T> right);
+			array<T> MXM_CALL operator*(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -473,7 +473,7 @@ namespace capex
 			//! are multiplied to the scalar.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL operator*(T right);
+			array<T> MXM_CALL operator*(T right);
 
 
 			// ---------------------------------------------------------------------
@@ -485,7 +485,7 @@ namespace capex
 			//! are multiplied to the scalar.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL operator*=(T right);
+			void MXM_CALL operator*=(T right);
 
 
 			// ---------------------------------------------------------------------
@@ -498,7 +498,7 @@ namespace capex
 			//! Product is possible only if the two arrays have the same size.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL operator*=(array<T> right);
+			void MXM_CALL operator*=(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -511,7 +511,7 @@ namespace capex
 			//! Difference is possible only if the two arrays have the same size.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL operator-(array<T> right);
+			array<T> MXM_CALL operator-(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -523,7 +523,7 @@ namespace capex
 			//! are subtracted to the scalar.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL operator-(T right);
+			array<T> MXM_CALL operator-(T right);
 
 
 			// ---------------------------------------------------------------------
@@ -535,7 +535,7 @@ namespace capex
 			//! are subtracted to the scalar.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL operator-=(T right);
+			void MXM_CALL operator-=(T right);
 
 
 			// ---------------------------------------------------------------------
@@ -548,7 +548,7 @@ namespace capex
 			//! Difference is possible only if the two arrays have the same size.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL operator-=(array<T> right);
+			void MXM_CALL operator-=(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -561,7 +561,7 @@ namespace capex
 			//! Division is possible only if the two arrays have the same size.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL operator/(array<T> right);
+			array<T> MXM_CALL operator/(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -573,7 +573,7 @@ namespace capex
 			//! are divided to the scalar.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL operator/(T right);
+			array<T> MXM_CALL operator/(T right);
 
 
 			// ---------------------------------------------------------------------
@@ -585,7 +585,7 @@ namespace capex
 			//! are divided to the scalar.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL operator/=(T right);
+			void MXM_CALL operator/=(T right);
 
 
 			// ---------------------------------------------------------------------
@@ -598,7 +598,7 @@ namespace capex
 			//! Division is possible only if the two arrays have the same size.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL operator/=(array<T> right);
+			void MXM_CALL operator/=(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -610,7 +610,7 @@ namespace capex
 			//! Product is possible only if the two arrays have the same size.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL operator^(array<T> right);
+			array<T> MXM_CALL operator^(array<T> right);
 
 
 			// ---------------------------------------------------------------------
@@ -621,7 +621,7 @@ namespace capex
 			//! This method returns the maximum value of the array
 			//!
 			// ---------------------------------------------------------------------
-			T CALL max(unsigned int *max_index = NULL);
+			T MXM_CALL max(unsigned int *max_index = NULL);
 
 
 			// ---------------------------------------------------------------------
@@ -636,7 +636,7 @@ namespace capex
 			//! and stop_index (non-included).
 			//!
 			// ---------------------------------------------------------------------
-			T CALL max(unsigned int start_index, unsigned int stop_index, unsigned int *max_index = NULL);
+			T MXM_CALL max(unsigned int start_index, unsigned int stop_index, unsigned int *max_index = NULL);
 
 
 			// ---------------------------------------------------------------------
@@ -651,7 +651,7 @@ namespace capex
 			//! methods.
 			//!
 			// ---------------------------------------------------------------------
-			T CALL max(array<bool> mask, unsigned int *max_index = NULL);
+			T MXM_CALL max(array<bool> mask, unsigned int *max_index = NULL);
 
 
 			// ---------------------------------------------------------------------
@@ -661,7 +661,7 @@ namespace capex
 			//! This method returns the minimum value of the array
 			//!
 			// ---------------------------------------------------------------------
-			T CALL min();
+			T MXM_CALL min();
 
 
 			// ---------------------------------------------------------------------
@@ -675,7 +675,7 @@ namespace capex
 			//! and stop_index (non-included).
 			//!
 			// ---------------------------------------------------------------------
-			T CALL min(unsigned int start_index, unsigned int stop_index);
+			T MXM_CALL min(unsigned int start_index, unsigned int stop_index);
 
 
 			// ---------------------------------------------------------------------
@@ -689,7 +689,7 @@ namespace capex
 			//! methods.
 			//!
 			// ---------------------------------------------------------------------
-			T CALL min(array<bool> mask);
+			T MXM_CALL min(array<bool> mask);
 
 
 			// ---------------------------------------------------------------------
@@ -699,7 +699,7 @@ namespace capex
 			//! This method returns the sum of all values of the array
 			//!
 			// ---------------------------------------------------------------------
-			T CALL sum();
+			T MXM_CALL sum();
 
 
 			// ---------------------------------------------------------------------
@@ -713,7 +713,7 @@ namespace capex
 			//! and stop_index (non-included).
 			//!
 			// ---------------------------------------------------------------------
-			T CALL sum(unsigned int start_index, unsigned int stop_index);
+			T MXM_CALL sum(unsigned int start_index, unsigned int stop_index);
 
 
 			// ---------------------------------------------------------------------
@@ -727,7 +727,7 @@ namespace capex
 			//! methods.
 			//!
 			// ---------------------------------------------------------------------
-			T CALL sum(array<bool> mask);
+			T MXM_CALL sum(array<bool> mask);
 
 
 			// ---------------------------------------------------------------------
@@ -737,7 +737,7 @@ namespace capex
 			//! This method returns the mean value of all values of the array
 			//!
 			// ---------------------------------------------------------------------
-			T CALL mean();
+			T MXM_CALL mean();
 
 
 			// ---------------------------------------------------------------------
@@ -751,7 +751,7 @@ namespace capex
 			//! and stop_index (non-included).
 			//!
 			// ---------------------------------------------------------------------
-			T CALL mean(unsigned int start_index, unsigned int stop_index);
+			T MXM_CALL mean(unsigned int start_index, unsigned int stop_index);
 
 
 			// ---------------------------------------------------------------------
@@ -765,7 +765,7 @@ namespace capex
 			//! methods.
 			//!
 			// ---------------------------------------------------------------------
-			T CALL mean(array<bool> mask);
+			T MXM_CALL mean(array<bool> mask);
 
 
 	  		// ---------------------------------------------------------------------
@@ -775,7 +775,7 @@ namespace capex
 			//! This method returns an array where all values are swapped
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL swap();
+			array<T> MXM_CALL swap();
 
 
 	  		// ---------------------------------------------------------------------
@@ -789,7 +789,7 @@ namespace capex
 			//! and stop_index (non-included).
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL swap(unsigned int start_index, unsigned int stop_index);
+			array<T> MXM_CALL swap(unsigned int start_index, unsigned int stop_index);
 
 
 	  		// ---------------------------------------------------------------------
@@ -803,7 +803,7 @@ namespace capex
 			//! methods.
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL swap(array<bool> mask);
+			array<T> MXM_CALL swap(array<bool> mask);
 
 
 	  		// ---------------------------------------------------------------------
@@ -819,7 +819,7 @@ namespace capex
 			//! number is given, it is rounded to the next one (2 -> 3, ...)
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CALL smooth(unsigned int area=5);
+			array<T> MXM_CALL smooth(unsigned int area=5);
 
 
 			// ---------------------------------------------------------------------
@@ -834,7 +834,7 @@ namespace capex
 			//! operations.
 			//!
 			// ---------------------------------------------------------------------
-			array<bool> CALL threshold(T level);
+			array<bool> MXM_CALL threshold(T level);
 
 
 			// ---------------------------------------------------------------------
@@ -850,7 +850,7 @@ namespace capex
 			//! could be used for selecting or for doing some operations.
 			//!
 			// ---------------------------------------------------------------------
-			array<bool> CALL window(T inferior, T superior);
+			array<bool> MXM_CALL window(T inferior, T superior);
 
 
 			// ---------------------------------------------------------------------
@@ -862,7 +862,7 @@ namespace capex
 			//! one defined by new_value.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL replace(T previous_value, T new_value);
+			void MXM_CALL replace(T previous_value, T new_value);
 
 
 			// ---------------------------------------------------------------------
@@ -876,7 +876,7 @@ namespace capex
 			//! and stop_index (non-included).
 			//!
 			// ---------------------------------------------------------------------
-			void CALL replace(unsigned int start_index, unsigned int stop_index, T new_value);
+			void MXM_CALL replace(unsigned int start_index, unsigned int stop_index, T new_value);
 
 
 			// ---------------------------------------------------------------------
@@ -890,7 +890,7 @@ namespace capex
 			//! methods.
 			//!
 			// ---------------------------------------------------------------------
-			void CALL replace(array<bool> mask, T new_value);
+			void MXM_CALL replace(array<bool> mask, T new_value);
 
 
 			// ---------------------------------------------------------------------
@@ -902,7 +902,7 @@ namespace capex
 			//! inversely. This method can only be used with a mask.
 			//!
 			// ---------------------------------------------------------------------
-			array<bool> CALL invert();
+			array<bool> MXM_CALL invert();
 
 
 			// ---------------------------------------------------------------------
@@ -913,7 +913,7 @@ namespace capex
 			//! array. This method can only be used with a mask.
 			//!
 			// ---------------------------------------------------------------------
-			unsigned int CALL elements();
+			unsigned int MXM_CALL elements();
 
 
 		protected: // Private Parameters
@@ -990,7 +990,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL sin(const array<T> x);
+	array<T> MXM_CALL sin(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1003,7 +1003,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL cos(const array<T> x);
+	array<T> MXM_CALL cos(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1016,7 +1016,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL tan(const array<T> x);
+	array<T> MXM_CALL tan(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1029,7 +1029,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL asin(const array<T> x);
+	array<T> MXM_CALL asin(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1042,7 +1042,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL acos(const array<T> x);
+	array<T> MXM_CALL acos(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1055,7 +1055,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL atan(const array<T> x);
+	array<T> MXM_CALL atan(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1068,7 +1068,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL exp(const array<T> x);
+	array<T> MXM_CALL exp(const array<T> x);
 
 	// ---------------------------------------------------------------------
 	//! \brief Overloading of the logarithm base 'e' operator
@@ -1080,7 +1080,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL log(const array<T> x);
+	array<T> MXM_CALL log(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1093,7 +1093,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL log10(const array<T> x);
+	array<T> MXM_CALL log10(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1106,7 +1106,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL log2(const array<T> x);
+	array<T> MXM_CALL log2(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1119,7 +1119,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL sqrt(const array<T> x);
+	array<T> MXM_CALL sqrt(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1132,7 +1132,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL pow(const array<T> x, double power);
+	array<T> MXM_CALL pow(const array<T> x, double power);
 
 
 	// ---------------------------------------------------------------------
@@ -1145,7 +1145,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL pow10(const array<T> x);
+	array<T> MXM_CALL pow10(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
@@ -1158,7 +1158,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template<class T>
-	array<T> CALL abs(const array<T> x);
+	array<T> MXM_CALL abs(const array<T> x);
 
 
 	// -----------------------------------------------------------------------------

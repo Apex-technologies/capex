@@ -1,22 +1,18 @@
 // -----------------------------------------------------------------------------
-// MXM LIBRARY
+// USB STATUS FOR USB CLASS
 // -----------------------------------------------------------------------------
 // CONTRIBUTORS : MAXIME FONTAINE
 // VERSION : 1.0
-// DATE : 12/11/2016
+// DATE : 27/01/2017
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-// This file includes all classes, functions, variables and constants
-// of the Apex Technologies Library 'capex'
+#ifndef _MXMUSBSTATUS_H
+#define _MXMUSBSTATUS_H
 
-#if __WIN32__
-	#define MXM_CALL __fastcall
-#elif __linux__
-	#define MXM_CALL
-#else
-	#define MXM_CALL
+	#define MXMUSB_TOO_MUCH_DEVICES		-20
+	
+	#define MXMUSB_EP0_WRITE_ERROR		-51
+	#define MXMUSB_EP0_READ_ERROR		-52
+
 #endif
-
-#include "./array.h"
-#include "./usb.h"
