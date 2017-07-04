@@ -14,6 +14,20 @@ object MainForm: TMainForm
   Position = poScreenCenter
   PixelsPerInch = 96
   TextHeight = 13
+  object FreqLabel: TLabel
+    Left = 10
+    Top = 610
+    Width = 68
+    Height = 13
+    Caption = 'Freqency (Hz)'
+  end
+  object Label1: TLabel
+    Left = 322
+    Top = 610
+    Width = 80
+    Height = 13
+    Caption = 'Threshold (A.U.)'
+  end
   object PageControl1: TPageControl
     Left = 8
     Top = 8
@@ -80,5 +94,31 @@ object MainForm: TMainForm
     Caption = 'Quit'
     TabOrder = 1
     OnClick = Quit_BtClick
+  end
+  object Frequency_Bar: TTrackBar
+    Left = 84
+    Top = 609
+    Width = 225
+    Height = 25
+    LineSize = 10
+    Max = 100
+    Min = 1
+    PageSize = 1
+    Frequency = 10
+    Position = 1
+    PositionToolTip = ptBottom
+    TabOrder = 2
+    ThumbLength = 15
+    OnChange = Frequency_BarChange
+  end
+  object Threshold_Edit: TEdit
+    Left = 418
+    Top = 606
+    Width = 81
+    Height = 21
+    Alignment = taCenter
+    TabOrder = 3
+    Text = '-1.0'
+    OnChange = Threshold_EditChange
   end
 end

@@ -3,10 +3,10 @@
 using std::cout;
 using std::endl;
 
-namespace mxm
+namespace capex
 {
 
-	MXM_CALL usb::usb()
+	CAPEX_CALL usb::usb()
 	{
 		// Initialize a library session
 		this->session = NULL;
@@ -17,7 +17,7 @@ namespace mxm
 	}
 	// -------------------------------------------------------------------
 
-	MXM_CALL usb::usb(int VID, int PID)
+	CAPEX_CALL usb::usb(int VID, int PID)
 	{
 		// Initialize a library session
 		this->session = NULL;
@@ -33,7 +33,7 @@ namespace mxm
 		if(this->devices.size() < 1)
 			this->status = LIBUSB_ERROR_NO_DEVICE;
 		else if(this->devices.size() > 1)
-			this->status = MXMUSB_TOO_MUCH_DEVICES;
+			this->status = CAPEXUSB_TOO_MUCH_DEVICES;
 		else if(this->devices.size() == 1)
 			this->status = this->Open(this->devices[0]);
 
@@ -41,7 +41,7 @@ namespace mxm
 	// -------------------------------------------------------------------
 
 
-	MXM_CALL usb::~usb()
+	CAPEX_CALL usb::~usb()
 	{
 		// Close the session
 		libusb_exit(this->session);
@@ -49,7 +49,7 @@ namespace mxm
 	// -------------------------------------------------------------------
 
 
-	std::vector<DeviceUSB> MXM_CALL usb::FoundDevices(int VID, int PID)
+	std::vector<DeviceUSB> CAPEX_CALL usb::FoundDevices(int VID, int PID)
 	{
 		std::vector<DeviceUSB> list;
 		list.clear();
@@ -98,7 +98,7 @@ namespace mxm
 	// -------------------------------------------------------------------
 
 
-	int MXM_CALL usb::Open(DeviceUSB device, int interface)
+	int CAPEX_CALL usb::Open(DeviceUSB device, int interface)
 	{
 		this->status = libusb_open(device.lib.device, &(device.lib.handle));
 		if(this->status >= 0)
@@ -114,7 +114,7 @@ namespace mxm
 	// -------------------------------------------------------------------
 
 
-	void MXM_CALL usb::Close()
+	void CAPEX_CALL usb::Close()
 	{
 		if(this->connected)
 		{
@@ -125,28 +125,28 @@ namespace mxm
 	// -------------------------------------------------------------------
 
 
-	bool MXM_CALL usb::IsConnected()
+	bool CAPEX_CALL usb::IsConnected()
 	{
 		return this->connected;
 	}
 	// -------------------------------------------------------------------
 
 
-	int MXM_CALL usb::GetVID()
+	int CAPEX_CALL usb::GetVID()
 	{
 		return this->device.VID;
 	}
 	// -------------------------------------------------------------------
 
 
-	int MXM_CALL usb::GetPID()
+	int CAPEX_CALL usb::GetPID()
 	{
 		return this->device.PID;
 	}
 	// -------------------------------------------------------------------
 
 
-	std::string MXM_CALL usb::GetUsbVersion()
+	std::string CAPEX_CALL usb::GetUsbVersion()
 	{
 		unsigned char Major, Minor;
 		Major = this->device.USBVersion >> 8;
@@ -159,28 +159,28 @@ namespace mxm
 	// -------------------------------------------------------------------
 
 
-	std::string MXM_CALL usb::GetManufacturer()
+	std::string CAPEX_CALL usb::GetManufacturer()
 	{
 		return this->device.Manufacturer;
 	}
 	// -------------------------------------------------------------------
 
 
-	std::string MXM_CALL usb::GetProduct()
+	std::string CAPEX_CALL usb::GetProduct()
 	{
 		return this->device.Product;
 	}
 	// -------------------------------------------------------------------
 
 
-	std::string MXM_CALL usb::GetSerialNumber()
+	std::string CAPEX_CALL usb::GetSerialNumber()
 	{
 		return this->device.SerialNumber;
 	}
 	// -------------------------------------------------------------------
 	
 	
-	std::string MXM_CALL usb::GetErrorMessage(int Status)
+	std::string CAPEX_CALL usb::GetErrorMessage(int Status)
 	{
 		if(Status == -1)
 			Status = this->status;
@@ -193,13 +193,13 @@ namespace mxm
 		{
 			switch(Status)
 			{
-				case MXMUSB_TOO_MUCH_DEVICES:
+				case CAPEXUSB_TOO_MUCH_DEVICES:
 					msg = "Too much USB devices found";
 					break;
-				case MXMUSB_EP0_WRITE_ERROR:
+				case CAPEXUSB_EP0_WRITE_ERROR:
 					msg = "Error for writing in EP0";
 					break;
-				case MXMUSB_EP0_READ_ERROR:
+				case CAPEXUSB_EP0_READ_ERROR:
 					msg = "Error for reading in EP0";
 					break;
 				default:
@@ -213,7 +213,7 @@ namespace mxm
 	// -------------------------------------------------------------------
 	
 	
-	int MXM_CALL usb::EP0Write(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length)
+	int CAPEX_CALL usb::EP0Write(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length)
 	{
 		unsigned int timeout = 1000;
 		static const int CONTROL_REQUEST_TYPE_OUT = LIBUSB_ENDPOINT_OUT | LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_INTERFACE;
@@ -226,7 +226,7 @@ namespace mxm
 	// -------------------------------------------------------------------
 	
 	
-	int MXM_CALL usb::EP0Read(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length)
+	int CAPEX_CALL usb::EP0Read(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length)
 	{
 		unsigned int timeout = 1000;
 		static const int CONTROL_REQUEST_TYPE_IN = LIBUSB_ENDPOINT_IN | LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_INTERFACE;

@@ -20,11 +20,11 @@
 
 #include <usb_status.h>
 
-#ifndef MXM_CALL
-    #define MXM_CALL
+#ifndef CAPEX_CALL
+    #define CAPEX_CALL
 #endif
 
-namespace mxm
+namespace capex
 {
 
 	struct DeviceLibUSB
@@ -64,31 +64,43 @@ namespace mxm
 			//! class with this constructor
 			//!
 			// ---------------------------------------------------------------------
-			MXM_CALL usb();
+			CAPEX_CALL usb();
 
 			// ---------------------------------------------------------------------
 			//! \brief Creates a USB class and connect to device with the
 			//! corresponding VID PID.
 			//! \param  VID	Vendor Integer of the Device
-			//! \param  PID Product Integer of the Device
+			//! \param  PID	Product Integer of the Device
 			//!
 			//! This creator creates a USB class and looking for devices with
-			//! the coresponding VID PID. If one (and only one) device is found,
-			//! the constructor coonects automatically to this device
+			//! the corresponding VID PID. If one (and only one) device is found,
+			//! the constructor connects automatically to this device
 			//!
 			// ---------------------------------------------------------------------
-			MXM_CALL usb(int VID, int PID);
+			CAPEX_CALL usb(int VID, int PID);
 
 			// ---------------------------------------------------------------------
-			//! \brief Deletes the USB class and deconnect the device if connected
+			//! \brief Deletes the USB class and deconnects the device if connected
 			//!
 			//! This destructor deletes the USB class and deconnects from the
 			//! USB device
 			//!
 			// ---------------------------------------------------------------------
-			MXM_CALL ~usb();
-
-			std::vector<DeviceUSB> MXM_CALL FoundDevices(int VID=-1, int PID=-1);
+			CAPEX_CALL ~usb();
+			
+			// ---------------------------------------------------------------------
+			//! \brief Find all USB devices connected to the host
+			//! \param VID	Vendor Integer of the Device (-1 by default)
+			//! \param PID	Product Integer of the Device (-1 by default)
+			//! \return	a list of devices with correct VID and PID
+			//!
+			//! This function returns a list of DeviceUSB with all connected USB 
+			//! devices with correct VID and PID. By default, VID and PID are set
+			//! to -1. In that case, all connected USB devices are listed.
+			//! If no devices is found, it returns an empty list.
+			//!
+			// ---------------------------------------------------------------------
+			std::vector<DeviceUSB> CAPEX_CALL FoundDevices(int VID=-1, int PID=-1);
 
 			// ---------------------------------------------------------------------
 			//! \brief Connects a USB device to the class
@@ -96,50 +108,50 @@ namespace mxm
 			//! \param interface	the interface to use (0 by default)
 			//! \return	an integer indicating the connection status
 			//!
-			//! This fucntion connects a USB device to the class.
-			//! It returns an integer represnting the status of the connection
+			//! This function connects a USB device to the class.
+			//! It returns an integer representing the status of the connection
 			//!
 			// ---------------------------------------------------------------------
-			int MXM_CALL Open(DeviceUSB device, int interface=0);
+			int CAPEX_CALL Open(DeviceUSB device, int interface=0);
 
 
 			// ---------------------------------------------------------------------
 			//! \brief Disconnects a USB device from the class
 			//!
-			//! This fucntion close the connection of USB device from the class.
+			//! This function close the connection of USB device from the class.
 			//!
 			// ---------------------------------------------------------------------
-			void MXM_CALL Close();
+			void CAPEX_CALL Close();
 
 			// ---------------------------------------------------------------------
 			//! \brief Tests if a USB device is connected to the class
 			//! \return	a boolean indicating the connected status
 			//!
-			//! This fucntion tests if a USB device is connected to the class.
+			//! This function tests if a USB device is connected to the class.
 			//! It returns true if a device is connected and false otherwise
 			//!
 			// ---------------------------------------------------------------------
-			bool MXM_CALL IsConnected();
+			bool CAPEX_CALL IsConnected();
 
 			// ---------------------------------------------------------------------
 			//! \brief Gets the VID of the connected USB device
-			//! \return	an integer represnting the VID of the USB device
+			//! \return	an integer representing the VID of the USB device
 			//!
 			//! This accessor gets the VID of the USB device. A device has to
 			//! be connected
 			//!
 			// ---------------------------------------------------------------------
-			int MXM_CALL GetVID();
+			int CAPEX_CALL GetVID();
 
 			// ---------------------------------------------------------------------
 			//! \brief Gets the PID of the connected USB device
-			//! \return	an integer represnting the PID of the USB device
+			//! \return	an integer representing the PID of the USB device
 			//!
 			//! This accessor gets the PID of the USB device. A device has to
 			//! be connected
 			//!
 			// ---------------------------------------------------------------------
-			int MXM_CALL GetPID();
+			int CAPEX_CALL GetPID();
 
 			// ---------------------------------------------------------------------
 			//! \brief Gets the USB version of the connected USB device
@@ -149,17 +161,17 @@ namespace mxm
 			//! USB device. A device has to be connected
 			//!
 			// ---------------------------------------------------------------------
-			std::string MXM_CALL GetUsbVersion();
+			std::string CAPEX_CALL GetUsbVersion();
 
 			// ---------------------------------------------------------------------
 			//! \brief Gets the manufacturer of the connected USB device
-			//! \return	a string representing the manufactuer of the device
+			//! \return	a string representing the manufacturer of the device
 			//!
 			//! This accessor gets the manufacturer of the USB device. A device
 			//! has to be connected
 			//!
 			// ---------------------------------------------------------------------
-			std::string MXM_CALL GetManufacturer();
+			std::string CAPEX_CALL GetManufacturer();
 
 			// ---------------------------------------------------------------------
 			//! \brief Gets the product of the connected USB device
@@ -169,7 +181,7 @@ namespace mxm
 			//! has to be connected
 			//!
 			// ---------------------------------------------------------------------
-			std::string MXM_CALL GetProduct();
+			std::string CAPEX_CALL GetProduct();
 
 			// ---------------------------------------------------------------------
 			//! \brief Gets the serial number of the connected USB device
@@ -179,7 +191,7 @@ namespace mxm
 			//! has to be connected
 			//!
 			// ---------------------------------------------------------------------
-			std::string MXM_CALL GetSerialNumber();
+			std::string CAPEX_CALL GetSerialNumber();
 			
 			// ---------------------------------------------------------------------
 			//! \brief Return a string message for a given status
@@ -190,31 +202,31 @@ namespace mxm
 			//! given in parameter. If no status is given, the last status is used
 			//!
 			// ---------------------------------------------------------------------
-			std::string MXM_CALL GetErrorMessage(int Status=-1);
+			std::string CAPEX_CALL GetErrorMessage(int Status=-1);
 			
 			// ---------------------------------------------------------------------
 			//! \brief Write data to the USB Device via EndPoint 0
 			//! \param Request	Byte corresponding to the request to send
 			//! \param Data		Pointer of bytes containing data to send
-			//! \param Length	Nomber of bytes to send
+			//! \param Length	Number of bytes to send
 			//! \return	an integer representing the writing status
 			//!
 			//! This method sends data to the USB device via the End Point 0
 			//!
 			// ---------------------------------------------------------------------
-			int MXM_CALL EP0Write(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length);
+			int CAPEX_CALL EP0Write(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length);
 			
 			// ---------------------------------------------------------------------
 			//! \brief Read data from the USB Device via EndPoint 0
 			//! \param Request	Byte corresponding to the request to send
 			//! \param Data		Pointer of bytes containing the returned data
-			//! \param Length	Nomber of returned bytes
+			//! \param Length	Number of returned bytes
 			//! \return	an integer representing the reading status
 			//!
 			//! This method gets data from the USB device via the End Point 0
 			//!
 			// ---------------------------------------------------------------------
-			int MXM_CALL EP0Read(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length);
+			int CAPEX_CALL EP0Read(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length);
 
 		public:     // Public attributs
 

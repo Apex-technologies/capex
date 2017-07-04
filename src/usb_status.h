@@ -7,12 +7,12 @@
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-#ifndef _MXMUSBSTATUS_H
-#define _MXMUSBSTATUS_H
+#ifndef _CAPEXUSBSTATUS_H
+#define _CAPEXUSBSTATUS_H
 
-	#define MXMUSB_TOO_MUCH_DEVICES		-20
+	#define CAPEXUSB_TOO_MUCH_DEVICES		-20
 	
-	#define MXMUSB_EP0_WRITE_ERROR		-51
-	#define MXMUSB_EP0_READ_ERROR		-52
+	#define CAPEXUSB_EP0_WRITE_ERROR		-51
+	#define CAPEXUSB_EP0_READ_ERROR		-52
 
 #endif

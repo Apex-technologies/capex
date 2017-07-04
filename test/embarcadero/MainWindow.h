@@ -34,8 +34,23 @@ __published:	// IDE-managed Components
 	TButton *Quit_Bt;
 	TChart *Chart1;
 	TFastLineSeries *Series1;
+	TTrackBar *Frequency_Bar;
+	TEdit *Threshold_Edit;
+	TLabel *FreqLabel;
+	TLabel *Label1;
 	void __fastcall Quit_BtClick(TObject *Sender);
+	void __fastcall Frequency_BarChange(TObject *Sender);
+	void __fastcall Threshold_EditChange(TObject *Sender);
 private:	// User declarations
+
+	array<float> x;
+	array<float> y;
+
+	float Frequency;
+	float Threshold;
+
+	void __fastcall DisplayGraph();
+
 public:		// User declarations
 	__fastcall TMainForm(TComponent* Owner);
 };

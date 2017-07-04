@@ -2,28 +2,19 @@
 #include <algorithm>
 #include <cmath>
 
-#ifndef DEBUG
-	#define DEBUG false
-#endif
-
-#define DBG_COLOR_RED "\033[0;41m"
-#define DBG_COLOR_GRN "\033[0;42m"
-#define DBG_COLOR_STD "\033[0m"
-#define DBG_EMPHASE "\033[4m"
-
 using std::cout;
 using std::endl;
 
-namespace mxm
+namespace capex
 {
 
 	template <typename T>
-	MXM_CALL array<T>::array()
+	CAPEX_CALL array<T>::array()
 	{
-		#if DEBUG
-			cout << DBG_COLOR_GRN;
-			cout << "+    Empty constructor of     " << DBG_EMPHASE << this;
-			cout << DBG_COLOR_STD << endl;
+		#if CAPEX_DEBUG
+			cout << CAPEX_DBG_COLOR_GRN;
+			cout << "+    Empty constructor of     " << CAPEX_DBG_EMPHASE << this;
+			cout << CAPEX_DBG_COLOR_STD << endl;
 		#endif
 		this->values = new T[1];
 		this->nb_values = 1;
@@ -32,12 +23,12 @@ namespace mxm
 
 
 	template <typename T>
-	MXM_CALL array<T>::array(T value, unsigned int number)
+	CAPEX_CALL array<T>::array(T value, unsigned int number)
 	{
-		#if DEBUG
-			cout << DBG_COLOR_GRN;
-			cout << "+    Constant constructor of  " << DBG_EMPHASE << this;
-			cout << DBG_COLOR_STD << endl;
+		#if CAPEX_DEBUG
+			cout << CAPEX_DBG_COLOR_GRN;
+			cout << "+    Constant constructor of  " << CAPEX_DBG_EMPHASE << this;
+			cout << CAPEX_DBG_COLOR_STD << endl;
 		#endif
 		this->values = new T[number];
 		for(unsigned int i = 0; i < number; i++)
@@ -50,12 +41,12 @@ namespace mxm
 
 
 	template <typename T>
-	MXM_CALL array<T>::array(const array<T> &value_array)
+	CAPEX_CALL array<T>::array(const array<T> &value_array)
 	{
-		#if DEBUG
-			cout << DBG_COLOR_GRN;
-			cout << "+    Copy constructor of      " << DBG_EMPHASE << this;
-			cout << DBG_COLOR_STD << endl;
+		#if CAPEX_DEBUG
+			cout << CAPEX_DBG_COLOR_GRN;
+			cout << "+    Copy constructor of      " << CAPEX_DBG_EMPHASE << this;
+			cout << CAPEX_DBG_COLOR_STD << endl;
 		#endif
 		this->values = new T[value_array.size()];
 		memcpy(&(this->values[0]), &(value_array.values[0]), sizeof(T) * value_array.size());
@@ -65,12 +56,12 @@ namespace mxm
 
 
 	template <typename T>
-	MXM_CALL array<T>::~array()
+	CAPEX_CALL array<T>::~array()
 	{
-		#if DEBUG
-			cout << DBG_COLOR_RED;
-			cout << "-    Destructor of            " << DBG_EMPHASE << this;
-			cout << DBG_COLOR_STD << endl;
+		#if CAPEX_DEBUG
+			cout << CAPEX_DBG_COLOR_RED;
+			cout << "-    Destructor of            " << CAPEX_DBG_EMPHASE << this;
+			cout << CAPEX_DBG_COLOR_STD << endl;
 		#endif
 		try
 		{
@@ -78,10 +69,10 @@ namespace mxm
 		}
 		catch(...)
 		{
-			#if DEBUG
-				cout << DBG_COLOR_RED;
+			#if CAPEX_DEBUG
+				cout << CAPEX_DBG_COLOR_RED;
 				cout << "Error for deleting array";
-				cout << DBG_COLOR_STD << endl;
+				cout << CAPEX_DBG_COLOR_STD << endl;
 			#endif
 		}
 	}
@@ -89,7 +80,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::zeroes(unsigned int number)
+	void CAPEX_CALL array<T>::zeroes(unsigned int number)
 	{
 		this->resize(number);
 
@@ -102,7 +93,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::ones(unsigned int number)
+	void CAPEX_CALL array<T>::ones(unsigned int number)
 	{
 		this->resize(number);
 
@@ -115,7 +106,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::linspace(T start, T stop, unsigned int number)
+	void CAPEX_CALL array<T>::linspace(T start, T stop, unsigned int number)
 	{
 		T step = T((stop - start) / (number - 1));
 		this->resize(number);
@@ -129,7 +120,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::logspace(T start, T stop, unsigned int number)
+	void CAPEX_CALL array<T>::logspace(T start, T stop, unsigned int number)
 	{
 		if(start > stop)
 			std::swap(start, stop);
@@ -143,7 +134,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::random(T min, T max, unsigned int number)
+	void CAPEX_CALL array<T>::random(T min, T max, unsigned int number)
 	{
 		if(min > max)
 			std::swap(min, max);
@@ -159,7 +150,7 @@ namespace mxm
 
 
 	template <typename T>
-	unsigned int MXM_CALL array<T>::size() const
+	unsigned int CAPEX_CALL array<T>::size() const
 	{
 		return this->nb_values;
 	}
@@ -167,7 +158,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::resize(unsigned int new_size)
+	void CAPEX_CALL array<T>::resize(unsigned int new_size)
 	{
 		if(this->nb_values != new_size)
 		{
@@ -193,7 +184,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::append(T value)
+	void CAPEX_CALL array<T>::append(T value)
 	{
 		this->resize(this->nb_values + 1);
 		this->values[this->nb_values] = value;
@@ -202,7 +193,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::append(T values[], unsigned int number)
+	void CAPEX_CALL array<T>::append(T values[], unsigned int number)
 	{
 		this->resize(this->nb_values + number);
 		for(unsigned int i = 0; i < number; i++)
@@ -213,7 +204,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::append(array<T> value_array)
+	void CAPEX_CALL array<T>::append(array<T> value_array)
 	{
 		this->resize(this->nb_values + value_array.size());
 		for(unsigned int i = 0; i < value_array.size(); i++)
@@ -224,7 +215,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::erase(unsigned int index)
+	void CAPEX_CALL array<T>::erase(unsigned int index)
 	{
 		T* buffer = new T[this->nb_values - 1];
 
@@ -244,7 +235,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::erase(unsigned int start_index, unsigned int stop_index)
+	void CAPEX_CALL array<T>::erase(unsigned int start_index, unsigned int stop_index)
 	{
 		if(stop_index < start_index)
 			std::swap(start_index, stop_index);
@@ -271,7 +262,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::erase(array<bool> mask)
+	void CAPEX_CALL array<T>::erase(array<bool> mask)
 	{
 		for(unsigned int i = 0; i < mask.size(); i++)
 		{
@@ -283,7 +274,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::pop()
+	void CAPEX_CALL array<T>::pop()
 	{
 		this->resize(this->nb_values - 1);
 		this->nb_values--;
@@ -292,7 +283,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::clear()
+	void CAPEX_CALL array<T>::clear()
 	{
 		delete[] this->values;
 		this->values = new T[1];
@@ -302,7 +293,7 @@ namespace mxm
 
 
 	template <typename T>
-	T& MXM_CALL array<T>::operator[](unsigned int index)
+	T& CAPEX_CALL array<T>::operator[](unsigned int index)
 	{
 		if(index > this->nb_values - 1)
 			index = this->nb_values - 1;
@@ -313,7 +304,7 @@ namespace mxm
 
 
 	template <typename T>
-	T& MXM_CALL array<T>::operator[](int index)
+	T& CAPEX_CALL array<T>::operator[](int index)
 	{
 		if(index < 0)
 			index = this->nb_values + index;
@@ -327,7 +318,7 @@ namespace mxm
 
 
 	template <typename T>
-	T& MXM_CALL array<T>::at(unsigned int index)
+	T& CAPEX_CALL array<T>::at(unsigned int index)
 	{
 		if(index > this->nb_values - 1)
 			index = this->nb_values - 1;
@@ -338,7 +329,7 @@ namespace mxm
 
 
 	template <typename T>
-	T* MXM_CALL array<T>::pointer()
+	T* CAPEX_CALL array<T>::pointer()
 	{
 		return &(this->values[0]);
 	}
@@ -346,7 +337,7 @@ namespace mxm
 
 
 	template <typename T>
-	int MXM_CALL array<T>::index(T value)
+	int CAPEX_CALL array<T>::index(T value)
 	{
 		for(unsigned int i = 0; i < this->nb_values; i++)
 		{
@@ -360,7 +351,7 @@ namespace mxm
 
 
 	template <typename T>
-	int MXM_CALL array<T>::nearest(T value)
+	int CAPEX_CALL array<T>::nearest(T value)
 	{
 		array<T> Sub = pow(*this - value, 2.0);
 		return Sub.index(Sub.min());
@@ -369,7 +360,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::select(unsigned int start_index, unsigned int stop_index)
+	array<T> CAPEX_CALL array<T>::select(unsigned int start_index, unsigned int stop_index)
 	{
 		if(start_index > stop_index)
 			std::swap(start_index, stop_index);
@@ -391,7 +382,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::select(array<bool> mask)
+	array<T> CAPEX_CALL array<T>::select(array<bool> mask)
 	{
 		array<T> SubArray = array<T> ();
 		SubArray.resize(mask.elements());
@@ -411,7 +402,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<bool> MXM_CALL array<T>::mask(T value)
+	array<bool> CAPEX_CALL array<T>::mask(T value)
 	{
 		array<bool> Mask;
 		Mask.resize(this->size());
@@ -429,7 +420,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<bool> MXM_CALL array<T>::mask(unsigned int start_index, unsigned int stop_index)
+	array<bool> CAPEX_CALL array<T>::mask(unsigned int start_index, unsigned int stop_index)
 	{
 		array<bool> Mask;
 		Mask.resize(this->size());
@@ -447,7 +438,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::operator= (array<T> right)
+	void CAPEX_CALL array<T>::operator= (array<T> right)
 	{
 		if(this->size() != right.size())
 			this->resize(right.size());
@@ -458,7 +449,7 @@ namespace mxm
 
 
 	template <typename T>
-	bool MXM_CALL array<T>::operator== (array<T> right)
+	bool CAPEX_CALL array<T>::operator== (array<T> right)
 	{
 		if(this->size() != right.size())
 			return false;
@@ -475,7 +466,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::operator+ (array<T> right)
+	array<T> CAPEX_CALL array<T>::operator+ (array<T> right)
 	{
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
@@ -499,7 +490,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::operator+ (T right)
+	array<T> CAPEX_CALL array<T>::operator+ (T right)
 	{
 		array<T> Sum = array<T> (T(), this->size());
 
@@ -511,7 +502,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::operator+= (T right)
+	void CAPEX_CALL array<T>::operator+= (T right)
 	{
 		for(unsigned int i = 0; i < this->size(); i++)
 			this->values[i] += right;
@@ -520,7 +511,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::operator+= (array<T> right)
+	void CAPEX_CALL array<T>::operator+= (array<T> right)
 	{
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
@@ -559,7 +550,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::operator* (array<T> right)
+	array<T> CAPEX_CALL array<T>::operator* (array<T> right)
 	{
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
@@ -583,7 +574,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::operator* (T right)
+	array<T> CAPEX_CALL array<T>::operator* (T right)
 	{
 		array<T> Product = array<T> ();
 		Product.resize(this->size());
@@ -596,7 +587,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::operator*= (T right)
+	void CAPEX_CALL array<T>::operator*= (T right)
 	{
 		for(unsigned int i = 0; i < this->size(); i++)
 			this->values[i] *= right;
@@ -605,7 +596,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::operator*= (array<T> right)
+	void CAPEX_CALL array<T>::operator*= (array<T> right)
 	{
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
@@ -625,7 +616,7 @@ namespace mxm
 	array<T> operator* (U left, array<T> right)
 	{
 		array<T> Product = array<T> ();
-		Product.resize(right->size());
+		Product.resize(right.size());
 
 		try
 		{
@@ -644,7 +635,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::operator- (array<T> right)
+	array<T> CAPEX_CALL array<T>::operator- (array<T> right)
 	{
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
@@ -668,7 +659,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::operator- (T right)
+	array<T> CAPEX_CALL array<T>::operator- (T right)
 	{
 		array<T> Diff = array<T> ();
 		Diff.resize(this->size());
@@ -681,7 +672,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::operator-= (T right)
+	void CAPEX_CALL array<T>::operator-= (T right)
 	{
 		for(unsigned int i = 0; i < this->size(); i++)
 		{
@@ -694,7 +685,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::operator-= (array<T> right)
+	void CAPEX_CALL array<T>::operator-= (array<T> right)
 	{
 		std::cout << this->size() << "\n" << right.size() << "\n";
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
@@ -738,7 +729,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::operator/ (array<T> right)
+	array<T> CAPEX_CALL array<T>::operator/ (array<T> right)
 	{
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
@@ -762,7 +753,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::operator/ (T right)
+	array<T> CAPEX_CALL array<T>::operator/ (T right)
 	{
 		array<T> Quotient = array<T> ();
 		Quotient.resize(this->size());
@@ -775,7 +766,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::operator/= (T right)
+	void CAPEX_CALL array<T>::operator/= (T right)
 	{
 		for(unsigned int i = 0; i < this->size(); i++)
 			this->values[i] /= right;
@@ -784,7 +775,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::operator/= (array<T> right)
+	void CAPEX_CALL array<T>::operator/= (array<T> right)
 	{
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
@@ -823,7 +814,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::operator^(array<T> right)
+	array<T> CAPEX_CALL array<T>::operator^(array<T> right)
 	{
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
@@ -847,7 +838,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::max(unsigned int *max_index)
+	T CAPEX_CALL array<T>::max(unsigned int *max_index)
 	{
 		T maxvalue = this->values[0];
 		for(unsigned int i = 0; i < this->size(); i++)
@@ -865,7 +856,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::max(unsigned int start_index, unsigned int stop_index, unsigned int *max_index)
+	T CAPEX_CALL array<T>::max(unsigned int start_index, unsigned int stop_index, unsigned int *max_index)
 	{
 		T maxvalue = this->values[start_index];
 		for(unsigned int i = start_index; i < stop_index; i++)
@@ -883,7 +874,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::max(array<bool> mask, unsigned int *max_index)
+	T CAPEX_CALL array<T>::max(array<bool> mask, unsigned int *max_index)
 	{
 		T maxvalue;
 		bool first = true;
@@ -915,7 +906,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::min()
+	T CAPEX_CALL array<T>::min()
 	{
 		T minvalue = this->values[0];
 		for(unsigned int i = 0; i < this->size(); i++)
@@ -929,7 +920,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::min(unsigned int start_index, unsigned int stop_index)
+	T CAPEX_CALL array<T>::min(unsigned int start_index, unsigned int stop_index)
 	{
 		T minvalue = this->values[start_index];
 		for(unsigned int i = start_index; i < stop_index; i++)
@@ -943,7 +934,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::min(array<bool> mask)
+	T CAPEX_CALL array<T>::min(array<bool> mask)
 	{
 		T minvalue;
 		bool first = true;
@@ -969,7 +960,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::sum()
+	T CAPEX_CALL array<T>::sum()
 	{
 		T sum = this->values[0];
 		for(unsigned int i = 1; i < this->size(); i++)
@@ -980,7 +971,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::sum(unsigned int start_index, unsigned int stop_index)
+	T CAPEX_CALL array<T>::sum(unsigned int start_index, unsigned int stop_index)
 	{
 		T sum = this->values[start_index];
 		for(unsigned int i = start_index + 1; i < stop_index; i++)
@@ -991,7 +982,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::sum(array<bool> mask)
+	T CAPEX_CALL array<T>::sum(array<bool> mask)
 	{
 		T sum;
 		bool first = true;
@@ -1016,7 +1007,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::mean()
+	T CAPEX_CALL array<T>::mean()
 	{
 		return this->sum() / this->size();
 	}
@@ -1024,7 +1015,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::mean(unsigned int start_index, unsigned int stop_index)
+	T CAPEX_CALL array<T>::mean(unsigned int start_index, unsigned int stop_index)
 	{
 		return this->sum(start_index, stop_index) / (stop_index - start_index);
 	}
@@ -1032,7 +1023,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::mean(array<bool> mask)
+	T CAPEX_CALL array<T>::mean(array<bool> mask)
 	{
 		return this->sum(mask) / mask.elements();
 	}
@@ -1040,7 +1031,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::swap()
+	array<T> CAPEX_CALL array<T>::swap()
 	{
 		array<T> SwapArray(*this);
 		for(unsigned int i = 0; i < SwapArray.nb_values / 2; i++)
@@ -1055,7 +1046,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::swap(unsigned int start_index, unsigned int stop_index)
+	array<T> CAPEX_CALL array<T>::swap(unsigned int start_index, unsigned int stop_index)
 	{
 		array<T> SwapArray = this->select(start_index, stop_index);
 		SwapArray = SwapArray.swap();
@@ -1065,7 +1056,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::swap(array<bool> mask)
+	array<T> CAPEX_CALL array<T>::swap(array<bool> mask)
 	{
 		array<T> SwapArray = this->select(mask);
 		SwapArray = SwapArray.swap();
@@ -1075,7 +1066,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<T> MXM_CALL array<T>::smooth(unsigned int area)
+	array<T> CAPEX_CALL array<T>::smooth(unsigned int area)
 	{
 
 	}
@@ -1083,7 +1074,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<bool> MXM_CALL array<T>::threshold(T level)
+	array<bool> CAPEX_CALL array<T>::threshold(T level)
 	{
 		array<bool> Mask;
 		Mask.resize(this->size());
@@ -1101,7 +1092,7 @@ namespace mxm
 
 
 	template <typename T>
-	array<bool> MXM_CALL array<T>::window(T inferior, T superior)
+	array<bool> CAPEX_CALL array<T>::window(T inferior, T superior)
 	{
 		array<bool> Mask;
 		Mask.resize(this->size());
@@ -1119,7 +1110,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::replace(T previous_value, T new_value)
+	void CAPEX_CALL array<T>::replace(T previous_value, T new_value)
 	{
 		for(unsigned int i = 0; i < this->size(); i++)
 		{
@@ -1131,7 +1122,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::replace(unsigned int start_index, unsigned int stop_index, T new_value)
+	void CAPEX_CALL array<T>::replace(unsigned int start_index, unsigned int stop_index, T new_value)
 	{
 		if(start_index > stop_index)
 			std::swap(start_index, stop_index);
@@ -1149,7 +1140,7 @@ namespace mxm
 
 
 	template <typename T>
-	void MXM_CALL array<T>::replace(array<bool> mask, T new_value)
+	void CAPEX_CALL array<T>::replace(array<bool> mask, T new_value)
 	{
 		for(unsigned int i = 0; i < mask.size(); i++)
 		{
@@ -1161,7 +1152,7 @@ namespace mxm
 
 
 	template <typename T>
-	T MXM_CALL array<T>::const_at(unsigned int index) const
+	T CAPEX_CALL array<T>::const_at(unsigned int index) const
 	{
 		if(index >= this->nb_values)
 			index = nb_values - 1;
@@ -1171,7 +1162,7 @@ namespace mxm
 
 
 	template <>
-	unsigned int MXM_CALL array<bool>::elements()
+	unsigned int CAPEX_CALL array<bool>::elements()
 	{
 		unsigned int number = 0;
 		for(unsigned int i = 0; i < this->size(); i++)
@@ -1185,7 +1176,7 @@ namespace mxm
 
 
 	template <>
-	array<bool> MXM_CALL array<bool>::invert()
+	array<bool> CAPEX_CALL array<bool>::invert()
 	{
 		array<bool> Inverse = array<bool> (false, this->size());
 
@@ -1200,7 +1191,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL sin(const array<T> x)
+	array<T> CAPEX_CALL sin(const array<T> x)
 	{
 		array<T> Sinus = array<T>(T(), x.size());
 
@@ -1212,7 +1203,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL cos(const array<T> x)
+	array<T> CAPEX_CALL cos(const array<T> x)
 	{
 		array<T> Cosinus = array<T>(T(), x.size());
 
@@ -1224,7 +1215,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL tan(const array<T> x)
+	array<T> CAPEX_CALL tan(const array<T> x)
 	{
 		array<T> Tangent = array<T>(T(), x.size());
 
@@ -1236,7 +1227,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL asin(const array<T> x)
+	array<T> CAPEX_CALL asin(const array<T> x)
 	{
 		array<T> Arcsinus = array<T>(T(), x.size());
 
@@ -1248,7 +1239,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL acos(const array<T> x)
+	array<T> CAPEX_CALL acos(const array<T> x)
 	{
 		array<T> Arcosinus = array<T>(T(), x.size());
 
@@ -1260,7 +1251,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL atan(const array<T> x)
+	array<T> CAPEX_CALL atan(const array<T> x)
 	{
 		array<T> Arctangent = array<T>(T(), x.size());
 
@@ -1272,7 +1263,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL exp(const array<T> x)
+	array<T> CAPEX_CALL exp(const array<T> x)
 	{
 		array<T> Exponential = array<T>(T(), x.size());
 
@@ -1283,7 +1274,7 @@ namespace mxm
 	// -------------------------------------------------------------------
 
 	template<class T>
-	array<T> MXM_CALL log(const array<T> x)
+	array<T> CAPEX_CALL log(const array<T> x)
 	{
 		array<T> Logarithm = array<T>(T(), x.size());
 
@@ -1295,7 +1286,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL log10(const array<T> x)
+	array<T> CAPEX_CALL log10(const array<T> x)
 	{
 		array<T> Logarithm = array<T>(T(), x.size());
 
@@ -1307,7 +1298,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL log2(const array<T> x)
+	array<T> CAPEX_CALL log2(const array<T> x)
 	{
 		array<T> Logarithm = array<T>(T(), x.size());
 
@@ -1319,7 +1310,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL sqrt(const array<T> x)
+	array<T> CAPEX_CALL sqrt(const array<T> x)
 	{
 		array<T> SquareRoot = array<T>(T(), x.size());
 
@@ -1331,7 +1322,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL pow(const array<T> x, double power)
+	array<T> CAPEX_CALL pow(const array<T> x, double power)
 	{
 		array<T> PowerResult = array<T>(T(), x.size());
 
@@ -1343,7 +1334,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL pow10(const array<T> x)
+	array<T> CAPEX_CALL pow10(const array<T> x)
 	{
 		array<T> PowerResult = array<T>(T(), x.size());
 
@@ -1355,7 +1346,7 @@ namespace mxm
 
 
 	template<class T>
-	array<T> MXM_CALL abs(const array<T> x)
+	array<T> CAPEX_CALL abs(const array<T> x)
 	{
 		array<T> Absolute = array<T>(T(), x.size());
 
