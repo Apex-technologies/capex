@@ -7,12 +7,13 @@
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-#ifndef _ARRAY_H
-#define _ARRAY_H
+#ifndef _CAPEX_ARRAY_H
+#define _CAPEX_ARRAY_H
 
 #include <iostream>
 #include <sstream>
 #include <exception>
+#include <memory>
 
 #include <string.h>
 #include <stdlib.h>
@@ -29,7 +30,10 @@ namespace capex
 	template <typename T> class array
 	{
 		public: // Public Methods
-			T *values;
+
+			//! \brief Array where values are stored
+			//! Do not modify this array directly
+            std::unique_ptr<T[]> values;
 
 			// ---------------------------------------------------------------------
 			//! \brief Creates an empty array of type <T>
@@ -281,7 +285,7 @@ namespace capex
 			//! \return a pointer pointing to the values table
 			//!
 			//! This method returns a pointer to the values of type <T>.
-			//! The pointed value is the first
+			//! The pointed value is the first one
 			//!
 			// ---------------------------------------------------------------------
 			T* CAPEX_CALL pointer();
@@ -301,7 +305,7 @@ namespace capex
 
 			// ---------------------------------------------------------------------
 			//! \brief Get the index of the first value
-			//! \param  value  index of the value to search for
+			//! \param  value  value to search for
 			//! \return the index of the searched value
 			//!
 			//! This method returns the index of the first searched value.
@@ -320,6 +324,19 @@ namespace capex
 			//!
 			// ---------------------------------------------------------------------
 			int CAPEX_CALL nearest(T value);
+
+
+			// ---------------------------------------------------------------------
+			//! \brief Select a group of values in an array
+			//! \param  index  the index of the start or stop value of the group to select
+			//! \return an array with the selected values
+			//!
+			//! This method select a group of values in an array. The group of values
+			//! is delimited from index (included) to the end if index is positive or,
+			//! from the beginning to -index (non-included) if index is negative
+			//!
+			// ---------------------------------------------------------------------
+			array<T> CAPEX_CALL select(int index);
 
 
 			// ---------------------------------------------------------------------
@@ -819,7 +836,7 @@ namespace capex
 			//! number is given, it is rounded to the next one (2 -> 3, ...)
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CAPEX_CALL smooth(unsigned int area=5);
+			array<T> CAPEX_CALL smooth(unsigned int area = 5);
 
 
 			// ---------------------------------------------------------------------
@@ -921,6 +938,8 @@ namespace capex
 			unsigned int nb_values;
 
 		private: // Private Methods
+
+			T CAPEX_CALL smooth_function(const T raw_data[], unsigned int Window);
 
 	};
 
@@ -1133,10 +1152,23 @@ namespace capex
 	// ---------------------------------------------------------------------
 	template<class T>
 	array<T> CAPEX_CALL pow(const array<T> x, double power);
+	
+	
+	// ---------------------------------------------------------------------
+	//! \brief Specialisation of the power operator with the '2' power
+	//! \param  x  the array to calculate with power 2 operator
+	//! \return an array of the power 2 values of x
+	//!
+	//! This method specializes the operator 'pow'. All terms of the array
+	//! are ponderated with the power 2 operator.
+	//!
+	// ---------------------------------------------------------------------
+	template<class T>
+	array<T> CAPEX_CALL pow2(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
-	//! \brief Spicialisation of the power operator with the '10' power
+	//! \brief Specialisation of the power operator with the '10' power
 	//! \param  x  the array to calculate with power 10 operator
 	//! \return an array of the power 10 values of x
 	//!

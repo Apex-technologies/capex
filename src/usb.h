@@ -7,18 +7,26 @@
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-#ifndef _MXMUSB_H
-#define _MXMUSB_H
+#ifndef _CAPEX_USB_H
+#define _CAPEX_USB_H
 
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
 #include <stdlib.h>
-#include <libusb.h>
 #include <vector>
 #include <string>
 
-#include <usb_status.h>
+#include <libusb.h>
+/*********************************************************************
+#if defined(_WIN32) || defined(__WIN32__)
+	#include "../lib/libusb.h"
+#elif defined(__linux__)
+	#include <libusb.h>
+#endif
+/*********************************************************************/
+
+#include "usb_status.h"
 
 #ifndef CAPEX_CALL
     #define CAPEX_CALL
@@ -51,7 +59,8 @@ namespace capex
 	//                             USB DECLARATION
 	// -----------------------------------------------------------------------------
 	//!
-	//! \brief A class to manipulate USB Devices (based on libusb-1.0)
+	//! \brief A class to manipulate USB Devices. It is based on libusb-1.0)
+
 
 	class usb
 	{
@@ -100,7 +109,7 @@ namespace capex
 			//! If no devices is found, it returns an empty list.
 			//!
 			// ---------------------------------------------------------------------
-			std::vector<DeviceUSB> CAPEX_CALL FoundDevices(int VID=-1, int PID=-1);
+			std::vector<DeviceUSB> CAPEX_CALL FoundDevices(int VID = -1, int PID = -1);
 
 			// ---------------------------------------------------------------------
 			//! \brief Connects a USB device to the class
@@ -112,7 +121,7 @@ namespace capex
 			//! It returns an integer representing the status of the connection
 			//!
 			// ---------------------------------------------------------------------
-			int CAPEX_CALL Open(DeviceUSB device, int interface=0);
+			int CAPEX_CALL Open(DeviceUSB device, int usbinterface = 0);
 
 
 			// ---------------------------------------------------------------------
@@ -202,7 +211,7 @@ namespace capex
 			//! given in parameter. If no status is given, the last status is used
 			//!
 			// ---------------------------------------------------------------------
-			std::string CAPEX_CALL GetErrorMessage(int Status=-1);
+			std::string CAPEX_CALL GetErrorMessage(int Status = 1);
 			
 			// ---------------------------------------------------------------------
 			//! \brief Write data to the USB Device via EndPoint 0
@@ -242,6 +251,9 @@ namespace capex
 			//! \brief opened session of libusb
 			libusb_context *session;
 
+			// \brief Pointer to pointer of device, for getting a list of devices
+			libusb_device **devs;
+
 			//! \brief Vector of USB devices
 			std::vector<DeviceUSB> devices;
 
@@ -257,5 +269,7 @@ namespace capex
 	};
 
 }
+
+#include "usb.cpp"
 
 #endif

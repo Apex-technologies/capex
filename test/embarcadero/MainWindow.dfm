@@ -2,7 +2,7 @@ object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'CAPEX Test'
-  ClientHeight = 639
+  ClientHeight = 653
   ClientWidth = 1059
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
@@ -14,29 +14,36 @@ object MainForm: TMainForm
   Position = poScreenCenter
   PixelsPerInch = 96
   TextHeight = 13
-  object FreqLabel: TLabel
-    Left = 10
-    Top = 610
-    Width = 68
-    Height = 13
-    Caption = 'Freqency (Hz)'
-  end
-  object Label1: TLabel
-    Left = 322
-    Top = 610
-    Width = 80
-    Height = 13
-    Caption = 'Threshold (A.U.)'
-  end
   object PageControl1: TPageControl
     Left = 8
     Top = 8
     Width = 1043
     Height = 593
-    ActivePage = ArraySheet
+    ActivePage = USBTest_Sheet
     TabOrder = 0
     object ArraySheet: TTabSheet
       Caption = 'Array Test'
+      object FreqLabel: TLabel
+        Left = 6
+        Top = 538
+        Width = 68
+        Height = 13
+        Caption = 'Freqency (Hz)'
+      end
+      object Label1: TLabel
+        Left = 318
+        Top = 538
+        Width = 80
+        Height = 13
+        Caption = 'Threshold (A.U.)'
+      end
+      object Label2: TLabel
+        Left = 507
+        Top = 538
+        Width = 97
+        Height = 13
+        Caption = 'Smoothing Winddow'
+      end
       object Chart1: TChart
         Left = -4
         Top = 3
@@ -84,41 +91,275 @@ object MainForm: TMainForm
           YValues.Order = loNone
         end
       end
+      object Frequency_Bar: TTrackBar
+        Left = 80
+        Top = 533
+        Width = 225
+        Height = 25
+        LineSize = 10
+        Max = 100
+        Min = 1
+        PageSize = 1
+        Frequency = 10
+        Position = 1
+        PositionToolTip = ptBottom
+        TabOrder = 1
+        ThumbLength = 15
+        OnChange = Frequency_BarChange
+      end
+      object Noise_Bt: TButton
+        Left = 972
+        Top = 533
+        Width = 60
+        Height = 25
+        Caption = 'Noise'
+        TabOrder = 2
+        OnClick = Noise_BtClick
+      end
+      object SetSmooth_Bt: TButton
+        Left = 822
+        Top = 533
+        Width = 64
+        Height = 25
+        Caption = 'Set Smooth'
+        TabOrder = 3
+        OnClick = SetSmooth_BtClick
+      end
+      object Sinus_Bt: TButton
+        Left = 906
+        Top = 533
+        Width = 60
+        Height = 25
+        Caption = 'Sinus'
+        TabOrder = 4
+        OnClick = Sinus_BtClick
+      end
+      object Smooth_Bar: TTrackBar
+        Left = 614
+        Top = 533
+        Width = 201
+        Height = 25
+        LineSize = 10
+        Max = 100
+        Min = 1
+        PageSize = 1
+        Frequency = 10
+        Position = 1
+        PositionToolTip = ptBottom
+        TabOrder = 5
+        ThumbLength = 15
+      end
+      object Threshold_Edit: TEdit
+        Left = 414
+        Top = 535
+        Width = 81
+        Height = 21
+        Alignment = taCenter
+        TabOrder = 6
+        Text = '-1.0'
+        OnChange = Threshold_EditChange
+      end
+    end
+    object USBTest_Sheet: TTabSheet
+      Caption = 'USB Test'
+      ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 28
+      object Label3: TLabel
+        Left = 576
+        Top = 72
+        Width = 84
+        Height = 13
+        Caption = 'Vendor Request :'
+      end
+      object Label4: TLabel
+        Left = 576
+        Top = 96
+        Width = 33
+        Height = 13
+        Caption = 'Value :'
+      end
+      object Label5: TLabel
+        Left = 576
+        Top = 120
+        Width = 35
+        Height = 13
+        Caption = 'Index :'
+      end
+      object Label6: TLabel
+        Left = 576
+        Top = 144
+        Width = 74
+        Height = 13
+        Caption = 'Bytes Number :'
+      end
+      object Label7: TLabel
+        Left = 685
+        Top = 72
+        Width = 12
+        Height = 13
+        Caption = '0x'
+      end
+      object Label8: TLabel
+        Left = 685
+        Top = 96
+        Width = 12
+        Height = 13
+        Caption = '0x'
+      end
+      object Label10: TLabel
+        Left = 685
+        Top = 120
+        Width = 12
+        Height = 13
+        Caption = '0x'
+      end
+      object FindDevices_Bt: TButton
+        Left = 32
+        Top = 16
+        Width = 492
+        Height = 25
+        Caption = 'Find Devices'
+        TabOrder = 0
+        OnClick = FindDevices_BtClick
+      end
+      object DevicesList_Grid: TStringGrid
+        Left = 32
+        Top = 56
+        Width = 492
+        Height = 481
+        ColCount = 4
+        DefaultColWidth = 150
+        FixedCols = 0
+        RowCount = 100
+        TabOrder = 1
+        OnSelectCell = DevicesList_GridSelectCell
+        ColWidths = (
+          79
+          67
+          156
+          166)
+      end
+      object VendorReq_Edit: TEdit
+        Left = 699
+        Top = 69
+        Width = 38
+        Height = 21
+        Alignment = taCenter
+        TabOrder = 2
+        Text = '0'
+      end
+      object Value_Edit: TEdit
+        Left = 699
+        Top = 93
+        Width = 38
+        Height = 21
+        Alignment = taCenter
+        TabOrder = 3
+        Text = '0'
+      end
+      object Index_Edit: TEdit
+        Left = 699
+        Top = 117
+        Width = 38
+        Height = 21
+        Alignment = taCenter
+        TabOrder = 4
+        Text = '0'
+      end
+      object RadioGroup1: TRadioGroup
+        Left = 576
+        Top = 18
+        Width = 161
+        Height = 39
+        Caption = 'EP0 Direction'
+        TabOrder = 5
+      end
+      object EP0Read_Radio: TRadioButton
+        Left = 600
+        Top = 34
+        Width = 41
+        Height = 17
+        Caption = 'Read'
+        Checked = True
+        TabOrder = 6
+        TabStop = True
+      end
+      object EP0Write_Radio: TRadioButton
+        Left = 672
+        Top = 34
+        Width = 41
+        Height = 17
+        Caption = 'Write'
+        TabOrder = 7
+      end
+      object BytesNumber_Edit: TEdit
+        Left = 699
+        Top = 141
+        Width = 38
+        Height = 21
+        Alignment = taCenter
+        NumbersOnly = True
+        TabOrder = 8
+        Text = '0'
+      end
+      object SendEP0_Bt: TButton
+        Left = 576
+        Top = 172
+        Width = 161
+        Height = 25
+        Caption = 'Send EP0'
+        TabOrder = 9
+        OnClick = SendEP0_BtClick
+      end
+      object DataEP0_Grid: TStringGrid
+        Left = 576
+        Top = 216
+        Width = 162
+        Height = 321
+        ColCount = 2
+        DefaultColWidth = 70
+        RowCount = 65
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
+        TabOrder = 10
+      end
+      object DataToEEProm_Bt: TButton
+        Left = 808
+        Top = 16
+        Width = 193
+        Height = 25
+        Caption = 'Set Data to EEPROM'
+        TabOrder = 11
+        OnClick = DataToEEProm_BtClick
+      end
+      object GetDataFromEEProm_Bt: TButton
+        Left = 808
+        Top = 47
+        Width = 193
+        Height = 25
+        Caption = 'EEPROM to Data'
+        TabOrder = 12
+        OnClick = GetDataFromEEProm_BtClick
+      end
     end
   end
   object Quit_Bt: TButton
-    Left = 962
+    Left = 1000
     Top = 607
-    Width = 89
+    Width = 51
     Height = 25
     Caption = 'Quit'
     TabOrder = 1
     OnClick = Quit_BtClick
   end
-  object Frequency_Bar: TTrackBar
-    Left = 84
-    Top = 609
-    Width = 225
-    Height = 25
-    LineSize = 10
-    Max = 100
-    Min = 1
-    PageSize = 1
-    Frequency = 10
-    Position = 1
-    PositionToolTip = ptBottom
-    TabOrder = 2
-    ThumbLength = 15
-    OnChange = Frequency_BarChange
-  end
-  object Threshold_Edit: TEdit
-    Left = 418
-    Top = 606
-    Width = 81
-    Height = 21
-    Alignment = taCenter
-    TabOrder = 3
-    Text = '-1.0'
-    OnChange = Threshold_EditChange
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 634
+    Width = 1059
+    Height = 19
+    Panels = <
+      item
+        Width = 50
+      end>
   end
 end

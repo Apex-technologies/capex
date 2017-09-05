@@ -1,4 +1,4 @@
-#include "usb.h"
+//#include "usb.h"
 
 using std::cout;
 using std::endl;
@@ -17,6 +17,7 @@ namespace capex
 	}
 	// -------------------------------------------------------------------
 
+
 	CAPEX_CALL usb::usb(int VID, int PID)
 	{
 		// Initialize a library session
@@ -26,8 +27,6 @@ namespace capex
 		// Get the list of devices with corresponding VID PID
 		this->connected = false;
 		this->devices = this->FoundDevices(VID, PID);
-		
-		//std::cout << "Devices found : " << this->devices.size() << std::endl;
 
 		// If only one device has been found, the constructor connects automatically to this device
 		if(this->devices.size() < 1)
@@ -43,6 +42,12 @@ namespace capex
 
 	CAPEX_CALL usb::~usb()
 	{
+		// Close the device if connected
+		this->Close();
+
+		// Free the list of USB devices
+		libusb_free_device_list(this->devs, 1);
+
 		// Close the session
 		libusb_exit(this->session);
 	}
@@ -53,16 +58,15 @@ namespace capex
 	{
 		std::vector<DeviceUSB> list;
 		list.clear();
-		// Pointer to pointer of device, for getting a list of devices
-		libusb_device **devs;
+
 		// Get the list of devices
-		ssize_t CountDevices = libusb_get_device_list(this->session, &devs);
+		ssize_t CountDevices = libusb_get_device_list(this->session, &this->devs);
 
 		// Get descriptor of searched devices
 		for(ssize_t i = 0; i < CountDevices; i++)
 		{
 			libusb_device_descriptor desc;
-			this->status = libusb_get_device_descriptor(devs[i], &desc);
+			this->status = libusb_get_device_descriptor(this->devs[i], &desc);
 			if(((desc.idVendor == VID) || (VID == -1)) && ((desc.idProduct == PID) || (PID == -1)))
 			{
 				DeviceUSB d;
@@ -71,44 +75,42 @@ namespace capex
 				d.USBVersion = desc.bcdUSB;
 				d.DeviceClass = desc.bDeviceClass;
 				d.lib.device = devs[i];
-				this->status = libusb_open(devs[i], &(d.lib.handle));
+				this->status = libusb_open(d.lib.device, &(d.lib.handle));
 				if(this->status >= 0)
 				{
 					unsigned char Buffer[256];
-					this->status = libusb_get_string_descriptor(d.lib.handle, desc.iManufacturer, 0, &Buffer[0], 256);
+					this->status = libusb_get_string_descriptor_ascii(d.lib.handle, desc.iManufacturer, &Buffer[0], 256);
 					if(this->status >= 0)
-						d.Manufacturer = std::string((char*)(&Buffer[2]), this->status - 2);
-					this->status = libusb_get_string_descriptor(d.lib.handle, desc.iProduct, 0, &Buffer[0], 256);
+						d.Manufacturer = std::string((char*)(&Buffer[0]), this->status);
+					this->status = libusb_get_string_descriptor_ascii(d.lib.handle, desc.iProduct, &Buffer[0], 256);
 					if(this->status >= 0)
-						d.Product = std::string((char*)(&Buffer[2]), this->status - 2);
-					this->status = libusb_get_string_descriptor(d.lib.handle, desc.iSerialNumber, 0, &Buffer[0], 256);
+						d.Product = std::string((char*)(&Buffer[0]), this->status);
+					this->status = libusb_get_string_descriptor_ascii(d.lib.handle, desc.iSerialNumber, &Buffer[0], 256);
 					if(this->status >= 0)
-						d.SerialNumber = std::string((char*)(&Buffer[2]), this->status - 2);
+						d.SerialNumber = std::string((char*)(&Buffer[0]), this->status);
 					libusb_close(d.lib.handle);
 				}
 				list.push_back(d);
 			}
 		}
 
-		// Free the list of USB devices
-		libusb_free_device_list(devs, 1);
-
 		return list;
 	}
 	// -------------------------------------------------------------------
 
 
-	int CAPEX_CALL usb::Open(DeviceUSB device, int interface)
+	int CAPEX_CALL usb::Open(DeviceUSB device, int usbinterface)
 	{
 		this->status = libusb_open(device.lib.device, &(device.lib.handle));
 		if(this->status >= 0)
 		{
 			this->device = device;
-			this->status = libusb_claim_interface(device.lib.handle, interface);
+			this->status = libusb_claim_interface(device.lib.handle, usbinterface);
 			this->connected = true;
-			
+
 			return LIBUSB_SUCCESS;
 		}
+
 		return ((int)(this->status));
 	}
 	// -------------------------------------------------------------------
@@ -148,12 +150,12 @@ namespace capex
 
 	std::string CAPEX_CALL usb::GetUsbVersion()
 	{
-		unsigned char Major, Minor;
-		Major = this->device.USBVersion >> 8;
-		Minor = this->device.USBVersion & 0xFF;
 		std::string s1, s2;
-		s1 = std::to_string(Major);
-		s2 = std::to_string(Minor);
+		char buffer[32];
+		s1 = std::string(std::itoa(this->device.USBVersion >> 8, buffer, 10));
+		s2 = std::string(std::itoa(this->device.USBVersion & 0xFF, buffer, 10));
+		//s1 = std::to_string(this->device.USBVersion >> 8);
+		//s2 = std::to_string(this->device.USBVersion & 0xFF);
 		return (s1 + "." + s2);
 	}
 	// -------------------------------------------------------------------
@@ -182,17 +184,56 @@ namespace capex
 	
 	std::string CAPEX_CALL usb::GetErrorMessage(int Status)
 	{
-		if(Status == -1)
+		if(Status == 1)
 			Status = this->status;
 		
 		std::string msg = "";
-		
+
 		if(Status >= -12)
 			msg = libusb_strerror((libusb_error)(Status));
 		else
 		{
 			switch(Status)
 			{
+				case LIBUSB_SUCCESS:
+					msg = "Success";
+					break;
+				case LIBUSB_ERROR_IO:
+					msg = "Input/output error";
+					break;
+				case LIBUSB_ERROR_INVALID_PARAM:
+					msg = "Invalid parameter";
+					break;
+				case LIBUSB_ERROR_ACCESS:
+					msg = "Access denied (insufficient permissions)";
+					break;
+				case LIBUSB_ERROR_NO_DEVICE:
+					msg = "No such device (it may have been disconnected)";
+					break;
+				case LIBUSB_ERROR_NOT_FOUND:
+					msg = "Entity not found";
+					break;
+				case LIBUSB_ERROR_BUSY:
+					msg = "Resource busy";
+					break;
+				case LIBUSB_ERROR_TIMEOUT:
+					msg = "Operation timed out";
+					break;
+				case LIBUSB_ERROR_OVERFLOW:
+					msg = "Overflow";
+					break;
+				case LIBUSB_ERROR_PIPE:
+					msg = "Pipe error";
+					break;
+				case LIBUSB_ERROR_INTERRUPTED:
+					msg = "System call interrupted (perhaps due to signal)";
+					break;
+				case LIBUSB_ERROR_NO_MEM:
+					msg = "Insufficient memory";
+					break;
+				case LIBUSB_ERROR_NOT_SUPPORTED:
+					msg = "Operation not supported or unimplemented on this platform";
+					break;
 				case CAPEXUSB_TOO_MUCH_DEVICES:
 					msg = "Too much USB devices found";
 					break;
@@ -202,8 +243,12 @@ namespace capex
 				case CAPEXUSB_EP0_READ_ERROR:
 					msg = "Error for reading in EP0";
 					break;
+				case LIBUSB_ERROR_OTHER:
+					msg = "Error not known";
+					break;
 				default:
-					msg = "Error " + std::to_string(Status) + " not known";
+					char buffer[32];
+					msg = "Error " + std::string(std::itoa(Status, buffer, 10)) + " not known";
 					break;
 			}
 		}

@@ -1,9 +1,11 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <memory>
 
 using std::cout;
 using std::endl;
+
 
 namespace capex
 {
@@ -16,7 +18,7 @@ namespace capex
 			cout << "+    Empty constructor of     " << CAPEX_DBG_EMPHASE << this;
 			cout << CAPEX_DBG_COLOR_STD << endl;
 		#endif
-		this->values = new T[1];
+		this->values = std::unique_ptr<T[]>(new T[1]);
 		this->nb_values = 1;
 	}
 	// -------------------------------------------------------------------
@@ -30,7 +32,7 @@ namespace capex
 			cout << "+    Constant constructor of  " << CAPEX_DBG_EMPHASE << this;
 			cout << CAPEX_DBG_COLOR_STD << endl;
 		#endif
-		this->values = new T[number];
+		this->values = std::unique_ptr<T[]>(new T[number]);
 		for(unsigned int i = 0; i < number; i++)
 		{
 			this->values[i] = value;
@@ -48,7 +50,7 @@ namespace capex
 			cout << "+    Copy constructor of      " << CAPEX_DBG_EMPHASE << this;
 			cout << CAPEX_DBG_COLOR_STD << endl;
 		#endif
-		this->values = new T[value_array.size()];
+		this->values = std::unique_ptr<T[]>(new T[value_array.size()]);
 		memcpy(&(this->values[0]), &(value_array.values[0]), sizeof(T) * value_array.size());
 		this->nb_values = value_array.size();
 	}
@@ -65,7 +67,7 @@ namespace capex
 		#endif
 		try
 		{
-			delete[] this->values;
+			this->values.release();
 		}
 		catch(...)
 		{
@@ -173,9 +175,10 @@ namespace capex
 				for(unsigned int i = 0; i < new_size; i++)
 					buffer[i] = this->values[i];
 			}
-			delete[] this->values;
-			this->values = new T[new_size];
-			std::copy(buffer, buffer + new_size, this->values);
+			this->values.release();
+			this->values = std::unique_ptr<T[]>(new T[new_size]);
+
+			std::copy(buffer, buffer + new_size, this->values.get());
 			this->nb_values = new_size;
 			delete[] buffer;
 		}
@@ -225,9 +228,10 @@ namespace capex
 		for(unsigned int i = index + 1; i < this->nb_values; i++)
 			buffer[i - 1] = this->values[i];
 
-		delete[] this->values;
-		this->values = new T[this->nb_values - 1];
-		std::copy(buffer, buffer + this->nb_values - 1, this->values);
+		this->values.release();
+		this->values = std::unique_ptr<T[]>(new T[this->nb_values - 1]);
+
+		std::copy(buffer, buffer + this->nb_values - 1, this->values.get());
 		this->nb_values--;
 		delete[] buffer;
 	}
@@ -252,9 +256,10 @@ namespace capex
 		for(unsigned int i = start_index; i < this->nb_values - stop_index; i++)
 			buffer[i] = this->values[stop_index + i];
 
-		delete[] this->values;
-		this->values = new T[new_size];
-		std::copy(buffer, buffer + new_size, this->values);
+		this->values.release();
+		this->values = std::unique_ptr<T[]>(new T[new_size]);
+
+		std::copy(buffer, buffer + new_size, this->values.get());
 		this->nb_values -= (stop_index - start_index);
 		delete[] buffer;
 	}
@@ -285,8 +290,8 @@ namespace capex
 	template <typename T>
 	void CAPEX_CALL array<T>::clear()
 	{
-		delete[] this->values;
-		this->values = new T[1];
+		this->values.release();
+		this->values = std::unique_ptr<T[]>(new T[1]);
 		this->nb_values = 1;
 	}
 	// -------------------------------------------------------------------
@@ -355,6 +360,39 @@ namespace capex
 	{
 		array<T> Sub = pow(*this - value, 2.0);
 		return Sub.index(Sub.min());
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	array<T> CAPEX_CALL array<T>::select(int index)
+	{
+		if(index > this->nb_values - 1)
+			index = this->nb_values - 1;
+
+		if(index < - (this->nb_values - 1))
+			index = - (this->nb_values - 1);
+
+		unsigned int size;
+		if(index >= 0)
+			size = this->nb_values - index;
+		else
+			size = this->nb_values + index;
+
+		array<T> SubArray = array<T>();
+		SubArray.resize(size);
+
+		if(index >= 0)
+		{
+			for(unsigned int i = index; i < this->nb_values; i++)
+				SubArray.values[i - index] = this->values[i];
+		}
+		else
+		{
+			for(unsigned int i = 0; i < this->nb_values + index; i++)
+				SubArray.values[i] = this->values[i];
+		}
+		return SubArray;
 	}
 	// -------------------------------------------------------------------
 
@@ -1068,7 +1106,86 @@ namespace capex
 	template <typename T>
 	array<T> CAPEX_CALL array<T>::smooth(unsigned int area)
 	{
+		array<T> SmoothingArray;
+		SmoothingArray.resize(this->nb_values);
 
+		if(std::pow(-1.0, (float)area) == 1.0)
+			area++;
+
+		if(area > this->nb_values)
+		{
+			if(std::pow(-1.0, (float)this->nb_values) == 1.0)
+				area = this->nb_values - 1;
+			else
+				area = this->nb_values;
+		}
+
+		T *temp = new T[area];
+		int cnt = 0;
+
+		for(unsigned int k = 0; k < area / 2; k++)
+			temp[k] = this->values[k];
+
+		while(cnt < (this->nb_values - (area / 2)))
+		{
+			int cpt = 0;
+			for(unsigned int k = area / 2; k < area; k++)
+			{
+				if((cnt + cpt) < this->nb_values)
+				{
+					temp[k] = this->values[cnt + cpt];
+					cpt++;
+				}
+				else
+					temp[k] = this->values[cnt + cpt - 1];
+			}
+
+			SmoothingArray.values[cnt] = this->smooth_function(temp, area);
+
+			for(int k = 0; k < area / 2; k++)
+				temp[k] = temp[k + 1];
+
+			cnt++;
+		}
+
+		int reduce = 0;
+		for(unsigned int i = this->nb_values - (area / 2); i < this->nb_values; i++)
+		{
+			for(unsigned int k = this->nb_values - (area + reduce); k < this->nb_values; k++)
+				temp[k - (this->nb_values - (area + reduce))] = this->values[k];
+
+			SmoothingArray.values[i] = this->smooth_function(temp, area + reduce);
+			reduce--;
+		}
+
+		delete[] temp;
+
+		return SmoothingArray;
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	T CAPEX_CALL array<T>::smooth_function(const T raw_data[], unsigned int Window)
+	{
+		const unsigned int i = (unsigned int)(Window / 2);
+		T result = T();
+		T coeff = T();
+
+		for(unsigned int k = 0; k < Window; k++)
+		{
+			double c = 1.0;
+			if(k != i)
+				c = std::abs((int)(Window / (2 * (k - i))));
+			else
+				c = Window;
+			result += c * raw_data[k];
+			coeff += c;
+		}
+
+		result *= (1.0 / coeff);
+
+		return result;
 	}
 	// -------------------------------------------------------------------
 
@@ -1328,6 +1445,18 @@ namespace capex
 
 		for(unsigned int i = 0; i < x.size(); i++)
                         PowerResult.values[i] = std::pow(x.values[i], power);
+		return PowerResult;
+	}
+	// -------------------------------------------------------------------
+	
+	
+	template<class T>
+	array<T> CAPEX_CALL pow2(const array<T> x)
+	{
+		array<T> PowerResult = array<T>(T(), x.size());
+
+		for(unsigned int i = 0; i < x.size(); i++)
+                        PowerResult.values[i] = std::pow(x.values[i], float(2.0));
 		return PowerResult;
 	}
 	// -------------------------------------------------------------------

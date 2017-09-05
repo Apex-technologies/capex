@@ -1,10 +1,8 @@
 #include "../../src/capex.h"
-//#include "../../src/apexusb.h"
-
 #include <iostream>
 
 using namespace std;
-using namespace mxm;
+using namespace capex;
 
 
 
@@ -49,7 +47,7 @@ int main(void)
 
 	cout << endl << "\t\t1D ARRAYS" << endl << endl;
 
-	mxm::array<float> a;
+	capex::array<float> a;
 	a.linspace(0.0, 6.28, N);
 
 	float *p = a.pointer();
@@ -70,17 +68,17 @@ int main(void)
 	}
 
 	cout << std::endl << "\t\t2D ARRAYS" << endl << endl;
-	mxm::array<float> z;
+	capex::array<float> z;
 	z.linspace(0.0, N - 1.0, N);
 
-	mxm::array<mxm::array<float>> *T = new mxm::array<mxm::array<float>>(z, 2);
+	capex::array<capex::array<float>> *T = new capex::array<capex::array<float>>(z, 2);
 
 	cout << "Reassign the 100th value : ";
 	(*T)[0][100] = 4;
 	cout << (*T)[0][100] << endl;
 	delete T;
 
-        cout << std::endl << "\t\tUSB DEVICES" << endl << endl;
+    cout << std::endl << "\t\tUSB DEVICES" << endl << endl;
 
 	usb dev(0x5553, 0x3510);
 	if(dev.IsConnected())
