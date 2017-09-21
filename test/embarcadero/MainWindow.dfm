@@ -23,6 +23,10 @@ object MainForm: TMainForm
     TabOrder = 0
     object ArraySheet: TTabSheet
       Caption = 'Array Test'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object FreqLabel: TLabel
         Left = 6
         Top = 538
@@ -163,8 +167,6 @@ object MainForm: TMainForm
     object USBTest_Sheet: TTabSheet
       Caption = 'USB Test'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 28
       object Label3: TLabel
         Left = 576
         Top = 72
@@ -217,7 +219,7 @@ object MainForm: TMainForm
       object FindDevices_Bt: TButton
         Left = 32
         Top = 16
-        Width = 492
+        Width = 530
         Height = 25
         Caption = 'Find Devices'
         TabOrder = 0
@@ -226,9 +228,8 @@ object MainForm: TMainForm
       object DevicesList_Grid: TStringGrid
         Left = 32
         Top = 56
-        Width = 492
+        Width = 530
         Height = 481
-        ColCount = 4
         DefaultColWidth = 150
         FixedCols = 0
         RowCount = 100
@@ -237,8 +238,9 @@ object MainForm: TMainForm
         ColWidths = (
           79
           67
-          156
-          166)
+          136
+          143
+          80)
       end
       object VendorReq_Edit: TEdit
         Left = 699
@@ -314,9 +316,9 @@ object MainForm: TMainForm
       end
       object DataEP0_Grid: TStringGrid
         Left = 576
-        Top = 216
+        Top = 240
         Width = 162
-        Height = 321
+        Height = 297
         ColCount = 2
         DefaultColWidth = 70
         RowCount = 65
@@ -340,6 +342,15 @@ object MainForm: TMainForm
         Caption = 'EEPROM to Data'
         TabOrder = 12
         OnClick = GetDataFromEEProm_BtClick
+      end
+      object SendEP1_Bt: TButton
+        Left = 576
+        Top = 203
+        Width = 161
+        Height = 25
+        Caption = 'Send EP1'
+        TabOrder = 13
+        OnClick = SendEP0_BtClick
       end
     end
   end

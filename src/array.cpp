@@ -1,7 +1,3 @@
-#include <iostream>
-#include <algorithm>
-#include <cmath>
-#include <memory>
 
 using std::cout;
 using std::endl;
@@ -36,6 +32,24 @@ namespace capex
 		for(unsigned int i = 0; i < number; i++)
 		{
 			this->values[i] = value;
+		}
+		this->nb_values = number;
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	CAPEX_CALL array<T>::array(T *values, unsigned int number)
+	{
+		#if CAPEX_DEBUG
+			cout << CAPEX_DBG_COLOR_GRN;
+			cout << "+    Table constructor of  " << CAPEX_DBG_EMPHASE << this;
+			cout << CAPEX_DBG_COLOR_STD << endl;
+		#endif
+		this->values = std::unique_ptr<T[]>(new T[number]);
+		for(unsigned int i = 0; i < number; i++)
+		{
+			this->values[i] = values[i];
 		}
 		this->nb_values = number;
 	}
@@ -160,11 +174,21 @@ namespace capex
 
 
 	template <typename T>
-	void CAPEX_CALL array<T>::resize(unsigned int new_size)
+	bool CAPEX_CALL array<T>::resize(unsigned int new_size)
 	{
 		if(this->nb_values != new_size)
 		{
-			T* buffer = new T[new_size];
+			T* buffer = NULL;
+			buffer = new T[new_size];
+			if(buffer == NULL)
+			{
+				#if CAPEX_DEBUG
+					cout << "Error in array::resize at line " << __LINE__ << endl;
+					cout << "Cannot initialize a table with " << new_size << " elements" << endl;
+				#endif
+				return false;
+			}
+
 			if(this->nb_values < new_size)
 			{
 				for(unsigned int i = 0; i < this->nb_values; i++)
@@ -182,6 +206,8 @@ namespace capex
 			this->nb_values = new_size;
 			delete[] buffer;
 		}
+
+		return true;
 	}
 	// -------------------------------------------------------------------
 
@@ -196,12 +222,11 @@ namespace capex
 
 
 	template <typename T>
-	void CAPEX_CALL array<T>::append(T values[], unsigned int number)
+	void CAPEX_CALL array<T>::append(T *values, unsigned int number)
 	{
 		this->resize(this->nb_values + number);
 		for(unsigned int i = 0; i < number; i++)
-			this->values[this->nb_values + i] = values[i];
-		this->nb_values += number;
+			this->values[this->nb_values - number + i] = values[i];
 	}
 	// -------------------------------------------------------------------
 
@@ -577,6 +602,10 @@ namespace capex
 		}
 		catch(...)
 		{
+			#if CAPEX_DEBUG
+				cout << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cout << "Return of an empty array" << endl;
+			#endif
 			return Sum;
 		}
 
@@ -662,6 +691,10 @@ namespace capex
 		}
 		catch(...)
 		{
+			#if CAPEX_DEBUG
+				cout << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cout << "Return of an empty array" << endl;
+			#endif
 			return Product;
 		}
 
@@ -756,6 +789,10 @@ namespace capex
 		}
 		catch(...)
 		{
+			#if CAPEX_DEBUG
+				cout << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cout << "Return of an empty array" << endl;
+			#endif
 			return Diff;
 		}
 
@@ -841,6 +878,10 @@ namespace capex
 		}
 		catch(...)
 		{
+			#if CAPEX_DEBUG
+				cout << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cout << "Return of an empty array" << endl;
+			#endif
 			return Quotient;
 		}
 
@@ -871,6 +912,29 @@ namespace capex
 		}
 		VectorProduct.values[right.size() - 1] = this->values[right.size() - 1] * right.values[0] - this->values[0] * right.values[right.size() - 1];
 		return VectorProduct;
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	std::ostream & operator<<(std::ostream &output, array<T> &right)
+	{
+		for(unsigned int i = 0; i < right.size(); i++)
+			output << right[i] << "\t";
+		return output;
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	std::istream & operator>>(std::istream &input, array<T> &right)
+	{
+		T value;
+		while(input >> value)
+		{
+			right.append(value);
+		}
+		return input;
 	}
 	// -------------------------------------------------------------------
 
@@ -1314,6 +1378,7 @@ namespace capex
 
 		for(unsigned int i = 0; i < x.size(); i++)
 			Sinus.values[i] = T(std::sin(x.values[i]));
+
 		return Sinus;
 	}
 	// -------------------------------------------------------------------
@@ -1325,7 +1390,8 @@ namespace capex
 		array<T> Cosinus = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Cosinus.values[i] = std::cos(x.values[i]);
+			Cosinus.values[i] = std::cos(x.values[i]);
+
 		return Cosinus;
 	}
 	// -------------------------------------------------------------------
@@ -1337,7 +1403,8 @@ namespace capex
 		array<T> Tangent = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Tangent.values[i] = std::tan(x.values[i]);
+			Tangent.values[i] = std::tan(x.values[i]);
+
 		return Tangent;
 	}
 	// -------------------------------------------------------------------
@@ -1349,7 +1416,8 @@ namespace capex
 		array<T> Arcsinus = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Arcsinus.values[i] = std::asin(x.values[i]);
+			Arcsinus.values[i] = std::asin(x.values[i]);
+
 		return Arcsinus;
 	}
 	// -------------------------------------------------------------------
@@ -1361,7 +1429,8 @@ namespace capex
 		array<T> Arcosinus = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Arcosinus.values[i] = std::acos(x.values[i]);
+			Arcosinus.values[i] = std::acos(x.values[i]);
+
 		return Arcosinus;
 	}
 	// -------------------------------------------------------------------
@@ -1373,7 +1442,8 @@ namespace capex
 		array<T> Arctangent = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Arctangent.values[i] = std::atan(x.values[i]);
+			Arctangent.values[i] = std::atan(x.values[i]);
+
 		return Arctangent;
 	}
 	// -------------------------------------------------------------------
@@ -1385,7 +1455,8 @@ namespace capex
 		array<T> Exponential = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Exponential.values[i] = std::exp(x.values[i]);
+			Exponential.values[i] = std::exp(x.values[i]);
+
 		return Exponential;
 	}
 	// -------------------------------------------------------------------
@@ -1396,7 +1467,8 @@ namespace capex
 		array<T> Logarithm = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Logarithm.values[i] = std::log(x.values[i]);
+			Logarithm.values[i] = std::log(x.values[i]);
+
 		return Logarithm;
 	}
 	// -------------------------------------------------------------------
@@ -1408,7 +1480,8 @@ namespace capex
 		array<T> Logarithm = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Logarithm.values[i] = std::log10(x.values[i]);
+			Logarithm.values[i] = std::log10(x.values[i]);
+
 		return Logarithm;
 	}
 	// -------------------------------------------------------------------
@@ -1420,7 +1493,8 @@ namespace capex
 		array<T> Logarithm = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Logarithm.values[i] = std::log2(x.values[i]);
+			Logarithm.values[i] = std::log2(x.values[i]);
+
 		return Logarithm;
 	}
 	// -------------------------------------------------------------------
@@ -1432,7 +1506,8 @@ namespace capex
 		array<T> SquareRoot = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        SquareRoot.values[i] = std::sqrt(x.values[i]);
+			SquareRoot.values[i] = std::sqrt(x.values[i]);
+
 		return SquareRoot;
 	}
 	// -------------------------------------------------------------------
@@ -1444,7 +1519,8 @@ namespace capex
 		array<T> PowerResult = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        PowerResult.values[i] = std::pow(x.values[i], power);
+			PowerResult.values[i] = std::pow(x.values[i], power);
+
 		return PowerResult;
 	}
 	// -------------------------------------------------------------------
@@ -1456,7 +1532,8 @@ namespace capex
 		array<T> PowerResult = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        PowerResult.values[i] = std::pow(x.values[i], float(2.0));
+			PowerResult.values[i] = std::pow(x.values[i], float(2.0));
+
 		return PowerResult;
 	}
 	// -------------------------------------------------------------------
@@ -1468,7 +1545,8 @@ namespace capex
 		array<T> PowerResult = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        PowerResult.values[i] = std::pow(x.values[i], float(10.0));
+			PowerResult.values[i] = std::pow(x.values[i], float(10.0));
+
 		return PowerResult;
 	}
 	// -------------------------------------------------------------------
@@ -1480,7 +1558,8 @@ namespace capex
 		array<T> Absolute = array<T>(T(), x.size());
 
 		for(unsigned int i = 0; i < x.size(); i++)
-                        Absolute.values[i] = std::abs(x.values[i]);
+			Absolute.values[i] = std::abs(x.values[i]);
+
 		return Absolute;
 	}
 	// -------------------------------------------------------------------

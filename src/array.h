@@ -11,15 +11,22 @@
 #define _CAPEX_ARRAY_H
 
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <exception>
+#include <algorithm>
 #include <memory>
-
-#include <string.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstring>
+#include <cstdlib>
 
 namespace capex
 {
+
+	// Forward declarations for overloading operators << and >>:
+	template <typename T> class array;
+	template <typename T> std::ostream & operator<<(std::ostream &, const array<T> &);
+	template <typename T> std::istream & operator>>(std::istream &, const array<T> &);
 
 	// -----------------------------------------------------------------------------
 	//                             ARRAY DECLARATION
@@ -29,11 +36,14 @@ namespace capex
 
 	template <typename T> class array
 	{
+		friend std::ostream & operator<< <T>(std::ostream &, const array<T> &);
+		friend std::istream & operator>> <T>(std::istream &, array<T> &);
+
 		public: // Public Methods
 
 			//! \brief Array where values are stored
 			//! Do not modify this array directly
-            std::unique_ptr<T[]> values;
+			std::unique_ptr<T[]> values;
 
 			// ---------------------------------------------------------------------
 			//! \brief Creates an empty array of type <T>
@@ -51,6 +61,17 @@ namespace capex
 			//!
 			// ---------------------------------------------------------------------
 			CAPEX_CALL array(T value, unsigned int number = 1);
+
+
+			// ---------------------------------------------------------------------
+			//! \brief Creates an array of type <T> with initial table values
+			//! \param  value  the table to fill in the array
+			//! \param  number the number of values in the table
+			//!
+			//! This creator creates an array initialized by a table
+			//!
+			// ---------------------------------------------------------------------
+			CAPEX_CALL array(T *values, unsigned int number);
 
 
 			// ---------------------------------------------------------------------
@@ -145,12 +166,15 @@ namespace capex
 			// ---------------------------------------------------------------------
 			//! \brief Resizes an array
 			//! \param  new_size  the new size of an array
+			//! \return a \e boolean representing the success of the operation
 			//!
 			//! This method resizes an array. If the new size is greater than
 			//! before, the new values are initialized to their default values.
+			//! If the array has been resized, the method returns \b true,
+			//! \b false otherwise
 			//!
 			// ---------------------------------------------------------------------
-			void CAPEX_CALL resize(unsigned int new_size);
+			bool CAPEX_CALL resize(unsigned int new_size);
 
 
 			// ---------------------------------------------------------------------
@@ -174,7 +198,7 @@ namespace capex
 			//! method generates an error
 			//!
 			// ---------------------------------------------------------------------
-			void CAPEX_CALL append(T values[], unsigned int number);
+			void CAPEX_CALL append(T *values, unsigned int number);
 
 
 			// ---------------------------------------------------------------------
@@ -942,6 +966,25 @@ namespace capex
 			T CAPEX_CALL smooth_function(const T raw_data[], unsigned int Window);
 
 	};
+
+
+	// ---------------------------------------------------------------------
+	//! \brief Overloading of the << operator
+	//! \param  output ostream where data have to be write
+	//! \param  right  the array to write
+	//! \return the ostream with the values of array
+	//!
+	//! This method overloads the operator '<<'. All terms of the array
+	//! are written into the output ostream.
+	//!
+	// ---------------------------------------------------------------------
+	template <typename T>
+	std::ostream &operator<<(std::ostream &output, array<T> &right);
+
+
+	template <typename T>
+	std::istream& operator>>(std::istream &input, array<T> &right);
+
 
 	// ---------------------------------------------------------------------
 	//! \brief Overloading of the + operator

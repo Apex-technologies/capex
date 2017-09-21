@@ -31,11 +31,13 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 	this->DevicesList_Grid->Cells[1][0] = "PID";
 	this->DevicesList_Grid->Cells[2][0] = "Manufacturer";
 	this->DevicesList_Grid->Cells[3][0] = "Product";
+	this->DevicesList_Grid->Cells[4][0] = "USB";
 
 	this->DataEP0_Grid->Cells[0][0] = "Index";
 	this->DataEP0_Grid->Cells[1][0] = "Data";
 	for(int i = 0; i < 64; i++)
-    	this->DataEP0_Grid->Cells[0][i + 1] = IntToStr(i);
+		this->DataEP0_Grid->Cells[0][i + 1] = IntToStr(i);
+
 }
 //---------------------------------------------------------------------------
 
@@ -101,11 +103,17 @@ void __fastcall TMainForm::FindDevices_BtClick(TObject *Sender)
 	this->devices = this->device->FoundDevices();
 	for(int i = 0; i < devices.size(); i++)
 	{
+		unsigned short uv = this->devices[i].USBVersion;
+		unsigned char major, minor;
+		major = this->devices[i].USBVersion >> 8;
+		minor = this->devices[i].USBVersion & 0x00FF;
 		this->DevicesList_Grid->Cells[0][i + 1] = "0x" + IntToHex((int)this->devices[i].VID, 4);
 		this->DevicesList_Grid->Cells[1][i + 1] = "0x" + IntToHex((int)this->devices[i].PID, 4);
 		this->DevicesList_Grid->Cells[2][i + 1] = UnicodeString(this->devices[i].Manufacturer.c_str());
 		this->DevicesList_Grid->Cells[3][i + 1] = UnicodeString(this->devices[i].Product.c_str());
+		this->DevicesList_Grid->Cells[4][i + 1] = IntToStr((int)major) + "." + IntToStr((int)minor);
 	}
+	this->StatusBar1->Panels->Items[0]->Text = "USB Status : " + UnicodeString(this->device->GetErrorMessage(1).c_str());
 }
 //---------------------------------------------------------------------------
 
@@ -252,10 +260,7 @@ void __fastcall TMainForm::GetDataFromEEProm_BtClick(TObject *Sender)
 
 	array<float> x;
 	x.linspace(0.0, eData.TimeBase * NbPoints, NbPoints);
-	array<float> y;
-	y.resize(NbPoints);
-	for(int i = 0; i < y.size(); i++)
-		y[i] = eData.Sinus[i];
+	array<float> y(eData.Sinus, NbPoints);
 
 	this->Series1->Clear();
 	for(unsigned int i = 0; i < x.size(); i++)

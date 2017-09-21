@@ -19,6 +19,7 @@
 #include <VCLTee.TeeProcs.hpp>
 #include <Vcl.Grids.hpp>
 
+#include <sstream>
 #include <memory>
 
 #define NB_POINTS					200
@@ -80,6 +81,7 @@ __published:	// IDE-managed Components
 	TStringGrid *DataEP0_Grid;
 	TButton *DataToEEProm_Bt;
 	TButton *GetDataFromEEProm_Bt;
+	TButton *SendEP1_Bt;
 	void __fastcall Quit_BtClick(TObject *Sender);
 	void __fastcall Frequency_BarChange(TObject *Sender);
 	void __fastcall Threshold_EditChange(TObject *Sender);

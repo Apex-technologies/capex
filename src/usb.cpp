@@ -237,6 +237,9 @@ namespace capex
 				case CAPEXUSB_TOO_MUCH_DEVICES:
 					msg = "Too much USB devices found";
 					break;
+				case CAPEXUSB_DEVICE_NOT_CONNECTED:
+					msg = "No USB device is connected";
+					break;
 				case CAPEXUSB_EP0_WRITE_ERROR:
 					msg = "Error for writing in EP0";
 					break;
@@ -260,6 +263,9 @@ namespace capex
 	
 	int CAPEX_CALL usb::EP0Write(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length)
 	{
+		if(!this->connected)
+			return CAPEXUSB_DEVICE_NOT_CONNECTED;
+
 		unsigned int timeout = 1000;
 		static const int CONTROL_REQUEST_TYPE_OUT = LIBUSB_ENDPOINT_OUT | LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_INTERFACE;
 		this->status = libusb_control_transfer(this->device.lib.handle,
@@ -273,6 +279,9 @@ namespace capex
 	
 	int CAPEX_CALL usb::EP0Read(unsigned char Request, unsigned short Value, unsigned short Index, unsigned char *Data, unsigned long Length)
 	{
+		if(!this->connected)
+			return CAPEXUSB_DEVICE_NOT_CONNECTED;
+
 		unsigned int timeout = 1000;
 		static const int CONTROL_REQUEST_TYPE_IN = LIBUSB_ENDPOINT_IN | LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_INTERFACE;
 		this->status = libusb_control_transfer(this->device.lib.handle,

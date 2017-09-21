@@ -42,6 +42,8 @@
 	#define CAPEXUSB_TOO_MUCH_DEVICES		-20
 	// Problem for opening the device
 	#define CAPEXUSB_CANNOT_OPEN_DEVICE		-21
+	// Device not connected
+	#define CAPEXUSB_DEVICE_NOT_CONNECTED	-22
 	// Problem during a write operation on EndPoint 0
 	#define CAPEXUSB_EP0_WRITE_ERROR		-51
 	// Problem during a read operation on EndPoint 0
