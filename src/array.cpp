@@ -1,5 +1,5 @@
 
-using std::cout;
+using std::cerr;
 using std::endl;
 
 
@@ -9,11 +9,6 @@ namespace capex
 	template <typename T>
 	CAPEX_CALL array<T>::array()
 	{
-		#if CAPEX_DEBUG
-			cout << CAPEX_DBG_COLOR_GRN;
-			cout << "+    Empty constructor of     " << CAPEX_DBG_EMPHASE << this;
-			cout << CAPEX_DBG_COLOR_STD << endl;
-		#endif
 		this->values = std::unique_ptr<T[]>(new T[1]);
 		this->nb_values = 1;
 	}
@@ -23,11 +18,6 @@ namespace capex
 	template <typename T>
 	CAPEX_CALL array<T>::array(T value, unsigned int number)
 	{
-		#if CAPEX_DEBUG
-			cout << CAPEX_DBG_COLOR_GRN;
-			cout << "+    Constant constructor of  " << CAPEX_DBG_EMPHASE << this;
-			cout << CAPEX_DBG_COLOR_STD << endl;
-		#endif
 		this->values = std::unique_ptr<T[]>(new T[number]);
 		for(unsigned int i = 0; i < number; i++)
 		{
@@ -41,11 +31,6 @@ namespace capex
 	template <typename T>
 	CAPEX_CALL array<T>::array(T *values, unsigned int number)
 	{
-		#if CAPEX_DEBUG
-			cout << CAPEX_DBG_COLOR_GRN;
-			cout << "+    Table constructor of  " << CAPEX_DBG_EMPHASE << this;
-			cout << CAPEX_DBG_COLOR_STD << endl;
-		#endif
 		this->values = std::unique_ptr<T[]>(new T[number]);
 		for(unsigned int i = 0; i < number; i++)
 		{
@@ -59,11 +44,6 @@ namespace capex
 	template <typename T>
 	CAPEX_CALL array<T>::array(const array<T> &value_array)
 	{
-		#if CAPEX_DEBUG
-			cout << CAPEX_DBG_COLOR_GRN;
-			cout << "+    Copy constructor of      " << CAPEX_DBG_EMPHASE << this;
-			cout << CAPEX_DBG_COLOR_STD << endl;
-		#endif
 		this->values = std::unique_ptr<T[]>(new T[value_array.size()]);
 		memcpy(&(this->values[0]), &(value_array.values[0]), sizeof(T) * value_array.size());
 		this->nb_values = value_array.size();
@@ -74,11 +54,6 @@ namespace capex
 	template <typename T>
 	CAPEX_CALL array<T>::~array()
 	{
-		#if CAPEX_DEBUG
-			cout << CAPEX_DBG_COLOR_RED;
-			cout << "-    Destructor of            " << CAPEX_DBG_EMPHASE << this;
-			cout << CAPEX_DBG_COLOR_STD << endl;
-		#endif
 		try
 		{
 			this->values.release();
@@ -86,9 +61,7 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cout << CAPEX_DBG_COLOR_RED;
-				cout << "Error for deleting array";
-				cout << CAPEX_DBG_COLOR_STD << endl;
+				cerr << "Error for deleting array";
 			#endif
 		}
 	}
@@ -155,11 +128,13 @@ namespace capex
 		if(min > max)
 			std::swap(min, max);
 
-		this->resize(number);
-		for(unsigned int i = 0; i < this->size(); i++)
+		if(this->resize(number))
 		{
-			double r = (double)(rand()) / (double)(RAND_MAX);
-			this->values[i] = T(r * (max - min)) + T(min);
+			for(unsigned int i = 0; i < this->size(); i++)
+			{
+				double r = (double)(rand()) / (double)(RAND_MAX);
+				this->values[i] = T(r * (max - min)) + T(min);
+			}
 		}
 	}
 	// -------------------------------------------------------------------
@@ -183,8 +158,8 @@ namespace capex
 			if(buffer == NULL)
 			{
 				#if CAPEX_DEBUG
-					cout << "Error in array::resize at line " << __LINE__ << endl;
-					cout << "Cannot initialize a table with " << new_size << " elements" << endl;
+					cerr << "Error in array::resize at line " << __LINE__ << endl;
+					cerr << "Cannot initialize a table with " << new_size << " elements" << endl;
 				#endif
 				return false;
 			}
@@ -215,8 +190,8 @@ namespace capex
 	template <typename T>
 	void CAPEX_CALL array<T>::append(T value)
 	{
-		this->resize(this->nb_values + 1);
-		this->values[this->nb_values] = value;
+		if(this->resize(this->nb_values + 1))
+			this->values[this->nb_values] = value;
 	}
 	// -------------------------------------------------------------------
 
@@ -224,9 +199,11 @@ namespace capex
 	template <typename T>
 	void CAPEX_CALL array<T>::append(T *values, unsigned int number)
 	{
-		this->resize(this->nb_values + number);
-		for(unsigned int i = 0; i < number; i++)
-			this->values[this->nb_values - number + i] = values[i];
+		if(this->resize(this->nb_values + number))
+		{
+			for(unsigned int i = 0; i < number; i++)
+				this->values[this->nb_values - number + i] = values[i];
+		}
 	}
 	// -------------------------------------------------------------------
 
@@ -234,10 +211,11 @@ namespace capex
 	template <typename T>
 	void CAPEX_CALL array<T>::append(array<T> value_array)
 	{
-		this->resize(this->nb_values + value_array.size());
-		for(unsigned int i = 0; i < value_array.size(); i++)
-			this->values[this->nb_values + i] = value_array.values[i];
-		this->nb_values += value_array.size();
+		if(this->resize(this->nb_values + value_array.size()))
+		{
+			for(unsigned int i = 0; i < value_array.size(); i++)
+				this->values[this->nb_values - value_array.size() + i] = value_array.values[i];
+		}
 	}
 	// -------------------------------------------------------------------
 
@@ -294,6 +272,9 @@ namespace capex
 	template <typename T>
 	void CAPEX_CALL array<T>::erase(array<bool> mask)
 	{
+		if(mask.size() > this->size())
+			return;
+		
 		for(unsigned int i = 0; i < mask.size(); i++)
 		{
 			if(mask.values[i])
@@ -306,8 +287,8 @@ namespace capex
 	template <typename T>
 	void CAPEX_CALL array<T>::pop()
 	{
-		this->resize(this->nb_values - 1);
-		this->nb_values--;
+		if(this->resize(this->nb_values - 1))
+			this->nb_values--;
 	}
 	// -------------------------------------------------------------------
 
@@ -405,17 +386,18 @@ namespace capex
 			size = this->nb_values + index;
 
 		array<T> SubArray = array<T>();
-		SubArray.resize(size);
-
-		if(index >= 0)
+		if(SubArray.resize(size))
 		{
-			for(unsigned int i = index; i < this->nb_values; i++)
-				SubArray.values[i - index] = this->values[i];
-		}
-		else
-		{
-			for(unsigned int i = 0; i < this->nb_values + index; i++)
-				SubArray.values[i] = this->values[i];
+			if(index >= 0)
+			{
+				for(unsigned int i = index; i < this->nb_values; i++)
+					SubArray.values[i - index] = this->values[i];
+			}
+			else
+			{
+				for(unsigned int i = 0; i < this->nb_values + index; i++)
+					SubArray.values[i] = this->values[i];
+			}
 		}
 		return SubArray;
 	}
@@ -435,10 +417,11 @@ namespace capex
 			stop_index = this->nb_values - 1;
 
 		array<T> SubArray = array<T>();
-		SubArray.resize(stop_index - start_index);
-
-		for(unsigned int i = start_index; i < stop_index; i++)
-			SubArray.values[i - start_index] = this->values[i];
+		if(SubArray.resize(stop_index - start_index))
+		{
+			for(unsigned int i = start_index; i < stop_index; i++)
+				SubArray.values[i - start_index] = this->values[i];
+		}		
 		return SubArray;
 	}
 	// -------------------------------------------------------------------
@@ -448,15 +431,20 @@ namespace capex
 	array<T> CAPEX_CALL array<T>::select(array<bool> mask)
 	{
 		array<T> SubArray = array<T> ();
-		SubArray.resize(mask.elements());
 
-		unsigned int k = 0;
-		for(unsigned int i = 0; i < mask.size(); i++)
+		if(mask.size() > this->size())
+			return SubArray;		
+		
+		if(SubArray.resize(mask.elements()))
 		{
-			if(mask.values[i])
+			unsigned int k = 0;
+			for(unsigned int i = 0; i < mask.size(); i++)
 			{
-				SubArray.values[k] = this->values[i];
-				k++;
+				if(mask.values[i])
+				{
+					SubArray.values[k] = this->values[i];
+					k++;
+				}
 			}
 		}
 		return SubArray;
@@ -468,14 +456,15 @@ namespace capex
 	array<bool> CAPEX_CALL array<T>::mask(T value)
 	{
 		array<bool> Mask;
-		Mask.resize(this->size());
-
-		for(unsigned int i = 0; i < this->size(); i++)
+		if(Mask.resize(this->size()))
 		{
-			if(this->values[i] == value)
-				Mask.values[i] = true;
-			else
-				Mask.values[i] = false;
+			for(unsigned int i = 0; i < this->size(); i++)
+			{
+				if(this->values[i] == value)
+					Mask.values[i] = true;
+				else
+					Mask.values[i] = false;
+			}
 		}
 		return Mask;
 	}
@@ -486,16 +475,92 @@ namespace capex
 	array<bool> CAPEX_CALL array<T>::mask(unsigned int start_index, unsigned int stop_index)
 	{
 		array<bool> Mask;
-		Mask.resize(this->size());
-
-		for(unsigned int i = 0; i < this->size(); i++)
+		if(Mask.resize(this->size()))
 		{
-			if((i >= start_index) && (i < stop_index))
-				Mask.values[i] = true;
-			else
-				Mask.values[i] = false;
+			for(unsigned int i = 0; i < this->size(); i++)
+			{
+				if((i >= start_index) && (i < stop_index))
+					Mask.values[i] = true;
+				else
+					Mask.values[i] = false;
+			}
 		}
 		return Mask;
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	array<T> CAPEX_CALL array<T>::sign()
+	{
+		array<T> Sign = array<T> ();
+		if(Sign.resize(this->size()))
+		{
+			for(unsigned int i = 0; i < this->size(); i++)
+			{
+				if(this->values[i] >= T(0))
+					Sign.values[i] = T(1);
+				else
+					Sign.values[i] = T(-1);
+			}
+		}
+		return Sign;
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	array<T> CAPEX_CALL array<T>::sign(unsigned int start_index, unsigned int stop_index)
+	{
+		if(start_index > stop_index)
+			std::swap(start_index, stop_index);
+
+		if(start_index > this->nb_values - 1)
+			start_index = this->nb_values - 1;
+
+		if(stop_index > this->nb_values - 1)
+			stop_index = this->nb_values - 1;
+		
+		array<T> Sign = array<T> ();
+		if(Sign.resize(stop_index - start_index))
+		{
+			for(unsigned int i = start_index; i < stop_index; i++)
+			{
+				if(this->values[i] >= T(0))
+					Sign.values[i - start_index] = T(1);
+				else
+					Sign.values[i - start_index] = T(-1);
+			}
+		}
+		return Sign;
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	array<T> CAPEX_CALL array<T>::sign(array<bool> mask)
+	{
+		array<T> Sign = array<T> ();
+	
+		if(mask.size() > this->size())
+			return Sign;		
+
+		if(Sign.resize(mask.elements()))
+		{
+			unsigned int k = 0;
+			for(unsigned int i = 0; i < mask.size(); i++)
+			{
+				if(mask.values[i])
+				{
+					if(this->values[i] >= T(0))
+						Sign.values[k] = T(1);
+					else
+						Sign.values[k] = T(-1);
+					k++;
+				}
+			}
+		}
+		return Sign;
 	}
 	// -------------------------------------------------------------------
 
@@ -504,7 +569,10 @@ namespace capex
 	void CAPEX_CALL array<T>::operator= (array<T> right)
 	{
 		if(this->size() != right.size())
-			this->resize(right.size());
+		{
+			if(!this->resize(right.size()))
+				return;
+		}
 
 		memcpy(&(this->values[0]), &(right.values[0]), sizeof(T) * right.size());
 	}
@@ -540,13 +608,15 @@ namespace capex
 		}
 
 		array<T> Sum = array<T> ();
-		Sum.resize(right.size());
 
 		if(this->size() != right.size())
 			return Sum;
 
-		for(unsigned int i = 0; i < this->size(); i++)
-			Sum.values[i] = this->values[i] + right.values[i];
+		if(Sum.resize(right.size()))
+		{
+			for(unsigned int i = 0; i < this->size(); i++)
+				Sum.values[i] = this->values[i] + right.values[i];
+		}
 		return Sum;
 	}
 	// -------------------------------------------------------------------
@@ -594,8 +664,7 @@ namespace capex
 	array<T> operator+ (U left, array<T> right)
 	{
 		array<T> Sum = array<T> ();
-		Sum.resize(right.size());
-
+		
 		try
 		{
 			T(left);
@@ -603,14 +672,17 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cout << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cout << "Return of an empty array" << endl;
+				cerr << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << "Return of an empty array" << endl;
 			#endif
 			return Sum;
 		}
 
-		for(unsigned int i = 0; i < right.size(); i++)
-			Sum.values[i] = right.values[i] + left;
+		if(Sum.resize(right.size()))
+		{
+			for(unsigned int i = 0; i < right.size(); i++)
+				Sum.values[i] = right.values[i] + left;
+		}
 		return Sum;
 	}
 	// -------------------------------------------------------------------
@@ -628,13 +700,15 @@ namespace capex
 		}
 
 		array<T> Product = array<T> ();
-		Product.resize(this->size());
 
 		if(this->size() != right.size())
 			return Product;
 
-		for(unsigned int i = 0; i < this->size(); i++)
-			Product.values[i] = this->values[i] * right.values[i];
+		if(Product.resize(this->size()))
+		{
+			for(unsigned int i = 0; i < this->size(); i++)
+				Product.values[i] = this->values[i] * right.values[i];
+		}
 		return Product;
 	}
 	// -------------------------------------------------------------------
@@ -644,10 +718,11 @@ namespace capex
 	array<T> CAPEX_CALL array<T>::operator* (T right)
 	{
 		array<T> Product = array<T> ();
-		Product.resize(this->size());
-
-		for(unsigned int i = 0; i < this->size(); i++)
-			Product.values[i] = this->values[i] * right;
+		if(Product.resize(this->size()))
+		{
+			for(unsigned int i = 0; i < this->size(); i++)
+				Product.values[i] = this->values[i] * right;
+		}
 		return Product;
 	}
 	// -------------------------------------------------------------------
@@ -683,7 +758,6 @@ namespace capex
 	array<T> operator* (U left, array<T> right)
 	{
 		array<T> Product = array<T> ();
-		Product.resize(right.size());
 
 		try
 		{
@@ -692,14 +766,17 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cout << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cout << "Return of an empty array" << endl;
+				cerr << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << "Return of an empty array" << endl;
 			#endif
 			return Product;
 		}
 
-		for(unsigned int i = 0; i < right.size(); i++)
-			Product.values[i] = right.values[i] * left;
+		if(Product.resize(right.size()))
+		{
+			for(unsigned int i = 0; i < right.size(); i++)
+				Product.values[i] = right.values[i] * left;
+		}
 		return Product;
 	}
 	// -------------------------------------------------------------------
@@ -717,13 +794,15 @@ namespace capex
 		}
 
 		array<T> Diff = array<T> ();
-		Diff.resize(this->size());
 
 		if(this->size() != right.size())
 			return Diff;
 
-		for(unsigned int i = 0; i < this->size(); i++)
-			Diff.values[i] = this->values[i] - right.values[i];
+		if(Diff.resize(this->size()))
+		{
+			for(unsigned int i = 0; i < this->size(); i++)
+				Diff.values[i] = this->values[i] - right.values[i];
+		}
 		return Diff;
 	}
 	// -------------------------------------------------------------------
@@ -733,10 +812,11 @@ namespace capex
 	array<T> CAPEX_CALL array<T>::operator- (T right)
 	{
 		array<T> Diff = array<T> ();
-		Diff.resize(this->size());
-
-		for(unsigned int i = 0; i < this->size(); i++)
-			Diff.values[i] = this->values[i] - right;
+		if(Diff.resize(this->size()))
+		{
+			for(unsigned int i = 0; i < this->size(); i++)
+				Diff.values[i] = this->values[i] - right;
+		}
 		return Diff;
 	}
 	// -------------------------------------------------------------------
@@ -781,7 +861,6 @@ namespace capex
 	array<T> operator- (U left, array<T> right)
 	{
 		array<T> Diff = array<T> ();
-		Diff.resize(right->size());
 
 		try
 		{
@@ -790,14 +869,17 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cout << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cout << "Return of an empty array" << endl;
+				cerr << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << "Return of an empty array" << endl;
 			#endif
 			return Diff;
 		}
 
-		for(unsigned int i = 0; i < right.size(); i++)
-			Diff.values[i] = left - right.values[i];
+		if(Diff.resize(right->size()))
+		{
+			for(unsigned int i = 0; i < right.size(); i++)
+				Diff.values[i] = left - right.values[i];
+		}
 		return Diff;
 	}
 	// -------------------------------------------------------------------
@@ -815,13 +897,15 @@ namespace capex
 		}
 
 		array<T> Quotient = array<T> ();
-		Quotient.resize(this->size());
 
 		if(this->size() != right.size())
 			return Quotient;
 
-		for(unsigned int i = 0; i < this->size(); i++)
-			Quotient.values[i] = this->values[i] / right.values[i];
+		if(Quotient.resize(this->size()))
+		{
+			for(unsigned int i = 0; i < this->size(); i++)
+				Quotient.values[i] = this->values[i] / right.values[i];
+		}
 		return Quotient;
 	}
 	// -------------------------------------------------------------------
@@ -831,10 +915,11 @@ namespace capex
 	array<T> CAPEX_CALL array<T>::operator/ (T right)
 	{
 		array<T> Quotient = array<T> ();
-		Quotient.resize(this->size());
-
-		for(unsigned int i = 0; i < this->size(); i++)
-			Quotient.values[i] = this->values[i] / right;
+		if(Quotient.resize(this->size()))
+		{
+			for(unsigned int i = 0; i < this->size(); i++)
+				Quotient.values[i] = this->values[i] / right;
+		}
 		return Quotient;
 	}
 	// -------------------------------------------------------------------
@@ -870,7 +955,6 @@ namespace capex
 	array<T> operator/ (U left, array<T> right)
 	{
 		array<T> Quotient = array<T> ();
-		Quotient.resize(right->size());
 
 		try
 		{
@@ -879,14 +963,17 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cout << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cout << "Return of an empty array" << endl;
+				cerr << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << "Return of an empty array" << endl;
 			#endif
 			return Quotient;
 		}
 
-		for(unsigned int i = 0; i < right.size(); i++)
-			Quotient.values[i] = left / right.values[i];
+		if(Quotient.resize(right->size()))
+		{
+			for(unsigned int i = 0; i < right.size(); i++)
+				Quotient.values[i] = left / right.values[i];
+		}
 		return Quotient;
 	}
 	// -------------------------------------------------------------------
@@ -904,13 +991,15 @@ namespace capex
 		}
 
 		array<T> VectorProduct = array<T> ();
-		VectorProduct.resize(right.size());
-
-		for(unsigned int i = 0; i < right.size() - 1; i++)
+		if(VectorProduct.resize(right.size()))
 		{
-			VectorProduct.values[i] = this->values[i] * right.values[i + 1] - this->values[i + 1] * right.values[i];
+			for(unsigned int i = 0; i < right.size() - 1; i++)
+			{
+				VectorProduct.values[i] = this->values[i] * right.values[i + 1] - this->values[i + 1] * right.values[i];
+			}
+			VectorProduct.values[right.size() - 1] = this->values[right.size() - 1] * right.values[0] 
+													 - this->values[0] * right.values[right.size() - 1];
 		}
-		VectorProduct.values[right.size() - 1] = this->values[right.size() - 1] * right.values[0] - this->values[0] * right.values[right.size() - 1];
 		return VectorProduct;
 	}
 	// -------------------------------------------------------------------
@@ -979,6 +1068,10 @@ namespace capex
 	T CAPEX_CALL array<T>::max(array<bool> mask, unsigned int *max_index)
 	{
 		T maxvalue;
+
+		if(mask.size() > this->size())
+			return maxvalue;
+
 		bool first = true;
 		for(unsigned int i = 0; i < mask.size(); i++)
 		{
@@ -1039,6 +1132,10 @@ namespace capex
 	T CAPEX_CALL array<T>::min(array<bool> mask)
 	{
 		T minvalue;
+
+		if(mask.size() > this->size())
+			return minvalue;
+
 		bool first = true;
 		for(unsigned int i = 0; i < mask.size(); i++)
 		{
@@ -1087,6 +1184,10 @@ namespace capex
 	T CAPEX_CALL array<T>::sum(array<bool> mask)
 	{
 		T sum;
+
+		if(mask.size() > this->size())
+			return sum;
+
 		bool first = true;
 		for(unsigned int i = 0; i < mask.size(); i++)
 		{
@@ -1171,7 +1272,8 @@ namespace capex
 	array<T> CAPEX_CALL array<T>::smooth(unsigned int area)
 	{
 		array<T> SmoothingArray;
-		SmoothingArray.resize(this->nb_values);
+		if(!SmoothingArray.resize(this->nb_values))
+			return SmoothingArray;
 
 		if(std::pow(-1.0, (float)area) == 1.0)
 			area++;
@@ -1247,7 +1349,7 @@ namespace capex
 			coeff += c;
 		}
 
-		result *= (1.0 / coeff);
+		result /= coeff;
 
 		return result;
 	}
@@ -1258,7 +1360,8 @@ namespace capex
 	array<bool> CAPEX_CALL array<T>::threshold(T level)
 	{
 		array<bool> Mask;
-		Mask.resize(this->size());
+		if(!Mask.resize(this->size()))
+			return Mask;
 
 		for(unsigned int i = 0; i < this->size(); i++)
 		{
@@ -1276,7 +1379,8 @@ namespace capex
 	array<bool> CAPEX_CALL array<T>::window(T inferior, T superior)
 	{
 		array<bool> Mask;
-		Mask.resize(this->size());
+		if(!Mask.resize(this->size()))
+			return Mask;
 
 		for(unsigned int i = 0; i < this->size(); i++)
 		{
@@ -1323,6 +1427,9 @@ namespace capex
 	template <typename T>
 	void CAPEX_CALL array<T>::replace(array<bool> mask, T new_value)
 	{
+		if(mask.size() > this->size())
+			return;
+
 		for(unsigned int i = 0; i < mask.size(); i++)
 		{
 			if(mask.values[i])
@@ -1546,6 +1653,32 @@ namespace capex
 
 		for(unsigned int i = 0; i < x.size(); i++)
 			PowerResult.values[i] = std::pow(x.values[i], float(10.0));
+
+		return PowerResult;
+	}
+	// -------------------------------------------------------------------
+
+
+	template<class T>
+	array<T> CAPEX_CALL power2(const array<T> x)
+	{
+		array<T> PowerResult = array<T>(T(), x.size());
+
+		for(unsigned int i = 0; i < x.size(); i++)
+			PowerResult.values[i] = std::pow(float(2.0), x.values[i]);
+
+		return PowerResult;
+	}
+	// -------------------------------------------------------------------
+
+
+	template<class T>
+	array<T> CAPEX_CALL power10(const array<T> x)
+	{
+		array<T> PowerResult = array<T>(T(), x.size());
+
+		for(unsigned int i = 0; i < x.size(); i++)
+			PowerResult.values[i] = std::pow(float(10.0), x.values[i]);
 
 		return PowerResult;
 	}

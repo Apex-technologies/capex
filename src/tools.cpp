@@ -1,6 +1,8 @@
 
-using std::cout;
+using std::cerr;
 using std::endl;
+
+std::streambuf *cerrbuf;
 
 namespace capex
 {
@@ -30,6 +32,40 @@ namespace capex
 			}
 		}
 		// -------------------------------------------------------------------
+
+		
+		// -------------------------------------------------------------------
+		void CAPEX_CALL InitLogFile(char *file = NULL)
+		{
+			if(file == NULL)
+				file = CAPEX_LOGFILE;
+			
+			// redirect errors to the logfile	
+			std::streambuf *cerrbuf = cerr.rdbuf();
+			std::ofstream err(file);
+			cerr.rdbuf(err.rdbuf());
+		}
+		// -------------------------------------------------------------------
+
+		
+		// -------------------------------------------------------------------
+		void CAPEX_CALL WriteLogFile(char *LogText)
+		{
+			char TimeStamp [20];
+			GetTime(&TimeStamp[0]);
+			
+			cerr << TimeStamp << LogText << std::endl;
+		}
+		// -------------------------------------------------------------------
+
+		
+		// -------------------------------------------------------------------
+		void CAPEX_CALL CloseLogFile(char *file = NULL)
+		{
+			// redirect errors to the standard error output
+			cerr.rdbuf(cerrbuf);
+		}
+		// -------------------------------------------------------------------
 		
 		
 		// -------------------------------------------------------------------
@@ -51,8 +87,8 @@ namespace capex
 			catch(...)
 			{
 				#if CAPEX_DEBUG
-					cout << "Error in ConvertLinearToBel at line " << __LINE__ << endl;
-					cout << "Value forced to -999" << endl;
+					cerr << "Error in ConvertLinearToBel at line " << __LINE__ << endl;
+					cerr << "Value forced to -999" << endl;
 				#endif
 				db = -999.0;
 			}
@@ -72,8 +108,8 @@ namespace capex
 			catch(...)
 			{
 				#if CAPEX_DEBUG
-					cout << "Error in ConvertBelToLinear at line " << __LINE__ << endl;
-					cout << "Value forced to 0" << endl;
+					cerr << "Error in ConvertBelToLinear at line " << __LINE__ << endl;
+					cerr << "Value forced to 0" << endl;
 				#endif
 				lin = 0.0;
 			}
@@ -111,8 +147,8 @@ namespace capex
 			catch(...)
 			{
 				#if CAPEX_DEBUG
-					cout << "Error in WriteInFile at line " << __LINE__ << endl;
-					cout << "File '" << std::string(FilePath) << "' has been closed" << endl;
+					cerr << "Error in WriteInFile at line " << __LINE__ << endl;
+					cerr << "File '" << std::string(FilePath) << "' has been closed" << endl;
 				#endif
 				f.close();
 				return false;

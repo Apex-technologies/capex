@@ -417,6 +417,45 @@ namespace capex
 			array<bool> CAPEX_CALL mask(unsigned int start_index, unsigned int stop_index);
 
 
+			// ---------------------------------------------------------------------
+			//! \brief Gets the sign of all values of the array
+			//! \return an array representing the sign of the values
+			//!
+			//! This method creates an array representing the sign of all values
+			//! the array
+			//!
+			// ---------------------------------------------------------------------
+			array<T> CAPEX_CALL sign();
+
+
+			// ---------------------------------------------------------------------
+			//! \brief Gets the sign of a group of values in an array
+			//! \param  start_index  the index of the start value
+			//! \param  stop_index  the index of the stop value
+			//! \return an array representing the sign of the selected values
+			//!
+			//! This method creates an array representing the sign of the selected 
+			//! values in an the array. The group of values is delimited by
+			//! start_index (included) and stop_index (non-included).
+			//!
+			// ---------------------------------------------------------------------
+			array<T> CAPEX_CALL sign(unsigned int start_index, unsigned int stop_index);
+
+
+			// ---------------------------------------------------------------------
+			//! \brief Gets the sign of some of values in an array defined by a mask
+			//! \param  mask  the mask of the needed values
+			//! \return an array representing the sign of the selected values
+			//!
+			//! This method creates an array representing the sign of the selected 
+			//! values in an the array. The group of values is defined by a mask
+			//! which can be defined with the mask() methods or by the threshold()
+			//! and window() methods.
+			//!
+			// ---------------------------------------------------------------------
+			array<T> CAPEX_CALL sign(array<bool> mask);
+
+
 	  		// ---------------------------------------------------------------------
 			//! \brief Overloading of the = operator
 			//! \param  right  the array to copy
@@ -1221,6 +1260,32 @@ namespace capex
 	// ---------------------------------------------------------------------
 	template<class T>
 	array<T> CAPEX_CALL pow10(const array<T> x);
+
+
+	// ---------------------------------------------------------------------
+	//! \brief Specialisation of the power operator with the power of '2'
+	//! \param  x  the array to calculate with power of 2 operator
+	//! \return an array of the 2 power the values of x
+	//!
+	//! This method specializes the operator 'pow'. the '2' value is 
+	//! powered by all terms of the array
+	//!
+	// ---------------------------------------------------------------------
+	template<class T>
+	array<T> CAPEX_CALL power2(const array<T> x);	
+
+
+	// ---------------------------------------------------------------------
+	//! \brief Specialisation of the power operator with the power of '10'
+	//! \param  x  the array to calculate with power of 10 operator
+	//! \return an array of the 10 power the values of x
+	//!
+	//! This method specializes the operator 'pow'. the '10' value is 
+	//! powered by all terms of the array
+	//!
+	// ---------------------------------------------------------------------
+	template<class T>
+	array<T> CAPEX_CALL power10(const array<T> x);
 
 
 	// ---------------------------------------------------------------------
