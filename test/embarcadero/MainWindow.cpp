@@ -8,8 +8,6 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 
-#define PI 3.14
-
 TMainForm *MainForm;
 //---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner)
@@ -21,7 +19,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 	this->Threshold = -1.0;
 
 	this->x.linspace(0.0, 1.0, Npt);
-	this->y = sin(2 * PI * this->Frequency * x);
+	this->y = sin(2 * capex::pi * this->Frequency * x);
 
 	this->DisplayGraph();
 
@@ -38,6 +36,13 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 	for(int i = 0; i < 64; i++)
 		this->DataEP0_Grid->Cells[0][i + 1] = IntToStr(i);
 
+	this->IniGrid->Cells[0][0] = "Section";
+	this->IniGrid->Cells[1][0] = "Parameter";
+	this->IniGrid->Cells[2][0] = "Value";
+	this->OpenIniDialog->InitialDir = ExtractFilePath(Application->ExeName);
+	//ShowMessage(ExtractFilePath(Application->ExeName));
+
+	this->parser = new ini();
 }
 //---------------------------------------------------------------------------
 
@@ -59,7 +64,7 @@ void __fastcall TMainForm::DisplayGraph()
 void __fastcall TMainForm::Frequency_BarChange(TObject *Sender)
 {
 	this->Frequency = (float)this->Frequency_Bar->Position;
-	this->y = sin(2 * PI * this->Frequency * x);
+	this->y = sin(2 * capex::pi * this->Frequency * x);
 	this->y.replace(this->y.threshold(this->Threshold).invert(), 0.0);
 
 	this->DisplayGraph();
@@ -70,7 +75,7 @@ void __fastcall TMainForm::Threshold_EditChange(TObject *Sender)
 {
 	this->Threshold = StrToFloatDef(this->Threshold_Edit->Text, -1.0);
 
-	this->y = sin(2 * PI * this->Frequency * x);
+	this->y = sin(2 * capex::pi * this->Frequency * x);
 	this->y.replace(this->y.threshold(this->Threshold).invert(), 0.0);
 
 	this->DisplayGraph();
@@ -86,14 +91,23 @@ void __fastcall TMainForm::Noise_BtClick(TObject *Sender)
 
 void __fastcall TMainForm::Sinus_BtClick(TObject *Sender)
 {
-	this->y = sin(2 * PI * this->Frequency * x);
+	this->y = sin(2 * capex::pi * this->Frequency * x);
 	this->DisplayGraph();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TMainForm::SetSmooth_BtClick(TObject *Sender)
 {
-	this->y = this->y.smooth(this->Smooth_Bar->Position);
+	AnsiString shape = "";
+	if(this->SmoothSquare_Radio->Checked)
+		shape = "square";
+	else if(this->SmoothSinus_Radio->Checked)
+		shape = "sin";
+	else if(this->SmoothSinc_Radio->Checked)
+		shape = "sinc";
+	else if(this->SmoothGaussian_Radio->Checked)
+		shape = "gauss";
+	this->y = this->y.smooth(this->Smooth_Bar->Position, shape.c_str());
 	this->DisplayGraph();
 }
 //---------------------------------------------------------------------------
@@ -171,7 +185,7 @@ void __fastcall TMainForm::DataToEEProm_BtClick(TObject *Sender)
 	x.linspace(0.0, 1.0, NbPoints);
 	eData.TimeBase = x.max() / NbPoints;
 	float Phi = 0.0;
-	array<float> y = sin(2 * PI * 10.0 * x + Phi);
+	array<float> y = sin(2 * capex::pi * 10.0 * x + Phi);
 	for(int i = 0; i < y.size(); i++)
 		eData.Sinus[i] = y[i];
 
@@ -267,6 +281,62 @@ void __fastcall TMainForm::GetDataFromEEProm_BtClick(TObject *Sender)
 		this->Series1->AddXY(x[i], y[i]);
 
 	delete[] Data;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::Derivative1_BtClick(TObject *Sender)
+{
+	double Dt = this->x[1] - this->x[0];
+	this->y = this->y.derivative(1);
+	if(this->DerivativeDeltaX_Check->Checked)
+		this->y /= Dt;
+
+	this->DisplayGraph();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::Derivative2_BtClick(TObject *Sender)
+{
+	double Dt = this->x[1] - this->x[0];
+	this->y = this->y.derivative(2);
+	if(this->DerivativeDeltaX_Check->Checked)
+		this->y /= std::pow(Dt, 2.0);
+
+	this->DisplayGraph();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::Button1Click(TObject *Sender)
+{
+	if(this->OpenIniDialog->Execute())
+	{
+		if(this->parser->Open(AnsiString(this->OpenIniDialog->FileName).c_str()))
+		{
+			int Line = 1;
+			std::vector<std::string> sec = this->parser->GetSectionsName();
+			for(int n = 0; n < sec.size(); n++)
+			{
+				capex::section s = this->parser->GetSection(sec[n].c_str());
+				for(int k = 0; k < s.parameters.size(); k++)
+				{
+					this->IniGrid->Cells[0][Line] = AnsiString(sec[n].c_str());
+					this->IniGrid->Cells[1][Line] = AnsiString(s.parameters[k].name.c_str());
+					this->IniGrid->Cells[2][Line] = AnsiString(s.parameters[k].value.c_str());
+					Line++;
+				}
+			}
+		}
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::SinusNoise_BtClick(TObject *Sender)
+{
+	this->y = sin(2 * capex::pi * this->Frequency * this->x);
+	array<float> noise;
+	noise.random(-0.5, 0.5, this->y.size());
+	this->y += noise;
+	this->DisplayGraph();
 }
 //---------------------------------------------------------------------------
 

@@ -10,6 +10,10 @@
 #ifndef _CAPEX_ARRAY_H
 #define _CAPEX_ARRAY_H
 
+#ifndef CAPEX_CALL
+	#define CAPEX_CALL
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -19,6 +23,8 @@
 #include <cmath>
 #include <cstring>
 #include <cstdlib>
+
+#include "./constants.h"
 
 namespace capex
 {
@@ -889,17 +895,39 @@ namespace capex
 	  		// ---------------------------------------------------------------------
 			//! \brief Smooth all values of an array
 			//! \param area	the number of points to consider (5 by default)
+			//! \param shape   string representing the smoothing function to use
 			//! \return the smoothed array
 			//!
 			//! This method returns an array where all values are smoothed.
 			//! The smoothing function considers the number of points defined
 			//! by the 'area' parameter. If area = 1, the returned array is
 			//! equal to the initial array. If area = 3, the nearest points
-			//! of each one is considered for the smoothing fucntion. If an even
-			//! number is given, it is rounded to the next one (2 -> 3, ...)
+			//! of each one is considered for the smoothing function. If an even
+			//! number is given, it is rounded to the next one (2 -> 3, 4 -> 5)...
+			//!
+			//! shape is a string representing the mathematical function to use
+			//! for the smoothing. Different functions can be used :
+			//!		- 'square' : a square function is used
+			//!     - 'sin' : a sinus function is used
+			//!     - 'sinc' : a cardinal sinus function is used
+			//!     - 'gauss' (default) : a gaussian function used
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CAPEX_CALL smooth(unsigned int area = 5);
+			array<T> CAPEX_CALL smooth(unsigned int area = 5, const char *shape = "gauss");
+			
+			
+			// ---------------------------------------------------------------------
+			//! \brief Differentiates all values of an array
+			//! \param order	the order of the derivative function (1 by default)
+			//! \return the derivative array
+			//!
+			//! This method returns an array where all values are Differentiated.
+			//! Two derivatives order can be used :
+			//!     - 1 for the 1st order
+			//!     - 2 for the 2nd order
+			//!
+			// ---------------------------------------------------------------------
+			array<T> CAPEX_CALL derivative(unsigned int order = 1);
 
 
 			// ---------------------------------------------------------------------
@@ -1002,7 +1030,7 @@ namespace capex
 
 		private: // Private Methods
 
-			T CAPEX_CALL smooth_function(const T raw_data[], unsigned int Window);
+			T CAPEX_CALL smooth_function(const T raw_data[], unsigned int Window, const char *shape);
 
 	};
 

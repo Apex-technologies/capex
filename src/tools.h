@@ -1,10 +1,15 @@
-#ifndef _CAPEX_UTILS_H
-#define _CAPEX_UTILS_H
+#ifndef _CAPEX_TOOLS_H
+#define _CAPEX_TOOLS_H
 
 #include <cstdio>
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#include "./constants.h"
 
 
 namespace capex
@@ -50,6 +55,11 @@ namespace capex
 		//!
 		// ---------------------------------------------------------------------
 		bool CAPEX_CALL GetTime(char *TimeString, const char *format = NULL);
+		
+		
+		void CAPEX_CALL InitLogFile(char *file = NULL);
+		void CAPEX_CALL WriteLogFile(char *LogText);
+		void CAPEX_CALL CloseLogFile(char *file = NULL);
 		
 		
 		// ---------------------------------------------------------------------
@@ -99,32 +109,85 @@ namespace capex
 		//!
 		// ---------------------------------------------------------------------
 		double CAPEX_CALL ConvertBelToLinear(double Value, double Coefficient = 10.0);
-
 		
-		// ---------------------------------------------------------------------
-		//! \brief Write values in a text file
-		//! \param FilePath  Path of the file to write
-		//! \param Mode        Opening mode of the file. see iom enumeration
-		//! \param Values      Values to write
-		//! \param Number      Number of values to write
-		//! \param Precision   Precision of the values to write (0 by default)
-		//! \param Separator   Separator between each values ("\n" by default)
-		//! \return a \e boolean representing the success of the operation
-		//!
-		//! This function writes values in a text formatted file. The file can
-		//! be opened in iom::out or iom::app mode. Precision is an integer
-		//! representing the number of digit after the dot. And Separator is
-		//! a string inserting between each values. If the write operation is
-		//! successful, \b true is returned, \b false otherwise.
-		//!
-		// ---------------------------------------------------------------------
-		template<typename T>
-		bool CAPEX_CALL WriteInFile(const char *FilePath, iom Mode, T *Values, int Number, int Precision = 0, char *Separator = NULL);
 		
+		//-------------------------------------------------------------------------
+		//!
+		//! \brief    Trim spaces in a string at start, end or both
+		//! \param    strinit string to trim
+		//! \param    mode    integer describing what part to trim (optional)
+		//! \return   a \e string representing the trimmed string
+		//! 
+		//! This function trims spaces and tabulations which are at start and at end of a string
+		//! mode is an integer which could be :
+		//!    0 : trims the start of the string
+		//!    1 : trims the end of the string
+		//!   -1 : trims the start and the end of the string (default)
+		//! 
+		//! This function returns the trimmed string.
+		//!
+		//--------------------------------------------------------------------------
+		std::string CAPEX_CALL StrTrim(std::string strinit, int mode = -1);
+		
+		
+		//-------------------------------------------------------------------------
+		//!
+		//! \brief    Converts a string in lower case
+		//! \param    strinit string to convert
+		//! \return   a \e string representing the converted string
+		//! 
+		//! This function converts all characters of a string into their lower case.
+		//! 
+		//! This function returns the lower case converted string.
+		//!
+		//--------------------------------------------------------------------------
+		std::string CAPEX_CALL StrLower(std::string strinit);
+		
+		
+		//-------------------------------------------------------------------------
+		//!
+		//! \brief    Converts a string in upper case
+		//! \param    strinit string to convert
+		//! \return   a \e string representing the converted string
+		//! 
+		//! This function converts all characters of a string into their upper case.
+		//! 
+		//! This function returns the upper case converted string.
+		//!
+		//--------------------------------------------------------------------------
+		std::string CAPEX_CALL StrUpper(std::string strinit);
+		
+		
+		//--------------------------------------------------------------------------
+		//!
+		//! \brief   Converts an integer into a string
+		//! \param   value integer to convert
+		//! \return  a \e string representing the converted value
+		//! 
+		//! this function converts an integer to a string.
+		//! 
+		//! this function returns the converted string.
+		//!
+		//--------------------------------------------------------------------------
+		std::string CAPEX_CALL NumToStr(int value);
+		
+		//--------------------------------------------------------------------------
+		//!
+		//! \brief   Converts a double in a string
+		//! \param   value double to convert
+		//! \param   precision integer representing the decimal number after point (default = 6)
+		//! \return  a \e string representing the converted value
+		//! 
+		//! this function converts a double to a string with a specified decimal number.
+		//! 
+		//! this function returns the converted string.
+		//!
+		//--------------------------------------------------------------------------
+		std::string CAPEX_CALL NumToStr(double value, int precision = 6);
 	}
 	
 }
 
-#include <tools.cpp>
+#include "./tools.cpp"
 
 #endif

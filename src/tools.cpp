@@ -1,12 +1,14 @@
+#include "./tools.h"
+#include "./constants.h"
 
 using std::cerr;
 using std::endl;
 
-std::streambuf *cerrbuf;
-
 namespace capex
 {
-	
+
+	std::streambuf *errbuf;
+
 	namespace tools
 	{
 
@@ -15,7 +17,7 @@ namespace capex
 		{
 			if(format == NULL)
 				sprintf(format, "%d/%m/%Y - %H:%M:%S - ");
-				
+
 			time_t rawtime;
 			struct tm * timeinfo;
 			char buffer [80];
@@ -33,17 +35,21 @@ namespace capex
 		}
 		// -------------------------------------------------------------------
 
-		
+
 		// -------------------------------------------------------------------
-		void CAPEX_CALL InitLogFile(char *file = NULL)
+		void CAPEX_CALL InitLogFile(char *file)
 		{
 			if(file == NULL)
 				file = CAPEX_LOGFILE;
-			
-			// redirect errors to the logfile	
-			std::streambuf *cerrbuf = cerr.rdbuf();
+
+			// redirect errors to the logfile
+			std::streambuf *errbuf = cerr.rdbuf();
 			std::ofstream err(file);
 			cerr.rdbuf(err.rdbuf());
+
+			#if CAPEX_DEBUG
+				cerr << "Error output redirected into " << std::string(file) << endl;
+			#endif
 		}
 		// -------------------------------------------------------------------
 
@@ -54,16 +60,20 @@ namespace capex
 			char TimeStamp [20];
 			GetTime(&TimeStamp[0]);
 			
-			cerr << TimeStamp << LogText << std::endl;
+			cerr << TimeStamp << LogText << endl;
 		}
 		// -------------------------------------------------------------------
 
 		
 		// -------------------------------------------------------------------
-		void CAPEX_CALL CloseLogFile(char *file = NULL)
+		void CAPEX_CALL CloseLogFile(char *file)
 		{
 			// redirect errors to the standard error output
-			cerr.rdbuf(cerrbuf);
+			cerr.rdbuf(errbuf);
+			
+			#if CAPEX_DEBUG
+				cerr << "Error output redirected into standard output" << endl;
+			#endif
 		}
 		// -------------------------------------------------------------------
 		
@@ -71,7 +81,16 @@ namespace capex
 		// -------------------------------------------------------------------
 		double CAPEX_CALL ConvertWavelengthOrFrequency(double Value)
 		{
-			return celerity / Value;
+			if(Value <= lowerLimit)
+			{
+				#if CAPEX_DEBUG
+					cerr << "Error in ConvertWavelengthOrFrequency at line " << __LINE__ << endl;
+					cerr << "Value forced to 0.0" << endl;
+				#endif
+				return 0.0;
+			}
+			
+			return VacuumCelerity / Value;
 		}
 		// -------------------------------------------------------------------
 		
@@ -118,50 +137,146 @@ namespace capex
 		// -------------------------------------------------------------------
 		
 		
-		// -------------------------------------------------------------------
-		template<typename T>
-		bool CAPEX_CALL WriteInFile(const char *FilePath, iom Mode, T *Values, int Number, int Precision, char *Separator)
+		//--------------------------------------------------------------------
+		std::string CAPEX_CALL StrTrim(std::string strinit, int mode)
 		{
-			ofstream f;
-			if(mode == out)
-				f.open(FileName, std::ios::out);
-			else if(mode == app)
-				f.open(FileName, std::ios::app);
-			if(!f.is_open())
-				return false;
-
-			f.precision(Precision);
-			
-			if(Separator == NULL)
-				sprintf(Separator, "\n");
-			
-			try
+			if(mode == 0)
 			{
-				for(int i = 0; i < Number; i++)
-				{
-					f << Values[i];
-					if(i < Number - 1)
-						f << std::string(Separator);
-				}
+				while(strinit[0] == ' ' || strinit[0] == '\t')
+					strinit.erase(0, 1);
 			}
-			catch(...)
+			else if(mode == 1)
 			{
-				#if CAPEX_DEBUG
-					cerr << "Error in WriteInFile at line " << __LINE__ << endl;
-					cerr << "File '" << std::string(FilePath) << "' has been closed" << endl;
-				#endif
-				f.close();
-				return false;
+				while(strinit[strinit.size() - 1] == ' ' || strinit[strinit.size() - 1] == '\t')
+					strinit.erase(strinit.size() - 1, 1);
 			}
-			
-			f.close();
-			return true;
+			else
+			{
+				while(strinit[0] == ' ' || strinit[0] == '\t')
+					strinit.erase(0, 1);
+				while(strinit[strinit.size() - 1] == ' ' || strinit[strinit.size() - 1] == '\t')
+					strinit.erase(strinit.size() - 1, 1);
+			}
+			return strinit;
 		}
-		// -------------------------------------------------------------------
+		//--------------------------------------------------------------------
 		
+		
+		//--------------------------------------------------------------------
+		std::string CAPEX_CALL StrLower(std::string strinit)
+		{
+			// transforme une std::string en char*
+			char *str = new char[strinit.length() + 1];
+			std::copy(strinit.begin(), strinit.end(), str);
+			str[strinit.length()] = '\0';
+
+			for(unsigned int i = 0; i < strinit.length(); i++)
+			{
+				if(str[i] <= 'Z' && str[i] >= 'A')
+					str[i] -= ('Z' - 'z');
+			}
+
+			std::string lstr = std::string(str);
+			delete[] str;
+
+			return lstr;
+		}
+		//--------------------------------------------------------------------
+		
+		
+		//--------------------------------------------------------------------
+		std::string CAPEX_CALL StrUpper(std::string strinit)
+		{
+			// transforme une std::string en char*
+			char *str = new char[strinit.length() + 1];
+			std::copy(strinit.begin(), strinit.end(), str);
+			str[strinit.length()] = '\0';
+
+			for(unsigned int i = 0; i < strinit.length(); i++)
+			{
+				if(str[i] <= 'z' && str[i] >= 'a')
+					str[i] -= ('z' - 'Z');
+			}
+			
+			std::string ustr = std::string(str);
+			delete[] str;
+
+			return ustr;
+		}
+		//--------------------------------------------------------------------
+		
+
+		//--------------------------------------------------------------------
+		std::string CAPEX_CALL NumToStr(int value)
+		{
+			if (value == 0)
+				return "0";
+
+			std::string temp="";
+			std::string returnvalue="";
+			
+			if(value < 0)
+				returnvalue += "-";
+			
+			value = std::abs(value);
+			
+			while (value > 0)
+			{
+				temp += value % 10 + 48;
+				value /= 10;
+			}
+			for(int i = 0; i < temp.length(); i++)
+				returnvalue += temp[temp.length() - i - 1];
+
+			return returnvalue;
+		}
+		//--------------------------------------------------------------------
+		
+
+		//--------------------------------------------------------------------
+		std::string CAPEX_CALL NumToStr(double value, int precision)
+		{
+			std::string temp="";
+			std::string returnvalue="";
+			
+			if(value < 0.0)
+				returnvalue += "-";
+			
+			value = std::fabs(value);
+
+			int IntPart = int(value);
+			
+			if (IntPart == 0)
+				returnvalue += "0";
+				
+			while (IntPart > 0)
+			{
+				temp += IntPart % 10 + 48;
+				IntPart /= 10;
+			}
+			for(int i = 0; i < temp.length(); i++)
+				returnvalue += temp[temp.length() - i - 1];
+
+			temp = "";
+			value = double(value) - int(value);
+			value *= std::pow(10.0, precision);
+			int DecPart = int(value);
+			for(int i = 0; i < precision; i++)
+			{
+				temp += DecPart % 10 + 48;
+				DecPart /= 10;
+			}
+			returnvalue += ".";
+			for(int i = 0; i < temp.length(); i++)
+				returnvalue += temp[temp.length() - i - 1];
+
+			return returnvalue;
+		}
+		//--------------------------------------------------------------------
+
 		
 	}
-	
+
 }
 
 

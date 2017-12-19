@@ -2,7 +2,7 @@ object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'CAPEX Test'
-  ClientHeight = 653
+  ClientHeight = 730
   ClientWidth = 1059
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
@@ -18,15 +18,11 @@ object MainForm: TMainForm
     Left = 8
     Top = 8
     Width = 1043
-    Height = 593
-    ActivePage = USBTest_Sheet
+    Height = 665
+    ActivePage = ArraySheet
     TabOrder = 0
     object ArraySheet: TTabSheet
       Caption = 'Array Test'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object FreqLabel: TLabel
         Left = 6
         Top = 538
@@ -163,6 +159,83 @@ object MainForm: TMainForm
         Text = '-1.0'
         OnChange = Threshold_EditChange
       end
+      object RadioGroup2: TRadioGroup
+        Left = 518
+        Top = 564
+        Width = 291
+        Height = 61
+        Caption = 'Smoothing Functions'
+        TabOrder = 7
+      end
+      object SmoothSquare_Radio: TRadioButton
+        Left = 525
+        Top = 584
+        Width = 64
+        Height = 17
+        Caption = 'Square'
+        Checked = True
+        TabOrder = 8
+        TabStop = True
+      end
+      object SmoothSinus_Radio: TRadioButton
+        Left = 526
+        Top = 604
+        Width = 64
+        Height = 17
+        Caption = 'Sinus'
+        TabOrder = 9
+      end
+      object SmoothSinc_Radio: TRadioButton
+        Left = 618
+        Top = 584
+        Width = 99
+        Height = 17
+        Caption = 'Cardinal Sinus'
+        TabOrder = 10
+      end
+      object SmoothGaussian_Radio: TRadioButton
+        Left = 618
+        Top = 604
+        Width = 99
+        Height = 17
+        Caption = 'Gaussian'
+        TabOrder = 11
+      end
+      object Derivative1_Bt: TButton
+        Left = 318
+        Top = 564
+        Width = 177
+        Height = 25
+        Caption = 'Derivative Order 1'
+        TabOrder = 12
+        OnClick = Derivative1_BtClick
+      end
+      object Derivative2_Bt: TButton
+        Left = 318
+        Top = 590
+        Width = 177
+        Height = 25
+        Caption = 'Derivative Order 2'
+        TabOrder = 13
+        OnClick = Derivative2_BtClick
+      end
+      object DerivativeDeltaX_Check: TCheckBox
+        Left = 320
+        Top = 616
+        Width = 177
+        Height = 17
+        Caption = 'Divide by Delta X'
+        TabOrder = 14
+      end
+      object SinusNoise_Bt: TButton
+        Left = 906
+        Top = 564
+        Width = 126
+        Height = 25
+        Caption = 'Sinus + Noise'
+        TabOrder = 15
+        OnClick = SinusNoise_BtClick
+      end
     end
     object USBTest_Sheet: TTabSheet
       Caption = 'USB Test'
@@ -229,7 +302,7 @@ object MainForm: TMainForm
         Left = 32
         Top = 56
         Width = 530
-        Height = 481
+        Height = 553
         DefaultColWidth = 150
         FixedCols = 0
         RowCount = 100
@@ -318,7 +391,7 @@ object MainForm: TMainForm
         Left = 576
         Top = 240
         Width = 162
-        Height = 297
+        Height = 369
         ColCount = 2
         DefaultColWidth = 70
         RowCount = 65
@@ -353,10 +426,1039 @@ object MainForm: TMainForm
         OnClick = SendEP0_BtClick
       end
     end
+    object INI_Sheet: TTabSheet
+      Caption = 'INI File Test'
+      ImageIndex = 2
+      object Button1: TButton
+        Left = 16
+        Top = 24
+        Width = 129
+        Height = 33
+        Caption = 'Open INI File'
+        TabOrder = 0
+        OnClick = Button1Click
+      end
+      object IniGrid: TStringGrid
+        Left = 16
+        Top = 80
+        Width = 1001
+        Height = 528
+        ColCount = 3
+        DefaultColWidth = 320
+        RowCount = 1000
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
+        TabOrder = 1
+        ColWidths = (
+          320
+          320
+          338)
+        RowHeights = (
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          23
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24
+          24)
+      end
+    end
   end
   object Quit_Bt: TButton
     Left = 1000
-    Top = 607
+    Top = 679
     Width = 51
     Height = 25
     Caption = 'Quit'
@@ -365,12 +1467,21 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 634
+    Top = 711
     Width = 1059
     Height = 19
     Panels = <
       item
         Width = 50
       end>
+  end
+  object OpenIniDialog: TOpenDialog
+    Filter = 'INI FILE (*.INI)|*.ini'
+    Left = 868
+    Top = 56
+  end
+  object SaveIniDialog: TSaveDialog
+    Left = 972
+    Top = 56
   end
 end

@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// MXM LIBRARY
+// CAPEX LIBRARY
 // -----------------------------------------------------------------------------
 // CONTRIBUTORS : MAXIME FONTAINE
 // VERSION : 1.0
@@ -27,6 +27,7 @@
 	#define CAPEX_CALL
 #endif
 
+
 // -----------------------------------------------------------------------------
 //                           DEBUG CONSTANTS AND MACROS
 // -----------------------------------------------------------------------------
@@ -35,14 +36,13 @@
 	#define CAPEX_DEBUG false
 #endif
 
-#define CAPEX_DBG_COLOR_RED "\033[0;41m"
-#define CAPEX_DBG_COLOR_GRN "\033[0;42m"
-#define CAPEX_DBG_COLOR_STD "\033[0m"
-#define CAPEX_DBG_EMPHASE "\033[4m"
+
 
 // -----------------------------------------------------------------------------
 //                           CAPEX LIBRARY INCLUDE FILES
 // -----------------------------------------------------------------------------
 
+#include "./constants.h"
 #include "./array.h"
-#include "./usb.h"
+#include "./tools.h"
+#include "./ini.h"

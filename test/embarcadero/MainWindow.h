@@ -18,6 +18,7 @@
 #include <VCLTee.TeEngine.hpp>
 #include <VCLTee.TeeProcs.hpp>
 #include <Vcl.Grids.hpp>
+#include <Vcl.Dialogs.hpp>
 
 #include <sstream>
 #include <memory>
@@ -82,6 +83,20 @@ __published:	// IDE-managed Components
 	TButton *DataToEEProm_Bt;
 	TButton *GetDataFromEEProm_Bt;
 	TButton *SendEP1_Bt;
+	TRadioGroup *RadioGroup2;
+	TRadioButton *SmoothSquare_Radio;
+	TRadioButton *SmoothSinus_Radio;
+	TRadioButton *SmoothSinc_Radio;
+	TRadioButton *SmoothGaussian_Radio;
+	TButton *Derivative1_Bt;
+	TButton *Derivative2_Bt;
+	TCheckBox *DerivativeDeltaX_Check;
+	TTabSheet *INI_Sheet;
+	TOpenDialog *OpenIniDialog;
+	TSaveDialog *SaveIniDialog;
+	TButton *Button1;
+	TStringGrid *IniGrid;
+	TButton *SinusNoise_Bt;
 	void __fastcall Quit_BtClick(TObject *Sender);
 	void __fastcall Frequency_BarChange(TObject *Sender);
 	void __fastcall Threshold_EditChange(TObject *Sender);
@@ -94,6 +109,10 @@ __published:	// IDE-managed Components
 	void __fastcall SendEP0_BtClick(TObject *Sender);
 	void __fastcall DataToEEProm_BtClick(TObject *Sender);
 	void __fastcall GetDataFromEEProm_BtClick(TObject *Sender);
+	void __fastcall Derivative1_BtClick(TObject *Sender);
+	void __fastcall Derivative2_BtClick(TObject *Sender);
+	void __fastcall Button1Click(TObject *Sender);
+	void __fastcall SinusNoise_BtClick(TObject *Sender);
 private:	// User declarations
 
 	array<float> x;
@@ -101,6 +120,8 @@ private:	// User declarations
 
 	usb *device;
 	std::vector<DeviceUSB> devices;
+
+	ini *parser;
 
 	float Frequency;
 	float Threshold;

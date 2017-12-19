@@ -1,7 +1,8 @@
+#include "./array.h"
+#include "./tools.h"
 
 using std::cerr;
 using std::endl;
-
 
 namespace capex
 {
@@ -1269,8 +1270,10 @@ namespace capex
 
 
 	template <typename T>
-	array<T> CAPEX_CALL array<T>::smooth(unsigned int area)
+	array<T> CAPEX_CALL array<T>::smooth(unsigned int area, const char *shape)
 	{
+		std::string sshape = tools::StrLower(std::string(shape));
+	
 		array<T> SmoothingArray;
 		if(!SmoothingArray.resize(this->nb_values))
 			return SmoothingArray;
@@ -1306,7 +1309,7 @@ namespace capex
 					temp[k] = this->values[cnt + cpt - 1];
 			}
 
-			SmoothingArray.values[cnt] = this->smooth_function(temp, area);
+			SmoothingArray.values[cnt] = this->smooth_function(temp, area, sshape.c_str());
 
 			for(int k = 0; k < area / 2; k++)
 				temp[k] = temp[k + 1];
@@ -1320,7 +1323,7 @@ namespace capex
 			for(unsigned int k = this->nb_values - (area + reduce); k < this->nb_values; k++)
 				temp[k - (this->nb_values - (area + reduce))] = this->values[k];
 
-			SmoothingArray.values[i] = this->smooth_function(temp, area + reduce);
+			SmoothingArray.values[i] = this->smooth_function(temp, area + reduce, sshape.c_str());
 			reduce--;
 		}
 
@@ -1332,26 +1335,87 @@ namespace capex
 
 
 	template <typename T>
-	T CAPEX_CALL array<T>::smooth_function(const T raw_data[], unsigned int Window)
+	T CAPEX_CALL array<T>::smooth_function(const T raw_data[], unsigned int Window, const char *shape)
 	{
 		const unsigned int i = (unsigned int)(Window / 2);
 		T result = T();
-		T coeff = T();
+		
+		double sum = 0.0;
+		double coeff = 0.0;
 
 		for(unsigned int k = 0; k < Window; k++)
 		{
 			double c = 1.0;
-			if(k != i)
-				c = std::abs((int)(Window / (2 * (k - i))));
+			
+			// If a square smoothing is used
+			if(std::strcmp(shape, "square") == 0)
+			{
+				c = 1.0;
+			}
+			// OR, if a sinus smoothing is used
+			else if(std::strcmp(shape, "sin") == 0)
+			{
+				c = std::sin(2 * capex::pi * ((double)k / (double)Window));
+			}
+			// OR, if a cardinal sinus smoothing is used
+			else if(std::strcmp(shape, "sinc") == 0)
+			{
+				if(k == 0)
+					c = 1.0;
+				else
+					c = std::sin(2 * capex::pi * ((double)k / (double)Window)) / (double)k;
+			}
+			// Else, a gaussian smoothing is used
 			else
-				c = Window;
-			result += c * raw_data[k];
+			{
+				double sigma = (k - i) / 3.0;
+				if(sigma == 0.0)
+					sigma = 1.0;
+				double e = (std::pow((k - i), 2.0) / (2.0 * std::pow(sigma, 2.0)));
+				c = std::exp(-e);
+			}
+			
+			sum += c * raw_data[k];
 			coeff += c;
 		}
 
-		result /= coeff;
+		if(std::fabs(coeff) < lowerLimit)
+			coeff = 1.0;
+		sum /= coeff;
+		result = T(sum);
 
 		return result;
+	}
+	// -------------------------------------------------------------------
+	
+	
+	template <typename T>
+	array<T> CAPEX_CALL array<T>::derivative(unsigned int order)
+	{
+		array<T> Derive;
+		if(!Derive.resize(this->size()))
+			return Derive;
+		
+		for(unsigned int i = 1; i < this->size() - 1; i++)
+		{
+			if(order == 1)
+				Derive.values[i] = this->values[i + 1] - this->values[i];
+			else if(order == 2)
+				Derive.values[i] = this->values[i + 1] + this->values[i + 1] -  2 * this->values[i];
+		}
+		
+		if(order == 1)
+		{
+			Derive.values[0] = this->values[1] - this->values[0];
+			Derive.values[this->size() - 1] = Derive.values[this->size() - 2];
+		}
+		else if(order == 2)
+		{
+			Derive.values[0] = Derive.values[1];
+			Derive.values[this->size() - 1] = Derive.values[this->size() - 2];
+		}
+		
+		return Derive;
 	}
 	// -------------------------------------------------------------------
 
