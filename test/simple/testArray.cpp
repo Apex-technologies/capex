@@ -9,7 +9,7 @@ using namespace capex;
 
 /**********************************************************************/
 template <typename T>
-void display(mxm::array<T> a)
+void display(capex::array<T> a)
 {
 	std::cout << "Values :";
 	for(unsigned int i = 0; i < a.size(); i++)
@@ -21,7 +21,7 @@ void display(mxm::array<T> a)
 /**********************************************************************/
 char DisplayMenu()
 {
-	cout << "-----------------USB AB3510 MENU-----------------" << endl;
+	cout << "-----------------INI FILE MENU-----------------" << endl;
 	cout << "\t'a'\tRun blinking" << endl;
 	cout << "\t'b'\tStop blinking" << endl;
 	cout << "\t'c'\tSet blinking frequency" << endl;
@@ -53,6 +53,9 @@ int main(void)
 	float *p = a.pointer();
 	*(p + 2) = 42.0;
 
+	capex::array<float> b = (float)5.0 + a;
+	display(b);
+
 	a[-1] = 28.0;
 
 	if(a.size() < 21)
@@ -77,59 +80,12 @@ int main(void)
 	(*T)[0][100] = 4;
 	cout << (*T)[0][100] << endl;
 	delete T;
-
-    cout << std::endl << "\t\tUSB DEVICES" << endl << endl;
-
-	usb dev(0x5553, 0x3510);
-	if(dev.IsConnected())
-	{
-        cout << std::hex << std::setfill('0') << std::setw(4);
-        cout << "VID = 0x" << dev.GetVID() << endl;
-        cout << "PID = 0x" << dev.GetPID() << endl;
-        cout << "USB " << dev.GetUsbVersion() << endl;
-        cout << "Manufacturer : " << dev.GetManufacturer() << endl;
-        cout << "Product : " << dev.GetProduct() << endl;
-        cout << "Serial Number : " << dev.GetSerialNumber() << endl;
-	}
-	else
-		cout << dev.GetErrorMessage() << endl;
 	
-	char key = '\0';
-	while((key != 'q') && (key != 'Q') && (dev.IsConnected()))
-	{
-		key = DisplayMenu();
-		
-		unsigned short Freq;
-		
-		switch(key)
-		{
-			case 'a':
-				dev.EP0Write(0xB6, 0, 0, NULL, 0);
-				break;
-			case 'b':
-				dev.EP0Write(0xB7, 0, 0, NULL, 0);
-				break;
-			case 'c':
-				cout << "New frequency : ";
-				cin >> Freq;
-				cout << endl;
-				dev.EP0Write(0xB9, Freq, 0, NULL, 0);
-				break;
-			case 'd':
-				dev.EP0Read(0xB8, 0, 0, (unsigned char*)(&Freq), 2);
-				cout << "Frequency = " << (int)Freq << endl;
-				break;
-			case 'q':
-				cout << "Quit the program" << endl;
-				break;
-			default:
-				cout << "Wrong choice" << endl;
-		}
-		cout << endl;
-	}
+    cout << endl << "\t\tINI FILE" << endl << endl;
 	
+	capex::ini *parser = new capex::ini("../ini/test.ini");
 	
-    dev.Close();
+	delete parser; 
 
 	return 0;
 }

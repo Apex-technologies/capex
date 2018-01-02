@@ -31,12 +31,23 @@ namespace capex
 			//! \brief File to open in append mode
 			app = 2
 		};
+
+		// \brief Trim Mode of the string
+		enum TrimMode
+		{
+			// \brief trims the start of the string
+			tmStart = 0,
+			// \brief trims the end of the string
+			tmEnd = 1,
+			// \brief trims the start and the end of the string
+			tmBoth = -1
+		};
 		
 
 		// ---------------------------------------------------------------------
 		//! \brief Get the time (day and hour) with the specified format
-		//! \param TimeString  Pointer to the formatted time string
 		//! \param format      Pointer specifying the format of the time string
+		//! \return a \a string with the formatted time 
 		//!
 		//! This function returns a string containing the time with the specified
 		//! format. If no format is specified, the default one is used :
@@ -54,7 +65,7 @@ namespace capex
 		//! of the library \b stdio.h
 		//!
 		// ---------------------------------------------------------------------
-		bool CAPEX_CALL GetTime(char *TimeString, const char *format = NULL);
+		std::string CAPEX_CALL GetTime(const char *format = NULL);
 		
 		
 		void CAPEX_CALL InitLogFile(char *file = NULL);
@@ -79,6 +90,26 @@ namespace capex
 		//!
 		// ---------------------------------------------------------------------
 		double CAPEX_CALL ConvertWavelengthOrFrequency(double Value);
+		
+		
+		// ---------------------------------------------------------------------
+		//! \brief Converts a delta wavelength into delta frequency or invert
+		//! \param Delta  Delta value to convert
+		//! \param Center Center wavelength or frequency of the delta value
+		//! \return a \e double representing the converted value
+		//!
+		//! This function converts a vacuum delta wavelengths into a delta
+		//! frequencies or a delta frequencies into a vacuum delta wavelengths
+		//!
+		//! Here is a table representing the conversion units :
+		//!     - m    <==>   Hz
+		//!     - mm   <==>   kHz
+		//!     - um   <==>   MHz
+		//!     - nm   <==>   GHz
+		//!     - pm   <==>   THz
+		//!
+		// ---------------------------------------------------------------------
+		double CAPEX_CALL ConvertDeltaWavelengthOrFrequency(double Delta, double Center);
 		
 		
 		// ---------------------------------------------------------------------
@@ -115,19 +146,19 @@ namespace capex
 		//!
 		//! \brief    Trim spaces in a string at start, end or both
 		//! \param    strinit string to trim
-		//! \param    mode    integer describing what part to trim (optional)
+		//! \param    mode    TrimMode describing what part to trim (optional)
 		//! \return   a \e string representing the trimmed string
 		//! 
 		//! This function trims spaces and tabulations which are at start and at end of a string
-		//! mode is an integer which could be :
-		//!    0 : trims the start of the string
-		//!    1 : trims the end of the string
-		//!   -1 : trims the start and the end of the string (default)
+		//! mode is a TrimMode variable which can be:
+		//!    tmStart : trims the start of the string
+		//!    tmEnd : trims the end of the string
+		//!    tmBoth : trims the start and the end of the string (default)
 		//! 
 		//! This function returns the trimmed string.
 		//!
 		//--------------------------------------------------------------------------
-		std::string CAPEX_CALL StrTrim(std::string strinit, int mode = -1);
+		std::string CAPEX_CALL StrTrim(std::string strinit, TrimMode mode = tmBoth);
 		
 		
 		//-------------------------------------------------------------------------

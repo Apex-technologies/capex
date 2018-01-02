@@ -6,8 +6,7 @@
 // DATE : 12/11/2016
 // -----------------------------------------------------------------------------
 //
-// This file includes all classes, functions, variables and constants
-// of the Apex Technologies Library 'capex'
+// This file includes all header files of the Apex Technologies Library 'capex'
 //
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

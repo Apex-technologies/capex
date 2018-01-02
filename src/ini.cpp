@@ -60,8 +60,8 @@ namespace capex
 		this->Keys->clear();
 
 		this->FileName = File;
-		ifstream f;
-		f.open(this->FileName, ios::in);
+		std::ifstream f;
+		f.open(this->FileName, std::ios::in);
 
 		if(!f.is_open())
 			return false;
@@ -123,7 +123,7 @@ namespace capex
 		for(unsigned int i = 0; i < L.size(); i++)
 		{
 
-			L[i] = tools::StrTrim(L[i], -1);
+			L[i] = tools::StrTrim(L[i], tools::tmBoth);
 
 			int p = -1;
 			int psharp = L[i].find_first_of("#", 0);
@@ -164,7 +164,7 @@ namespace capex
 
 			for(unsigned int i = 0; i < p.size(); i++)
 			{
-				p[i] = tools::StrTrim(p[i], -1);
+				p[i] = tools::StrTrim(p[i], tools::tmBoth);
 
 				// transforme une std::string en char*
 				char *str = new char[p[i].length() + 1];
@@ -238,7 +238,7 @@ namespace capex
 			{
 				parameter sp;
 
-				p[i] = tools::StrTrim(p[i], -1);
+				p[i] = tools::StrTrim(p[i], tools::tmBoth);
 
 				// transforme une std::string en char*
 				char *str = new char[p[i].length() + 1];
@@ -251,12 +251,12 @@ namespace capex
 					pch = std::strtok (str,"=");
 					if(pch != NULL)
 					{
-						sp.name = tools::StrTrim(std::string(pch), -1);
+						sp.name = tools::StrTrim(std::string(pch), tools::tmBoth);
 						pch = std::strtok (NULL, "=#;");
-						sp.value = tools::StrTrim(std::string(pch), -1);
+						sp.value = tools::StrTrim(std::string(pch), tools::tmBoth);
 						pch = std::strtok (NULL, "#;");
 						if(pch != NULL)
-							sp.comment = tools::StrTrim(std::string(pch), -1);
+							sp.comment = tools::StrTrim(std::string(pch), tools::tmBoth);
 						sp.line = i;
 						s.parameters.push_back(sp);
 					}
@@ -457,8 +457,8 @@ namespace capex
 
 		try
 		{
-			ofstream f;
-			f.open(File, ios::out);
+			std::ofstream f;
+			f.open(File, std::ios::out);
 			std::string s = this->DicoToString(d);
 			f.write(s.c_str(), s.size());
 			f.close();
@@ -520,7 +520,6 @@ namespace capex
 				sExists = true;
 				for(unsigned int j = 0; j < this->dico->sections[i].parameters.size(); j++)
 				{
-					cout << "Ancienne ligne : " << this->dico->sections[i].parameters[j].line << endl;
 					if(this->dico->sections[i].parameters[j].name == std::string(parameter))
 					{
 						pExists = true;
@@ -529,7 +528,6 @@ namespace capex
 				}
 				if(!pExists)
 				{
-					cout << endl;
 					struct parameter p;
 					struct comment c;
 					std::vector<int>::iterator LIt = this->LinesType->begin();
@@ -538,7 +536,6 @@ namespace capex
 					p.name = std::string(parameter);
 					p.value = value;
 					p.line = this->dico->sections[i].parameters[this->dico->sections[i].parameters.size() - 1].line + 1;
-					cout << "Nouvelle ligne : " << p.line << endl;
 					c.line = p.line;
 					this->ChangeLine(p.line);
 					(this->EndLine)++;

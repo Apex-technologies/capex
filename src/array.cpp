@@ -10,8 +10,8 @@ namespace capex
 	template <typename T>
 	CAPEX_CALL array<T>::array()
 	{
-		this->values = std::unique_ptr<T[]>(new T[1]);
-		this->nb_values = 1;
+		this->values = std::unique_ptr<T[]>(new T[0]);
+		this->nb_values = 0;
 	}
 	// -------------------------------------------------------------------
 
@@ -159,8 +159,8 @@ namespace capex
 			if(buffer == NULL)
 			{
 				#if CAPEX_DEBUG
-					cerr << "Error in array::resize at line " << __LINE__ << endl;
-					cerr << "Cannot initialize a table with " << new_size << " elements" << endl;
+					cerr << tools::GetTime() << "Error in array::resize at line " << __LINE__ << endl;
+					cerr << tools::GetTime() << "Cannot initialize a table with " << new_size << " elements" << endl;
 				#endif
 				return false;
 			}
@@ -224,6 +224,9 @@ namespace capex
 	template <typename T>
 	void CAPEX_CALL array<T>::erase(unsigned int index)
 	{
+		if(this->nb_values < 1)
+			return;
+		
 		T* buffer = new T[this->nb_values - 1];
 
 		for(unsigned int i = 0; i < index; i++)
@@ -249,6 +252,9 @@ namespace capex
 			std::swap(start_index, stop_index);
 
 		unsigned int new_size = this->nb_values - (stop_index - start_index);
+		if(new_size < 1)
+			return;
+		
 		T* buffer = new T[new_size];
 
 		for(unsigned int i = 0; i < start_index; i++)
@@ -298,8 +304,8 @@ namespace capex
 	void CAPEX_CALL array<T>::clear()
 	{
 		this->values.release();
-		this->values = std::unique_ptr<T[]>(new T[1]);
-		this->nb_values = 1;
+		this->values = std::unique_ptr<T[]>(new T[0]);
+		this->nb_values = 0;
 	}
 	// -------------------------------------------------------------------
 
@@ -343,7 +349,10 @@ namespace capex
 	template <typename T>
 	T* CAPEX_CALL array<T>::pointer()
 	{
-		return &(this->values[0]);
+		if(this->nb_values < 1)
+			return NULL;
+		else
+			return &(this->values[0]);
 	}
 	// -------------------------------------------------------------------
 
@@ -603,6 +612,9 @@ namespace capex
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
 		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+			#endif
 			// The arrays have not the same size
 			throw(e);
 			exit(-1);
@@ -650,6 +662,9 @@ namespace capex
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
 		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+			#endif
 			// The arrays have not the same size
 			throw(e);
 			exit(-1);
@@ -673,8 +688,8 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cerr << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cerr << "Return of an empty array" << endl;
+				cerr << tools::GetTime() << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << tools::GetTime() << "Return of an empty array" << endl;
 			#endif
 			return Sum;
 		}
@@ -695,6 +710,9 @@ namespace capex
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
 		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+			#endif
 			// The arrays have not the same size
 			throw(e);
 			exit(-1);
@@ -744,6 +762,9 @@ namespace capex
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
 		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+			#endif
 			// The arrays have not the same size
 			throw(e);
 			exit(-1);
@@ -767,8 +788,8 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cerr << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cerr << "Return of an empty array" << endl;
+				cerr << tools::GetTime() << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << tools::GetTime() << "Return of an empty array" << endl;
 			#endif
 			return Product;
 		}
@@ -789,6 +810,9 @@ namespace capex
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
 		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+			#endif
 			// The arrays have not the same size
 			throw(e);
 			exit(-1);
@@ -843,6 +867,9 @@ namespace capex
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
 		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+			#endif
 			// The arrays have not the same size
 			throw(e);
 			exit(-1);
@@ -870,8 +897,8 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cerr << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cerr << "Return of an empty array" << endl;
+				cerr << tools::GetTime() << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << tools::GetTime() << "Return of an empty array" << endl;
 			#endif
 			return Diff;
 		}
@@ -892,6 +919,9 @@ namespace capex
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
 		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+			#endif
 			// The arrays have not the same size
 			throw(e);
 			exit(-1);
@@ -941,6 +971,9 @@ namespace capex
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
 		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+			#endif
 			// The arrays have not the same size
 			throw(e);
 			exit(-1);
@@ -964,8 +997,8 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cerr << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cerr << "Return of an empty array" << endl;
+				cerr << tools::GetTime() << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << tools::GetTime() << "Return of an empty array" << endl;
 			#endif
 			return Quotient;
 		}
@@ -986,6 +1019,9 @@ namespace capex
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
 		if(this->size() != right.size())
 		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+			#endif
 			// The arrays have not the same size
 			throw(e);
 			exit(-1);
@@ -1401,7 +1437,7 @@ namespace capex
 			if(order == 1)
 				Derive.values[i] = this->values[i + 1] - this->values[i];
 			else if(order == 2)
-				Derive.values[i] = this->values[i + 1] + this->values[i + 1] -  2 * this->values[i];
+				Derive.values[i] = this->values[i + 1] + this->values[i - 1] -  2 * this->values[i];
 		}
 		
 		if(order == 1)
