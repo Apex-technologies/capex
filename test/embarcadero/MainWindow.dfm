@@ -19,7 +19,7 @@ object MainForm: TMainForm
     Top = 8
     Width = 1043
     Height = 665
-    ActivePage = ArraySheet
+    ActivePage = INI_Sheet
     TabOrder = 0
     object ArraySheet: TTabSheet
       Caption = 'Array Test'
@@ -237,206 +237,17 @@ object MainForm: TMainForm
         OnClick = SinusNoise_BtClick
       end
     end
-    object USBTest_Sheet: TTabSheet
-      Caption = 'USB Test'
-      ImageIndex = 1
-      object Label3: TLabel
-        Left = 576
-        Top = 72
-        Width = 84
-        Height = 13
-        Caption = 'Vendor Request :'
-      end
-      object Label4: TLabel
-        Left = 576
-        Top = 96
-        Width = 33
-        Height = 13
-        Caption = 'Value :'
-      end
-      object Label5: TLabel
-        Left = 576
-        Top = 120
-        Width = 35
-        Height = 13
-        Caption = 'Index :'
-      end
-      object Label6: TLabel
-        Left = 576
-        Top = 144
-        Width = 74
-        Height = 13
-        Caption = 'Bytes Number :'
-      end
-      object Label7: TLabel
-        Left = 685
-        Top = 72
-        Width = 12
-        Height = 13
-        Caption = '0x'
-      end
-      object Label8: TLabel
-        Left = 685
-        Top = 96
-        Width = 12
-        Height = 13
-        Caption = '0x'
-      end
-      object Label10: TLabel
-        Left = 685
-        Top = 120
-        Width = 12
-        Height = 13
-        Caption = '0x'
-      end
-      object FindDevices_Bt: TButton
-        Left = 32
-        Top = 16
-        Width = 530
-        Height = 25
-        Caption = 'Find Devices'
-        TabOrder = 0
-        OnClick = FindDevices_BtClick
-      end
-      object DevicesList_Grid: TStringGrid
-        Left = 32
-        Top = 56
-        Width = 530
-        Height = 553
-        DefaultColWidth = 150
-        FixedCols = 0
-        RowCount = 100
-        TabOrder = 1
-        OnSelectCell = DevicesList_GridSelectCell
-        ColWidths = (
-          79
-          67
-          136
-          143
-          80)
-      end
-      object VendorReq_Edit: TEdit
-        Left = 699
-        Top = 69
-        Width = 38
-        Height = 21
-        Alignment = taCenter
-        TabOrder = 2
-        Text = '0'
-      end
-      object Value_Edit: TEdit
-        Left = 699
-        Top = 93
-        Width = 38
-        Height = 21
-        Alignment = taCenter
-        TabOrder = 3
-        Text = '0'
-      end
-      object Index_Edit: TEdit
-        Left = 699
-        Top = 117
-        Width = 38
-        Height = 21
-        Alignment = taCenter
-        TabOrder = 4
-        Text = '0'
-      end
-      object RadioGroup1: TRadioGroup
-        Left = 576
-        Top = 18
-        Width = 161
-        Height = 39
-        Caption = 'EP0 Direction'
-        TabOrder = 5
-      end
-      object EP0Read_Radio: TRadioButton
-        Left = 600
-        Top = 34
-        Width = 41
-        Height = 17
-        Caption = 'Read'
-        Checked = True
-        TabOrder = 6
-        TabStop = True
-      end
-      object EP0Write_Radio: TRadioButton
-        Left = 672
-        Top = 34
-        Width = 41
-        Height = 17
-        Caption = 'Write'
-        TabOrder = 7
-      end
-      object BytesNumber_Edit: TEdit
-        Left = 699
-        Top = 141
-        Width = 38
-        Height = 21
-        Alignment = taCenter
-        NumbersOnly = True
-        TabOrder = 8
-        Text = '0'
-      end
-      object SendEP0_Bt: TButton
-        Left = 576
-        Top = 172
-        Width = 161
-        Height = 25
-        Caption = 'Send EP0'
-        TabOrder = 9
-        OnClick = SendEP0_BtClick
-      end
-      object DataEP0_Grid: TStringGrid
-        Left = 576
-        Top = 240
-        Width = 162
-        Height = 369
-        ColCount = 2
-        DefaultColWidth = 70
-        RowCount = 65
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
-        TabOrder = 10
-      end
-      object DataToEEProm_Bt: TButton
-        Left = 808
-        Top = 16
-        Width = 193
-        Height = 25
-        Caption = 'Set Data to EEPROM'
-        TabOrder = 11
-        OnClick = DataToEEProm_BtClick
-      end
-      object GetDataFromEEProm_Bt: TButton
-        Left = 808
-        Top = 47
-        Width = 193
-        Height = 25
-        Caption = 'EEPROM to Data'
-        TabOrder = 12
-        OnClick = GetDataFromEEProm_BtClick
-      end
-      object SendEP1_Bt: TButton
-        Left = 576
-        Top = 203
-        Width = 161
-        Height = 25
-        Caption = 'Send EP1'
-        TabOrder = 13
-        OnClick = SendEP0_BtClick
-      end
-    end
     object INI_Sheet: TTabSheet
       Caption = 'INI File Test'
       ImageIndex = 2
-      object Button1: TButton
+      object OpenINI_Bt: TButton
         Left = 16
         Top = 24
         Width = 129
         Height = 33
         Caption = 'Open INI File'
         TabOrder = 0
-        OnClick = Button1Click
+        OnClick = OpenINI_BtClick
       end
       object IniGrid: TStringGrid
         Left = 16
@@ -445,6 +256,7 @@ object MainForm: TMainForm
         Height = 528
         ColCount = 3
         DefaultColWidth = 320
+        FixedCols = 0
         RowCount = 1000
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
         TabOrder = 1
@@ -1454,6 +1266,15 @@ object MainForm: TMainForm
           24
           24)
       end
+      object SaveINI_Bt: TButton
+        Left = 151
+        Top = 24
+        Width = 129
+        Height = 33
+        Caption = 'Save INI File'
+        TabOrder = 2
+        OnClick = SaveINI_BtClick
+      end
     end
   end
   object Quit_Bt: TButton
@@ -1481,6 +1302,7 @@ object MainForm: TMainForm
     Top = 56
   end
   object SaveIniDialog: TSaveDialog
+    Filter = 'INI FILE (*.INI)|*.ini'
     Left = 972
     Top = 56
   end
