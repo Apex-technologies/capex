@@ -12,12 +12,10 @@ all: $(EXEC)
 debug: OPTIONS = -DDEBUG -g
 debug: $(EXEC)
 
-$(EXEC): $(EXEC).o mxm.o
-	$(CC) -o $(BDIR)/$(EXEC) $(BDIR)/$(EXEC).o $(BDIR)/capex.o $(CFLAGS) $(LDFLAGS)
-$(EXEC).o: testArray.cpp ../../src/array.cpp
+$(EXEC): $(EXEC).o
+	$(CC) -o $(BDIR)/$(EXEC) $(BDIR)/$(EXEC).o $(CFLAGS) $(LDFLAGS)
+$(EXEC).o: testArray.cpp ../../src/*.cpp
 	$(CC) -o $(BDIR)/$(EXEC).o -c *.cpp $(CFLAGS) $(OPTIONS)
-mxm.o: usb.cpp
-	$(CC) -o $(BDIR)/capex.o -c ../../src/usb.cpp $(CFLAGS) $(OPTIONS)
 clean:
 	rm -f *.o core
 mrproper: clean

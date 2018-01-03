@@ -13,7 +13,7 @@ namespace capex
 	{
 
 		// -------------------------------------------------------------------
-		void CAPEX_CALL GetTime(char *TimeString, char *format)
+		std::string CAPEX_CALL GetTime(char *format)
 		{
 			if(format == NULL)
 				sprintf(format, "%d/%m/%Y - %H:%M:%S - ");
@@ -26,12 +26,8 @@ namespace capex
 			timeinfo = localtime(&rawtime);
 
 			strftime(buffer, 80 , format, timeinfo);
-			for(int i = 0; i < 80; i++)
-			{
-				*(TimeString + i) = ((char)(buffer[i]));
-				if(((char)(buffer[i])) == '\0')
-					break;
-			}
+
+			return std::string(&buffer[0]);
 		}
 		// -------------------------------------------------------------------
 
@@ -44,11 +40,11 @@ namespace capex
 
 			// redirect errors to the logfile
 			std::streambuf *errbuf = cerr.rdbuf();
-			std::ofstream err(file);
+			std::ofstream err(file, std::ios::out);
 			cerr.rdbuf(err.rdbuf());
 
 			#if CAPEX_DEBUG
-				cerr << "Error output redirected into " << std::string(file) << endl;
+				cerr << GetTime() << "Error output redirected into " << std::string(file) << endl;
 			#endif
 		}
 		// -------------------------------------------------------------------
@@ -56,11 +52,10 @@ namespace capex
 		
 		// -------------------------------------------------------------------
 		void CAPEX_CALL WriteLogFile(char *LogText)
-		{
-			char TimeStamp [20];
-			GetTime(&TimeStamp[0]);
-			
-			cerr << TimeStamp << LogText << endl;
+		{		
+			#if CAPEX_DEBUG
+				cerr << GetTime() << LogText << endl;
+			#endif
 		}
 		// -------------------------------------------------------------------
 
@@ -72,7 +67,7 @@ namespace capex
 			cerr.rdbuf(errbuf);
 			
 			#if CAPEX_DEBUG
-				cerr << "Error output redirected into standard output" << endl;
+				cerr << GetTime() << "Error output redirected into standard output" << endl;
 			#endif
 		}
 		// -------------------------------------------------------------------
@@ -84,13 +79,30 @@ namespace capex
 			if(Value <= lowerLimit)
 			{
 				#if CAPEX_DEBUG
-					cerr << "Error in ConvertWavelengthOrFrequency at line " << __LINE__ << endl;
-					cerr << "Value forced to 0.0" << endl;
+					cerr << GetTime() << "Error in ConvertWavelengthOrFrequency at line " << __LINE__ << endl;
+					cerr << GetTime() << "Value forced to 0.0" << endl;
 				#endif
 				return 0.0;
 			}
 			
 			return VacuumCelerity / Value;
+		}
+		// -------------------------------------------------------------------
+
+		
+		// -------------------------------------------------------------------
+		double CAPEX_CALL ConvertDeltaWavelengthOrFrequency(double Delta, double Center)
+		{
+			if(Center <= lowerLimit)
+			{
+				#if CAPEX_DEBUG
+					cerr << GetTime() << "Error in ConvertDeltaWavelengthOrFrequency at line " << __LINE__ << endl;
+					cerr << GetTime() << "Value forced to 0.0" << endl;
+				#endif
+				return 0.0;
+			}
+
+			return VacuumCelerity * (Delta / (Center * Center));
 		}
 		// -------------------------------------------------------------------
 		
@@ -106,8 +118,8 @@ namespace capex
 			catch(...)
 			{
 				#if CAPEX_DEBUG
-					cerr << "Error in ConvertLinearToBel at line " << __LINE__ << endl;
-					cerr << "Value forced to -999" << endl;
+					cerr << GetTime() << "Error in ConvertLinearToBel at line " << __LINE__ << endl;
+					cerr << GetTime() << "Value forced to -999" << endl;
 				#endif
 				db = -999.0;
 			}
@@ -127,8 +139,8 @@ namespace capex
 			catch(...)
 			{
 				#if CAPEX_DEBUG
-					cerr << "Error in ConvertBelToLinear at line " << __LINE__ << endl;
-					cerr << "Value forced to 0" << endl;
+					cerr << GetTime() << "Error in ConvertBelToLinear at line " << __LINE__ << endl;
+					cerr << GetTime() << "Value forced to 0" << endl;
 				#endif
 				lin = 0.0;
 			}
@@ -138,24 +150,31 @@ namespace capex
 		
 		
 		//--------------------------------------------------------------------
-		std::string CAPEX_CALL StrTrim(std::string strinit, int mode)
+		std::string CAPEX_CALL StrTrim(std::string strinit, TrimMode mode)
 		{
-			if(mode == 0)
+			if(mode == tmStart)
 			{
 				while(strinit[0] == ' ' || strinit[0] == '\t')
 					strinit.erase(0, 1);
 			}
-			else if(mode == 1)
+			else if(mode == tmEnd)
 			{
+				while(strinit[strinit.size() - 1] == ' ' || strinit[strinit.size() - 1] == '\t')
+					strinit.erase(strinit.size() - 1, 1);
+			}
+			else if(mode == tmBoth)
+			{
+				while(strinit[0] == ' ' || strinit[0] == '\t')
+					strinit.erase(0, 1);
 				while(strinit[strinit.size() - 1] == ' ' || strinit[strinit.size() - 1] == '\t')
 					strinit.erase(strinit.size() - 1, 1);
 			}
 			else
 			{
-				while(strinit[0] == ' ' || strinit[0] == '\t')
-					strinit.erase(0, 1);
-				while(strinit[strinit.size() - 1] == ' ' || strinit[strinit.size() - 1] == '\t')
-					strinit.erase(strinit.size() - 1, 1);
+				#if CAPEX_DEBUG
+					cerr << GetTime() << "Error in StrTrim at line " << __LINE__ << endl;
+					cerr << GetTime() << "String has not been trimmed" << endl;
+				#endif
 			}
 			return strinit;
 		}
@@ -165,7 +184,7 @@ namespace capex
 		//--------------------------------------------------------------------
 		std::string CAPEX_CALL StrLower(std::string strinit)
 		{
-			// transforme une std::string en char*
+			// transforms a std::string into char*
 			char *str = new char[strinit.length() + 1];
 			std::copy(strinit.begin(), strinit.end(), str);
 			str[strinit.length()] = '\0';
@@ -187,7 +206,7 @@ namespace capex
 		//--------------------------------------------------------------------
 		std::string CAPEX_CALL StrUpper(std::string strinit)
 		{
-			// transforme une std::string en char*
+			// transforms a std::string into char*
 			char *str = new char[strinit.length() + 1];
 			std::copy(strinit.begin(), strinit.end(), str);
 			str[strinit.length()] = '\0';
