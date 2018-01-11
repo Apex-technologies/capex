@@ -293,7 +293,40 @@ namespace capex
 		}
 		//--------------------------------------------------------------------
 
-		
+
+		//--------------------------------------------------------------------
+		std::string CAPEX_CALL NumToHex(unsigned int value)
+		{
+			std::stringstream stream;
+			stream << std::hex << value;
+
+			std::string result = std::string(stream.str());
+			result = StrUpper(result);
+
+			return result;
+		}
+		//--------------------------------------------------------------------
+
+
+		//--------------------------------------------------------------------
+		unsigned int CAPEX_CALL HexToNum(std::string hexa)
+		{
+			unsigned int value;
+
+			hexa = StrTrim(hexa, tmBoth);
+			hexa = StrLower(hexa);
+
+			if(strcmp(hexa.c_str(), "0x") >= 2)
+				hexa = hexa.substr(2, hexa.size());
+
+			std::stringstream stream;
+			stream << std::hex << hexa;
+
+			stream >> value;
+
+			return value;
+		}
+		//--------------------------------------------------------------------
 	}
 
 }

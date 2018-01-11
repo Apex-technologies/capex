@@ -29,7 +29,13 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 	this->OpenIniDialog->InitialDir = ExtractFilePath(Application->ExeName);
 	//ShowMessage(ExtractFilePath(Application->ExeName));
 
-	this->parser = new ini();
+	this->parser = new capex::ini();
+}
+//---------------------------------------------------------------------------
+
+__fastcall TMainForm::~TMainForm()
+{
+	delete this->parser;
 }
 //---------------------------------------------------------------------------
 
@@ -62,7 +68,7 @@ void __fastcall TMainForm::Threshold_EditChange(TObject *Sender)
 	this->Threshold = StrToFloatDef(this->Threshold_Edit->Text, -1.0);
 
 	this->y = sin(2 * capex::pi * this->Frequency * x);
-	this->y.replace(this->y.threshold(this->Threshold).invert(), 0.0);
+	this->y.replace(this->y.threshold(this->Threshold).invert(), this->Threshold);
 
 	this->DisplayGraph();
 }
@@ -70,7 +76,7 @@ void __fastcall TMainForm::Threshold_EditChange(TObject *Sender)
 
 void __fastcall TMainForm::Noise_BtClick(TObject *Sender)
 {
-	this->y.random(-5.0, 5.0, this->y.size());
+	this->y.random(-1.0, 1.0, this->y.size());
 	this->DisplayGraph();
 }
 //---------------------------------------------------------------------------
@@ -124,13 +130,14 @@ void __fastcall TMainForm::OpenINI_BtClick(TObject *Sender)
 {
 	if(this->OpenIniDialog->Execute())
 	{
-		if(this->parser->Open(AnsiString(this->OpenIniDialog->FileName).c_str()))
+		AnsiString fname = AnsiString(this->OpenIniDialog->FileName);
+		if(this->parser->Open(fname.c_str()))
 		{
 			int Line = 1;
 			std::vector<std::string> sec = this->parser->GetSectionsName();
 			for(int n = 0; n < sec.size(); n++)
 			{
-				capex::section s = this->parser->GetSection(sec[n].c_str());
+				section s = this->parser->GetSection(sec[n].c_str());
 				for(int k = 0; k < s.parameters.size(); k++)
 				{
 					this->IniGrid->Cells[0][Line] = AnsiString(sec[n].c_str());
@@ -169,7 +176,8 @@ void __fastcall TMainForm::SaveINI_BtClick(TObject *Sender)
 			}
 		}
 		dictionary d = this->parser->GetDictionary();
-		this->parser->WriteINI(&d, AnsiString(this->SaveIniDialog->FileName).c_str());
+		AnsiString fname = AnsiString(this->SaveIniDialog->FileName);
+		this->parser->WriteINI(&d, fname.c_str());
 	}
 }
 //---------------------------------------------------------------------------

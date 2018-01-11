@@ -19,7 +19,7 @@ object MainForm: TMainForm
     Top = 8
     Width = 1043
     Height = 665
-    ActivePage = INI_Sheet
+    ActivePage = ArraySheet
     TabOrder = 0
     object ArraySheet: TTabSheet
       Caption = 'Array Test'

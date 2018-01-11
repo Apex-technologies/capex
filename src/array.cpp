@@ -677,7 +677,7 @@ namespace capex
 
 
 	template <typename T, typename U>
-	array<T> operator+ (U left, array<T> right)
+	array<T> operator+ (U left, array<T> &right)
 	{
 		array<T> Sum = array<T> ();
 		
@@ -886,7 +886,7 @@ namespace capex
 
 
 	template <typename T, typename U>
-	array<T> operator- (U left, array<T> right)
+	array<T> operator- (U left, array<T> &right)
 	{
 		array<T> Diff = array<T> ();
 
@@ -986,7 +986,7 @@ namespace capex
 
 
 	template <typename T, typename U>
-	array<T> operator/ (U left, array<T> right)
+	array<T> operator/ (U left, array<T> &right)
 	{
 		array<T> Quotient = array<T> ();
 

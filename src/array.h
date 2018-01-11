@@ -26,6 +26,8 @@
 
 #include "./constants.h"
 
+#define DEFINE_FRIEND false
+
 namespace capex
 {
 
@@ -34,31 +36,13 @@ namespace capex
 	template <typename T> std::ostream & operator<<(std::ostream &, const array<T> &);
 	template <typename T> std::istream & operator>>(std::istream &, const array<T> &);
 
-	template <typename T, typename U> array<T> operator+ (U left, array<T> right);
+	#if DEFINE_FRIEND
+	template <typename T, typename U> array<T> operator+ (U left, array<T> &right);
 	template <typename T, typename U> array<T> operator* (U left, array<T> right);
-	template <typename T, typename U> array<T> operator- (U left, array<T> right);
-	template <typename T, typename U> array<T> operator/ (U left, array<T> right);
-	
-	template <typename T> array<T> CAPEX_CALL sin (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL cos (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL tan (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL asin (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL acos (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL atan (const array<T> x);
-	
-	template <typename T> array<T> CAPEX_CALL exp (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL log (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL log10 (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL log2 (const array<T> x);
+	template <typename T, typename U> array<T> operator- (U left, array<T> &right);
+	template <typename T, typename U> array<T> operator/ (U left, array<T> &right);
+	#endif
 
-	template <typename T> array<T> CAPEX_CALL sqrt (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL pow (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL pow2 (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL pow10 (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL power2 (const array<T> x);
-	template <typename T> array<T> CAPEX_CALL power10 (const array<T> x);
-
-	template <typename T> array<T> CAPEX_CALL abs (const array<T> x);	
 
 	// -----------------------------------------------------------------------------
 	//                             ARRAY DECLARATION
@@ -68,35 +52,28 @@ namespace capex
 
 	template <typename T> class array
 	{
-		// Friend functions
-			friend std::ostream & operator<< (std::ostream &, const array<T> &);
-			friend std::istream & operator>> (std::istream &, array<T> &);
-			
-			template<class U> friend array<T> operator+ <T>(U left, array<T> right);
-			template<class U> friend array<T> operator* (U left, array<T> right);
-			template<class U> friend array<T> operator- (U left, array<T> right);
-			template<class U> friend array<T> operator/ (U left, array<T> right);
+			// Any other class of array<X> is friend of this one (type <T>)
+			template <typename X> friend class array;
 
-			friend array<T> CAPEX_CALL sin <T>(const array<T> x);
-			friend array<T> CAPEX_CALL cos <T>(const array<T> x);
-			friend array<T> CAPEX_CALL tan <T>(const array<T> x);
-			friend array<T> CAPEX_CALL asin <T>(const array<T> x);
-			friend array<T> CAPEX_CALL acos <T>(const array<T> x);
-			friend array<T> CAPEX_CALL atan <T>(const array<T> x);
+			// Friend functions
+			friend std::ostream & operator<< <>(std::ostream &, const array<T> &);
+			friend std::istream & operator>> <>(std::istream &, array<T> &);
 
-			friend array<T> CAPEX_CALL exp <T>(const array<T> x);
-			friend array<T> CAPEX_CALL log <T>(const array<T> x);
-			friend array<T> CAPEX_CALL log10 <T>(const array<T> x);
-			friend array<T> CAPEX_CALL log2 <T>(const array<T> x);
+			#if DEFINE_FRIEND
+			// Problem with the Template Class friends
+			template<class U> friend array<T> operator+ <>(U left, array<T> &right);
+			template<class U> friend array<T> operator* <>(U left, array<T> right);
+			template<class U> friend array<T> operator- <>(U left, array<T> &right);
+			template<class U> friend array<T> operator/ <>(U left, array<T> &right);
+			#endif
 
-			friend array<T> CAPEX_CALL sqrt <T>(const array<T> x);
-			friend array<T> CAPEX_CALL pow <T>(const array<T> x);
-			friend array<T> CAPEX_CALL pow2 <T>(const array<T> x);
-			friend array<T> CAPEX_CALL pow10 <T>(const array<T> x);
-			friend array<T> CAPEX_CALL power2 <T>(const array<T> x);
-			friend array<T> CAPEX_CALL power10 <T>(const array<T> x);
+		public: // Public Attributs
 
-			friend array<T> CAPEX_CALL abs <T>(const array<T> x);
+			#if !DEFINE_FRIEND
+			//! \brief Array where values are stored
+			//! Do not modify this array directly
+			std::unique_ptr<T[]> values;
+			#endif
 
 		public: // Public Methods
 
@@ -1073,15 +1050,17 @@ namespace capex
 			unsigned int CAPEX_CALL elements();
 
 
-		protected: // Private Parameters
+		private: // Private Parameters
+
+			#if DEFINE_FRIEND
+			//! \brief Array where values are stored
+			//! Do not modify this array directly
+			std::unique_ptr<T[]> values;
+			#endif
 
 			//! \brief Size of the array
 			//! Do not modify this value directly
 			unsigned int nb_values;
-
-			//! \brief Array where values are stored
-			//! Do not modify this array directly
-			std::unique_ptr<T[]> values;
 
 		private: // Private Methods
 
@@ -1119,7 +1098,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template <typename T, typename U>
-	array<T> operator+ (U left, array<T> right);
+	array<T> operator+ (U left, array<T> &right);
 
 
 	// ---------------------------------------------------------------------
@@ -1147,7 +1126,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template <typename T, typename U>
-	array<T> operator- (U left, array<T> right);
+	array<T> operator- (U left, array<T> &right);
 
 
 	// ---------------------------------------------------------------------
@@ -1161,7 +1140,7 @@ namespace capex
 	//!
 	// ---------------------------------------------------------------------
 	template <typename T, typename U>
-	array<T> operator/ (U left, array<T> right);
+	array<T> operator/ (U left, array<T> &right);
 
 
 	// ---------------------------------------------------------------------

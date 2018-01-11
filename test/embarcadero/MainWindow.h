@@ -101,6 +101,7 @@ private:	// User declarations
 
 public:		// User declarations
 	__fastcall TMainForm(TComponent* Owner);
+	__fastcall ~TMainForm();
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TMainForm *MainForm;

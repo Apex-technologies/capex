@@ -126,11 +126,6 @@
         <BCC_PCHName_Clang>capexPCH1.h</BCC_PCHName_Clang>
     </PropertyGroup>
     <ItemGroup>
-        <LibFiles Include="..\..\lib\libusb_bcb-1.0.lib" Condition="'$(Platform)'=='Win32'">
-            <VirtualFolder>{7370048E-BF65-437F-B00D-6CEDC2D29564}</VirtualFolder>
-            <BuildOrder>4</BuildOrder>
-            <IgnorePath>true</IgnorePath>
-        </LibFiles>
         <None Include="..\..\src\capex.h">
             <VirtualFolder>{7370048E-BF65-437F-B00D-6CEDC2D29564}</VirtualFolder>
             <BuildOrder>3</BuildOrder>

@@ -215,8 +215,34 @@ namespace capex
 		//!
 		//--------------------------------------------------------------------------
 		std::string CAPEX_CALL NumToStr(double value, int precision = 6);
+
+		//--------------------------------------------------------------------------
+		//!
+		//! \brief   Converts an integer into a string representing the hexa value
+		//! \param   value integer to convert
+		//! \return  a \e string representing the hexa converted value
+		//!
+		//! this function converts an integer to an hexadecimal string.
+		//!
+		//! this function returns the converted string.
+		//!
+		//--------------------------------------------------------------------------
+		std::string CAPEX_CALL NumToHex(unsigned int value);
+
+		//--------------------------------------------------------------------------
+		//!
+		//! \brief   Converts an hexadecimal string to an integer
+		//! \param   hexa string to convert
+		//! \return  an \e int representing the value
+		//!
+		//! this function converts an hexadecimal string to an integer.
+		//!
+		//! this function returns the converted integer.
+		//!
+		//--------------------------------------------------------------------------
+		unsigned int CAPEX_CALL HexToNum(std::string hexa);
 	}
-	
+
 }
 
 #include "./tools.cpp"
