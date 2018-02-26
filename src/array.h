@@ -43,6 +43,20 @@ namespace capex
 	template <typename T, typename U> array<T> operator/ (U left, array<T> &right);
 	#endif
 
+	enum SmoothShape
+	{
+		ssSquare = 0,
+		ssGauss = 1,
+		ssSin = 2,
+		ssSinc = 3
+	};
+
+	enum RandomShape
+	{
+		rsUniform = 0,
+		rsGauss = 1
+	};
+
 
 	// -----------------------------------------------------------------------------
 	//                             ARRAY DECLARATION
@@ -174,15 +188,29 @@ namespace capex
 
 			// ---------------------------------------------------------------------
 			//! \brief Fills an array with random values
-			//! \param  min  the minimum value of the random operation
-			//! \param  max  the maximum value of the random operation
+			//! \param  mean  the mean value of the array values
+			//! \param  std_deviation  the standard deviation of the random density
 			//! \param  number  the number of values
+			//! \param  shape  the shape of the random density (capex::RandomShape)
 			//!
-			//! This method fills an array with random values comprised
-			//! between 'min' and 'max'. The array is automatically resized.
+			//! This method fills an array with random values following a
+			//! probability density defined by the 'shape' parameter.
 			//!
 			// ---------------------------------------------------------------------
-			void CAPEX_CALL random(T min, T max, unsigned int number);
+			void CAPEX_CALL random(T mean, T std_deviation, unsigned int number, RandomShape shape);
+
+
+			// ---------------------------------------------------------------------
+			//! \brief Adds noise to an array
+			//! \param  std_deviation  the standard deviation of the noise density
+			//! \param  shape  the shape of the noise density (capex::RandomShape)
+			//!
+			//! This method adds a random noise to an array. The noise is
+			//! caracterized by its standard deviation and its shape which is
+			//! a capex::RandomShape enumeration value
+			//!
+			// ---------------------------------------------------------------------
+			void CAPEX_CALL noise(T std_deviation, RandomShape shape);
 
 
 			// ---------------------------------------------------------------------
@@ -714,6 +742,30 @@ namespace capex
 
 
 			// ---------------------------------------------------------------------
+			//! \brief Overloading of the % operator
+			//! \param  right  a scalar value
+			//! \return an array of the modulo values
+			//!
+			//! This method overloads the operator '%'. All terms of the array
+			//! are the modulo of the scalar value.
+			//!
+			// ---------------------------------------------------------------------
+			array<T> CAPEX_CALL operator%(T right);
+
+
+			// ---------------------------------------------------------------------
+			//! \brief Overloading of the %= operator
+			//! \param  right  a scalar value
+			//! \return an array of the modulo values
+			//!
+			//! This method overloads the operator '%='. All terms of the array
+			//! are the modulo of the scalar value.
+			//!
+			// ---------------------------------------------------------------------
+			void CAPEX_CALL operator%=(T right);
+
+
+			// ---------------------------------------------------------------------
 			//! \brief Overloading of the ^ operator
 			//! \param  right  the array to multiply (vectorial product)
 			//! \return an array of the vectorial product values
@@ -920,8 +972,8 @@ namespace capex
 
 	  		// ---------------------------------------------------------------------
 			//! \brief Smooth all values of an array
-			//! \param area	the number of points to consider (5 by default)
-			//! \param shape   string representing the smoothing function to use
+			//! \param area    the number of points to consider (5 by default)
+			//! \param shape   value representing the smoothing function to use
 			//! \return the smoothed array
 			//!
 			//! This method returns an array where all values are smoothed.
@@ -931,15 +983,15 @@ namespace capex
 			//! of each one is considered for the smoothing function. If an even
 			//! number is given, it is rounded to the next one (2 -> 3, 4 -> 5)...
 			//!
-			//! shape is a string representing the mathematical function to use
-			//! for the smoothing. Different functions can be used :
-			//!		- 'square' : a square function is used
-			//!     - 'sin' : a sinus function is used
-			//!     - 'sinc' : a cardinal sinus function is used
-			//!     - 'gauss' (default) : a gaussian function used
+			//! shape is a value representing the mathematical function to use
+			//! for the smoothing (capex::SmoothShape). Different functions can be used :
+			//!     - ssSquare : a square function is used
+			//!     - ssSin : a sinus function is used
+			//!     - ssSinc : a cardinal sinus function is used
+			//!     - ssGauss (default) : a gaussian function is used
 			//!
 			// ---------------------------------------------------------------------
-			array<T> CAPEX_CALL smooth(unsigned int area = 5, const char *shape = "gauss");
+			array<T> CAPEX_CALL smooth(unsigned int area = 5, SmoothShape shape = ssGauss);
 			
 			
 			// ---------------------------------------------------------------------
@@ -1064,7 +1116,7 @@ namespace capex
 
 		private: // Private Methods
 
-			T CAPEX_CALL smooth_function(const T raw_data[], unsigned int Window, const char *shape);
+			T CAPEX_CALL smooth_function(const T raw_data[], unsigned int Window, SmoothShape shape);
 
 	};
 

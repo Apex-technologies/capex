@@ -65,7 +65,7 @@ namespace capex
 		//! of the library \b stdio.h
 		//!
 		// ---------------------------------------------------------------------
-		std::string CAPEX_CALL GetTime(const char *format = NULL);
+		std::string CAPEX_CALL GetTime(char *format = NULL);
 		
 		
 		void CAPEX_CALL InitLogFile(char *file = NULL);

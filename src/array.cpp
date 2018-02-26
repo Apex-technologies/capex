@@ -124,18 +124,96 @@ namespace capex
 
 
 	template <typename T>
-	void CAPEX_CALL array<T>::random(T min, T max, unsigned int number)
+	void CAPEX_CALL array<T>::random(T mean, T std_deviation, unsigned int number, RandomShape shape)
 	{
-		if(min > max)
-			std::swap(min, max);
+		Exception_OperationArray e("The random shape is not valid", __LINE__);
 
 		if(this->resize(number))
 		{
-			for(unsigned int i = 0; i < this->size(); i++)
+			switch(shape)
 			{
-				double r = (double)(rand()) / (double)(RAND_MAX);
-				this->values[i] = T(r * (max - min)) + T(min);
+				case rsUniform:
+				{
+					for(unsigned int i = 0; i < this->nb_values; i++)
+					{
+						double r = (double)(rand()) / (double)(RAND_MAX);
+						this->values[i] = T(r * (2 * std_deviation)) + std_deviation + mean;
+					}
+				}
+				break;
+
+				case rsGauss:
+				{
+					for(unsigned int i = 0; i < this->nb_values; i++)
+					{
+						double r1 = (double)(rand()) / (double)(RAND_MAX);
+						double r2 = (double)(rand()) / (double)(RAND_MAX);
+						if(r1 <= 0.0)
+							r1 = capex::lowerLimit;
+						double n = std::sqrt(-2.0 * std::log(r1)) * std::cos(2.0 * capex::pi * r2);
+						n *= std_deviation;
+						this->values[i] = mean + T(n);
+					}
+				}
+				break;
+
+				default:
+				{
+					#if CAPEX_DEBUG
+						cerr << tools::GetTime() << "The random shape is not valid at line " << __LINE__ << endl;
+					#endif
+					// The random shape is not a valid one
+					throw(e);
+					exit(-1);
+				}
+				break;
 			}
+		}
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	void CAPEX_CALL array<T>::noise(T std_deviation, RandomShape shape)
+	{
+		Exception_OperationArray e("The random shape is not valid", __LINE__);
+		switch(shape)
+		{
+			case rsUniform:
+			{
+				for(unsigned int i = 0; i < this->nb_values; i++)
+				{
+					double r = (double)(rand()) / (double)(RAND_MAX);
+					this->values[i] += T(r * (2 * std_deviation)) + std_deviation;
+				}
+			}
+			break;
+
+			case rsGauss:
+			{
+				for(unsigned int i = 0; i < this->nb_values; i++)
+				{
+					double r1 = (double)(rand()) / (double)(RAND_MAX);
+					double r2 = (double)(rand()) / (double)(RAND_MAX);
+					if(r1 <= 0.0)
+						r1 = capex::lowerLimit;
+					double n = std::sqrt(-2.0 * std::log(r1)) * std::cos(2.0 * capex::pi * r2);
+					n *= std_deviation;
+					this->values[i] += T(n);
+				}
+			}
+			break;
+
+			default:
+			{
+				#if CAPEX_DEBUG
+					cerr << tools::GetTime() << "The random shape is not valid at line " << __LINE__ << endl;
+				#endif
+				// The random shape is not a valid one
+				throw(e);
+				exit(-1);
+			}
+			break;
 		}
 	}
 	// -------------------------------------------------------------------
@@ -1014,6 +1092,59 @@ namespace capex
 
 
 	template <typename T>
+	array<T> CAPEX_CALL array<T>::operator%(T right)
+	{
+		Exception_OperationArray e("Modulo operation cannot be performed with this type!", __LINE__);
+		array<T> Modulo = array<T> ();
+		if(Modulo.resize(this->nb_values))
+		{
+			try
+			{
+				for(unsigned int i = 0; i < this->nb_values; i++)
+				{
+					Modulo.values[i] = ((T)(std::fmod(this->values[i], right)));
+				}
+			}
+			catch(...)
+			{
+				#if CAPEX_DEBUG
+					cerr << tools::GetTime() << "Cannot perform modulo operation at line " << __LINE__ << endl;
+				#endif
+				// The arrays have not the same size
+				throw(e);
+				exit(-1);
+			}
+		}
+		return Modulo;
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
+	void CAPEX_CALL array<T>::operator%=(T right)
+	{
+		Exception_OperationArray e("Modulo operation cannot be performed with this type!", __LINE__);
+		try
+		{
+			for(unsigned int i = 0; i < this->nb_values; i++)
+			{
+				this->values[i] = ((T)(std::fmod(this->values[i], right)));
+			}
+		}
+		catch(...)
+		{
+			#if CAPEX_DEBUG
+				cerr << tools::GetTime() << "Cannot perform modulo operation at line " << __LINE__ << endl;
+			#endif
+			// The arrays have not the same size
+			throw(e);
+			exit(-1);
+		}
+	}
+	// -------------------------------------------------------------------
+
+
+	template <typename T>
 	array<T> CAPEX_CALL array<T>::operator^(array<T> right)
 	{
 		Exception_OperationArray e("The arrays must have the same size for this operation!", __LINE__);
@@ -1034,7 +1165,7 @@ namespace capex
 			{
 				VectorProduct.values[i] = this->values[i] * right.values[i + 1] - this->values[i + 1] * right.values[i];
 			}
-			VectorProduct.values[right.size() - 1] = this->values[right.size() - 1] * right.values[0] 
+			VectorProduct.values[right.size() - 1] = this->values[right.size() - 1] * right.values[0]
 													 - this->values[0] * right.values[right.size() - 1];
 		}
 		return VectorProduct;
@@ -1306,10 +1437,8 @@ namespace capex
 
 
 	template <typename T>
-	array<T> CAPEX_CALL array<T>::smooth(unsigned int area, const char *shape)
+	array<T> CAPEX_CALL array<T>::smooth(unsigned int area, SmoothShape shape)
 	{
-		std::string sshape = tools::StrLower(std::string(shape));
-	
 		array<T> SmoothingArray;
 		if(!SmoothingArray.resize(this->nb_values))
 			return SmoothingArray;
@@ -1345,7 +1474,7 @@ namespace capex
 					temp[k] = this->values[cnt + cpt - 1];
 			}
 
-			SmoothingArray.values[cnt] = this->smooth_function(temp, area, sshape.c_str());
+			SmoothingArray.values[cnt] = this->smooth_function(temp, area, shape);
 
 			for(int k = 0; k < area / 2; k++)
 				temp[k] = temp[k + 1];
@@ -1359,7 +1488,7 @@ namespace capex
 			for(unsigned int k = this->nb_values - (area + reduce); k < this->nb_values; k++)
 				temp[k - (this->nb_values - (area + reduce))] = this->values[k];
 
-			SmoothingArray.values[i] = this->smooth_function(temp, area + reduce, sshape.c_str());
+			SmoothingArray.values[i] = this->smooth_function(temp, area + reduce, shape);
 			reduce--;
 		}
 
@@ -1371,54 +1500,86 @@ namespace capex
 
 
 	template <typename T>
-	T CAPEX_CALL array<T>::smooth_function(const T raw_data[], unsigned int Window, const char *shape)
+	T CAPEX_CALL array<T>::smooth_function(const T raw_data[], unsigned int Window, SmoothShape shape)
 	{
+		Exception_OperationArray e("The smooth shape is not valid", __LINE__);
+
 		const unsigned int i = (unsigned int)(Window / 2);
 		T result = T();
-		
+
 		double sum = 0.0;
 		double coeff = 0.0;
+		bool ValidShape = true;
 
 		for(unsigned int k = 0; k < Window; k++)
 		{
 			double c = 1.0;
-			
-			// If a square smoothing is used
-			if(std::strcmp(shape, "square") == 0)
+
+			switch(shape)
 			{
-				c = 1.0;
-			}
-			// OR, if a sinus smoothing is used
-			else if(std::strcmp(shape, "sin") == 0)
-			{
-				c = std::sin(2 * capex::pi * ((double)k / (double)Window));
-			}
-			// OR, if a cardinal sinus smoothing is used
-			else if(std::strcmp(shape, "sinc") == 0)
-			{
-				if(k == 0)
+				// If a square smoothing is used
+				case ssSquare:
+				{
 					c = 1.0;
-				else
-					c = std::sin(2 * capex::pi * ((double)k / (double)Window)) / (double)k;
+				}
+				break;
+
+				// OR, if a sinus smoothing is used
+				case ssSin:
+				{
+					c = std::sin(2 * capex::pi * ((double)k / (double)Window));
+				}
+				break;
+
+				// OR, if a cardinal sinus smoothing is used
+				case ssSinc:
+				{
+					if(k == 0)
+						c = 1.0;
+					else
+						c = std::sin(2 * capex::pi * ((double)k / (double)Window)) / (double)k;
+				}
+				break;
+
+				// Else, a gaussian smoothing is used
+				case ssGauss:
+				{
+					double sigma = (k - i) / 3.0;
+					if(sigma == 0.0)
+						sigma = 1.0;
+					double e = (std::pow((k - i), 2.0) / (2.0 * std::pow(sigma, 2.0)));
+					c = std::exp(-e);
+				}
+				break;
+
+				default:
+				{
+					ValidShape = false;
+					#if CAPEX_DEBUG
+						cerr << tools::GetTime() << "The smooth shape is not valid at line " << __LINE__ << endl;
+					#endif
+					// The smooth shape is not a valid one
+					throw(e);
+					exit(-1);
+				}
+				break;
 			}
-			// Else, a gaussian smoothing is used
-			else
-			{
-				double sigma = (k - i) / 3.0;
-				if(sigma == 0.0)
-					sigma = 1.0;
-				double e = (std::pow((k - i), 2.0) / (2.0 * std::pow(sigma, 2.0)));
-				c = std::exp(-e);
-			}
-			
+
 			sum += c * raw_data[k];
 			coeff += c;
 		}
 
-		if(std::fabs(coeff) < lowerLimit)
-			coeff = 1.0;
-		sum /= coeff;
-		result = T(sum);
+		if(ValidShape)
+		{
+			if(std::fabs(coeff) < lowerLimit)
+				coeff = 1.0;
+			sum /= coeff;
+			result = T(sum);
+		}
+		else
+		{
+			result = raw_data[i];
+		}
 
 		return result;
 	}

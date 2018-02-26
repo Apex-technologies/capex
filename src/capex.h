@@ -32,7 +32,7 @@
 // -----------------------------------------------------------------------------
 
 #ifndef CAPEX_DEBUG
-	#define CAPEX_DEBUG false
+	#define CAPEX_DEBUG true
 #endif
 
 
