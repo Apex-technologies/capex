@@ -7,7 +7,7 @@ using std::endl;
 namespace capex
 {
 
-	std::streambuf *errbuf;
+	//std::streambuf *errbuf;
 
 	namespace tools
 	{
@@ -39,7 +39,7 @@ namespace capex
 				file = CAPEX_LOGFILE;
 
 			// redirect errors to the logfile
-			std::streambuf *errbuf = cerr.rdbuf();
+			//std::streambuf *errbuf = cerr.rdbuf();
 			std::ofstream err(file, std::ios::out);
 			cerr.rdbuf(err.rdbuf());
 
@@ -64,7 +64,7 @@ namespace capex
 		void CAPEX_CALL CloseLogFile(char *file)
 		{
 			// redirect errors to the standard error output
-			cerr.rdbuf(errbuf);
+			//cerr.rdbuf(errbuf);
 			
 			#if CAPEX_DEBUG
 				cerr << GetTime() << "Error output redirected into standard output" << endl;

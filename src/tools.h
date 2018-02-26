@@ -17,9 +17,6 @@ namespace capex
 	
 	namespace tools
 	{
-		//! \brief Light celerity in vacuum
-		const double celerity = 299792458.0;
-	
 		
 		//! \brief Input/Output mode for file
 		enum iom
