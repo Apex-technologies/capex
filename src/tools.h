@@ -67,7 +67,7 @@ namespace capex
 		
 		void CAPEX_CALL InitLogFile(char *file = NULL);
 		void CAPEX_CALL WriteLogFile(char *LogText);
-		void CAPEX_CALL CloseLogFile(char *file = NULL);
+		void CAPEX_CALL CloseLogFile();
 		
 		
 		// ---------------------------------------------------------------------

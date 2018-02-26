@@ -19,7 +19,7 @@ object MainForm: TMainForm
     Top = 8
     Width = 1043
     Height = 665
-    ActivePage = ArraySheet
+    ActivePage = LogFileSheet
     TabOrder = 0
     object ArraySheet: TTabSheet
       Caption = 'Array Test'
@@ -1276,6 +1276,65 @@ object MainForm: TMainForm
         OnClick = SaveINI_BtClick
       end
     end
+    object LogFileSheet: TTabSheet
+      Caption = 'Log File'
+      ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 28
+      object LogFilePath_Edit: TEdit
+        Left = 32
+        Top = 48
+        Width = 697
+        Height = 21
+        TabOrder = 0
+        Text = 'C:\temp\capex.log'
+      end
+      object NewLogFile_Bt: TButton
+        Left = 731
+        Top = 47
+        Width = 32
+        Height = 23
+        Caption = '...'
+        TabOrder = 1
+        OnClick = NewLogFile_BtClick
+      end
+      object InitLogFile_Bt: TButton
+        Left = 32
+        Top = 88
+        Width = 289
+        Height = 25
+        Caption = 'Init Log File'
+        TabOrder = 2
+        OnClick = InitLogFile_BtClick
+      end
+      object CloseLogFile_Bt: TButton
+        Left = 32
+        Top = 464
+        Width = 289
+        Height = 25
+        Caption = 'Close Log File'
+        TabOrder = 3
+        OnClick = CloseLogFile_BtClick
+      end
+      object WriteLog_Bt: TButton
+        Left = 32
+        Top = 423
+        Width = 289
+        Height = 25
+        Caption = 'Write Log File'
+        TabOrder = 4
+        OnClick = WriteLog_BtClick
+      end
+      object WriteLog_Memo: TMemo
+        Left = 32
+        Top = 128
+        Width = 697
+        Height = 273
+        Lines.Strings = (
+          'First line memo')
+        TabOrder = 5
+      end
+    end
   end
   object Quit_Bt: TButton
     Left = 1000
@@ -1305,5 +1364,11 @@ object MainForm: TMainForm
     Filter = 'INI FILE (*.INI)|*.ini'
     Left = 972
     Top = 56
+  end
+  object SaveLogDialog: TSaveDialog
+    Filter = 'LOG FILE (*.LOG)|*.log'
+    Title = 'Save the log file'
+    Left = 972
+    Top = 120
   end
 end

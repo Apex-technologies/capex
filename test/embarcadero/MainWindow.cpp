@@ -76,7 +76,7 @@ void __fastcall TMainForm::Threshold_EditChange(TObject *Sender)
 
 void __fastcall TMainForm::Noise_BtClick(TObject *Sender)
 {
-	this->y.random(-1.0, 1.0, this->y.size());
+	this->y.random(0.0, 1.0, this->y.size(), capex::rsGauss);
 	this->DisplayGraph();
 }
 //---------------------------------------------------------------------------
@@ -90,16 +90,16 @@ void __fastcall TMainForm::Sinus_BtClick(TObject *Sender)
 
 void __fastcall TMainForm::SetSmooth_BtClick(TObject *Sender)
 {
-	AnsiString shape = "";
+	SmoothShape shape;
 	if(this->SmoothSquare_Radio->Checked)
-		shape = "square";
+		shape = ssSquare;
 	else if(this->SmoothSinus_Radio->Checked)
-		shape = "sin";
+		shape = ssSin;
 	else if(this->SmoothSinc_Radio->Checked)
-		shape = "sinc";
+		shape = ssSinc;
 	else if(this->SmoothGaussian_Radio->Checked)
-		shape = "gauss";
-	this->y = this->y.smooth(this->Smooth_Bar->Position, shape.c_str());
+		shape = ssGauss;
+	this->y = this->y.smooth(this->Smooth_Bar->Position, shape);
 	this->DisplayGraph();
 }
 //---------------------------------------------------------------------------
@@ -155,7 +155,7 @@ void __fastcall TMainForm::SinusNoise_BtClick(TObject *Sender)
 {
 	this->y = sin(2 * capex::pi * this->Frequency * this->x);
 	array<float> noise;
-	noise.random(-0.5, 0.5, this->y.size());
+	noise.random(0.0, 0.5, this->y.size(), capex::rsGauss);
 	this->y += noise;
 	this->DisplayGraph();
 }
@@ -179,6 +179,43 @@ void __fastcall TMainForm::SaveINI_BtClick(TObject *Sender)
 		AnsiString fname = AnsiString(this->SaveIniDialog->FileName);
 		this->parser->WriteINI(&d, fname.c_str());
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::NewLogFile_BtClick(TObject *Sender)
+{
+	if(this->SaveLogDialog->Execute())
+	{
+		this->LogFilePath_Edit->Text = this->SaveLogDialog->FileName;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::InitLogFile_BtClick(TObject *Sender)
+{
+	std::string Path = std::string(AnsiString(this->LogFilePath_Edit->Text).c_str());
+	capex::tools::InitLogFile(&Path[0]);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::CloseLogFile_BtClick(TObject *Sender)
+{
+	capex::tools::CloseLogFile();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::WriteLog_BtClick(TObject *Sender)
+{
+	std::string str = "";
+
+	for(int l = 0; l < this->WriteLog_Memo->Lines->Count; l++)
+	{
+		str += std::string(AnsiString(this->WriteLog_Memo->Lines->Strings[l]).c_str());
+		if(l < this->WriteLog_Memo->Lines->Count - 1)
+			str += std::string("\n");
+	}
+
+	capex::tools::WriteLogFile(&str[0]);
 }
 //---------------------------------------------------------------------------
 

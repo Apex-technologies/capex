@@ -76,6 +76,14 @@ __published:	// IDE-managed Components
 	TStringGrid *IniGrid;
 	TButton *SinusNoise_Bt;
 	TButton *SaveINI_Bt;
+	TTabSheet *LogFileSheet;
+	TEdit *LogFilePath_Edit;
+	TButton *NewLogFile_Bt;
+	TButton *InitLogFile_Bt;
+	TButton *CloseLogFile_Bt;
+	TSaveDialog *SaveLogDialog;
+	TButton *WriteLog_Bt;
+	TMemo *WriteLog_Memo;
 	void __fastcall Quit_BtClick(TObject *Sender);
 	void __fastcall Frequency_BarChange(TObject *Sender);
 	void __fastcall Threshold_EditChange(TObject *Sender);
@@ -87,6 +95,10 @@ __published:	// IDE-managed Components
 	void __fastcall OpenINI_BtClick(TObject *Sender);
 	void __fastcall SinusNoise_BtClick(TObject *Sender);
 	void __fastcall SaveINI_BtClick(TObject *Sender);
+	void __fastcall NewLogFile_BtClick(TObject *Sender);
+	void __fastcall InitLogFile_BtClick(TObject *Sender);
+	void __fastcall CloseLogFile_BtClick(TObject *Sender);
+	void __fastcall WriteLog_BtClick(TObject *Sender);
 private:	// User declarations
 
 	array<float> x;

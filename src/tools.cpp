@@ -7,7 +7,8 @@ using std::endl;
 namespace capex
 {
 
-	//std::streambuf *errbuf;
+	std::streambuf *errbuf;
+	std::ofstream err;
 
 	namespace tools
 	{
@@ -15,8 +16,14 @@ namespace capex
 		// -------------------------------------------------------------------
 		std::string CAPEX_CALL GetTime(char *format)
 		{
+			bool NewFormat = false;
+
 			if(format == NULL)
-				sprintf(format, "%d/%m/%Y - %H:%M:%S - ");
+			{
+				format = new char[32];
+				NewFormat = true;
+				sprintf(&format[0], "%%d/%%m/%%Y - %%H:%%M:%%S - ");
+			}
 
 			time_t rawtime;
 			struct tm * timeinfo;
@@ -26,6 +33,9 @@ namespace capex
 			timeinfo = localtime(&rawtime);
 
 			strftime(buffer, 80 , format, timeinfo);
+
+			if(NewFormat)
+				delete[] format;
 
 			return std::string(&buffer[0]);
 		}
@@ -39,8 +49,8 @@ namespace capex
 				file = CAPEX_LOGFILE;
 
 			// redirect errors to the logfile
-			//std::streambuf *errbuf = cerr.rdbuf();
-			std::ofstream err(file, std::ios::out);
+			errbuf = cerr.rdbuf();
+			err.open(file, std::ios::out);
 			cerr.rdbuf(err.rdbuf());
 
 			#if CAPEX_DEBUG
@@ -61,14 +71,17 @@ namespace capex
 
 		
 		// -------------------------------------------------------------------
-		void CAPEX_CALL CloseLogFile(char *file)
+		void CAPEX_CALL CloseLogFile()
 		{
-			// redirect errors to the standard error output
-			//cerr.rdbuf(errbuf);
-			
 			#if CAPEX_DEBUG
 				cerr << GetTime() << "Error output redirected into standard output" << endl;
 			#endif
+
+			if(err.is_open())
+				err.close();
+
+			// redirect errors to the standard error output
+			cerr.rdbuf(errbuf);
 		}
 		// -------------------------------------------------------------------
 		
