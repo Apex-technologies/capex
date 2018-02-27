@@ -17,6 +17,12 @@ namespace capex
 	
 	namespace tools
 	{
+
+		// Buffer for saving the standard error before redirecting it
+		extern std::streambuf *errbuf;
+
+		// File for saving the error redirection data
+		extern std::ofstream err;
 		
 		//! \brief Input/Output mode for file
 		enum iom
@@ -65,7 +71,7 @@ namespace capex
 		std::string CAPEX_CALL GetTime(char *format = NULL);
 		
 		
-		void CAPEX_CALL InitLogFile(char *file = NULL);
+		void CAPEX_CALL InitLogFile(char *file = NULL, std::ios_base::openmode mode = std::ios::out);
 		void CAPEX_CALL WriteLogFile(char *LogText);
 		void CAPEX_CALL CloseLogFile();
 		
