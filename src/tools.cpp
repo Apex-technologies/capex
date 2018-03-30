@@ -7,9 +7,6 @@ using std::endl;
 namespace capex
 {
 
-	std::streambuf *errbuf;
-	std::ofstream err;
-
 	namespace tools
 	{
 
@@ -47,6 +44,9 @@ namespace capex
 		{
 			if(file == NULL)
 				file = (char*)(&DefaultLogFile[0]);
+
+			if((mode != std::ios::out) && (mode != std::ios::app))
+				mode = std::ios::out;
 
 			// redirect errors to the logfile
 			errbuf = cerr.rdbuf();
