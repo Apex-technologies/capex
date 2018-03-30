@@ -19,7 +19,7 @@ object MainForm: TMainForm
     Top = 8
     Width = 1043
     Height = 665
-    ActivePage = LogFileSheet
+    ActivePage = ArraySheet
     TabOrder = 0
     object ArraySheet: TTabSheet
       Caption = 'Array Test'
@@ -1279,15 +1279,13 @@ object MainForm: TMainForm
     object LogFileSheet: TTabSheet
       Caption = 'Log File'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 28
       object LogFilePath_Edit: TEdit
         Left = 32
         Top = 48
         Width = 697
         Height = 21
         TabOrder = 0
-        Text = 'C:\temp\capex.log'
+        Text = '%TEMP%\capex.log'
       end
       object NewLogFile_Bt: TButton
         Left = 731
@@ -1313,6 +1311,7 @@ object MainForm: TMainForm
         Width = 289
         Height = 25
         Caption = 'Close Log File'
+        Enabled = False
         TabOrder = 3
         OnClick = CloseLogFile_BtClick
       end
@@ -1322,6 +1321,7 @@ object MainForm: TMainForm
         Width = 289
         Height = 25
         Caption = 'Write Log File'
+        Enabled = False
         TabOrder = 4
         OnClick = WriteLog_BtClick
       end

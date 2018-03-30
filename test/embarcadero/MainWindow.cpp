@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "MainWindow.h"
+#include <windows.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -30,6 +31,12 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 	//ShowMessage(ExtractFilePath(Application->ExeName));
 
 	this->parser = new capex::ini();
+
+	// Default windows temporary directory
+	wchar_t TempPath[256];
+	unsigned long Size = 256;
+	GetTempPath(Size, &TempPath[0]);
+	this->LogFilePath_Edit->Text = UnicodeString(&TempPath[0]) + "capex.log";
 }
 //---------------------------------------------------------------------------
 
@@ -194,13 +201,22 @@ void __fastcall TMainForm::NewLogFile_BtClick(TObject *Sender)
 void __fastcall TMainForm::InitLogFile_BtClick(TObject *Sender)
 {
 	std::string Path = std::string(AnsiString(this->LogFilePath_Edit->Text).c_str());
-	capex::tools::InitLogFile(&Path[0]);
+	bool success = capex::tools::InitLogFile(&Path[0]);
+	if(success)
+	{
+		this->InitLogFile_Bt->Enabled = false;
+		this->CloseLogFile_Bt->Enabled = true;
+		this->WriteLog_Bt->Enabled = true;
+	}
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TMainForm::CloseLogFile_BtClick(TObject *Sender)
 {
 	capex::tools::CloseLogFile();
+	this->InitLogFile_Bt->Enabled = true;
+	this->CloseLogFile_Bt->Enabled = false;
+	this->WriteLog_Bt->Enabled = false;
 }
 //---------------------------------------------------------------------------
 

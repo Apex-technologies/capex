@@ -64,9 +64,50 @@ namespace capex
 		// ---------------------------------------------------------------------
 		std::string CAPEX_CALL GetTime(char *format = NULL);
 		
-		
-		void CAPEX_CALL InitLogFile(char *file = NULL);
+
+		// ---------------------------------------------------------------------
+		//! \brief Open a log file and redirect error output
+		//! \param file path to the log file
+		//! \return a \a boolean indicating if the file is created
+		//!
+		//! This function opens a file for saving all error output into it.
+		//! The standard error output "std::cerr" is redirected into this file.
+		//! This function returns \b true if the file is opened, \b false
+		//! otherwise.
+		//!
+		//! If no file path is given, the default file path is used. See the
+		//! default path into capex::DefaultLogFile
+		//!
+		//! Use function WriteLogFile to write data into this file and use
+		//! CloseLogFile to close the file and redirect "std::cerr" into
+		//! standard error output.
+		//!
+		// ---------------------------------------------------------------------
+		bool CAPEX_CALL InitLogFile(char *file = NULL);
+
+
+		// ---------------------------------------------------------------------
+		//! \brief Write data into the log file
+		//! \param LogText string pointer to write into the log file
+		//!
+		//! This function writes text into the standard error output. If the
+		//! function InitLogFile has been called before, the text is saved
+		//! into the opened log file.
+		//!
+		//! This function saves a string as follow:
+		//!    Day/Month/Year - Hour:Min:Sec - LogText
+		//!
+		// ---------------------------------------------------------------------
 		void CAPEX_CALL WriteLogFile(char *LogText);
+
+
+		// ---------------------------------------------------------------------
+		//! \brief Close a log file and redirect error output
+		//!
+		//! This function closes a log file and redirect the error output
+		//! "std::cerr" into the standard error output.
+		//!
+		// ---------------------------------------------------------------------
 		void CAPEX_CALL CloseLogFile();
 		
 		

@@ -43,29 +43,28 @@ namespace capex
 
 
 		// -------------------------------------------------------------------
-		void CAPEX_CALL InitLogFile(char *file)
+		bool CAPEX_CALL InitLogFile(char *file)
 		{
 			if(file == NULL)
-				file = CAPEX_LOGFILE;
+				file = (char*)(&DefaultLogFile[0]);
 
 			// redirect errors to the logfile
 			errbuf = cerr.rdbuf();
 			err.open(file, std::ios::out);
+			bool opened = err.is_open();
 			cerr.rdbuf(err.rdbuf());
 
-			#if CAPEX_DEBUG
-				cerr << GetTime() << "Error output redirected into " << std::string(file) << endl;
-			#endif
+			cerr << GetTime() << "Error output redirected into " << std::string(file) << endl;
+
+			return opened;
 		}
 		// -------------------------------------------------------------------
 
 		
 		// -------------------------------------------------------------------
 		void CAPEX_CALL WriteLogFile(char *LogText)
-		{		
-			#if CAPEX_DEBUG
-				cerr << GetTime() << LogText << endl;
-			#endif
+		{
+			cerr << GetTime() << LogText << endl;
 		}
 		// -------------------------------------------------------------------
 
@@ -73,9 +72,7 @@ namespace capex
 		// -------------------------------------------------------------------
 		void CAPEX_CALL CloseLogFile()
 		{
-			#if CAPEX_DEBUG
-				cerr << GetTime() << "Error output redirected into standard output" << endl;
-			#endif
+			cerr << GetTime() << "Error output redirected into standard output" << endl;
 
 			if(err.is_open())
 				err.close();
