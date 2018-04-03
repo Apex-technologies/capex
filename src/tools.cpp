@@ -45,9 +45,6 @@ namespace capex
 			if(file == NULL)
 				file = (char*)(&DefaultLogFile[0]);
 
-			if((mode != std::ios::out) && (mode != std::ios::app))
-				mode = std::ios::out;
-
 			// redirect errors to the logfile
 			errbuf = cerr.rdbuf();
 			err.open(file, std::ios::out);
