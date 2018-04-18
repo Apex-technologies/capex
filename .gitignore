@@ -1,0 +1,9 @@
+!.gitignore
+*~*
+*/Win32/*
+*/bin/*
+/test/simple/bin/
+/test/embarcadero/Win32/
+*/__history/*
+/html/*
+/latex/*

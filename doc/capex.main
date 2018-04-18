@@ -1,0 +1,163 @@
+﻿Capex documentation
+===================
+
+Introduction
+------------
+
+capex is a C++ library for standardizing data and functions in apex programs.
+capex is constituted of multiple classes and functions :
+	- array: a class for manipulating numbers
+	- ini: a class for manipulating INI files
+	- constants: variables of physics and program constants
+	- tools: a tool box with various functions
+
+Compiling/installing the library {#compilation}
+--------------------------------
+
+Edit the Makefile to indicate the C++ compiler you want to use, the
+options to provide to compile ANSI C, and possibly the options to pass
+to the ar program on your machine to build a library (.a) from a set
+of object (.o) files.
+
+Defaults are set for the g++ compiler and the standard ar library
+builder.
+
+Type 'make', that should do it.
+
+To use the library in your programs, add the following line on top
+of your module:
+
+@code
+#include "capex.h"
+@endcode
+
+See the file test/simple/testCapex.cpp for an example.
+
+
+Array documentation {#mainpage}
+===================
+
+
+Introduction {#introduction}
+------------
+
+Array is a simple C++ library for manipulating vectors.
+The library is pretty small (only one class) and robust, and
+does not depend on any other external library to compile. It is written
+in ANSI C++ and should compile on most platforms without difficulty.
+
+
+What is an array? {#definition}
+-----------------
+
+An array is a tamplate class which inherits from the class vector of
+the standard library.
+In the Array class are defined some additional operations and manipulations
+for the vector class.
+
+Using the Array class {#using}
+---------------------
+
+For using the Array class on your program, you have to add the following line 
+on top of your source file :
+
+@code
+#include "capex.h"
+// if you don't want to write the namespace,
+// add this line into your source file :
+// using namespace capex;
+@endcode
+
+For creating an Array class, you call the empty constructor or the constant fill
+constructor:
+
+@code
+capex::array<int> *a = new capex::array<int> (); // Creates a pointer to an empty array of integers
+//or
+capex::array<double> a = capex::array<double> (3.14, 12); // Creates an array of double with 12 values of 3.14
+@endcode
+
+You can access to the size of an array with the "size()" method:
+
+@code
+capex::array<double> a = capex::array<double> (3.14, 12);
+a.size(); // returns the value 12
+@endcode
+
+You can also resize an array with the "resize()" method:
+
+@code
+capex::array<double> a = capex::array<double> (3.14, 12);
+a.size(); // returns the value 12
+a.resize(15); // resizes the array
+a.size(); // returns the value 15
+@endcode
+
+You can add some values to an array with the "append" methods:
+
+@code
+capex::array<int> *a = new capex::array<int> ();
+capex::array<int> b = capex::array<int> (0, 10);
+a->append(5); // Adds a new value (here: 5) at the end of the array
+a->append(b); // Adds the array 'b' at the end of 'a'
+@endcode
+
+You can also erase some values of an existing array with the "erase" and "pop" methods:
+
+@code
+capex::array<int> *a = new capex::array<int> ();
+a->append(1);
+a->append(2);
+a->append(3);
+a->append(4);
+a->append(5);
+a->erase(3); // erases the index 3 (value 4 here)
+a->pop(); // erases the last value
+@endcode
+
+You can create linear and log spaces from one line:
+
+@code
+capex::array<double> a = capex::array<double> ();
+a.linspace(0.0, 1.0, 1000); // creates an array of 1000 values linearly spaced between 0 and 1
+@endcode
+
+You can do some mathematic calculus with arrays:
+
+@code
+capex::array<double> a = capex::array<double> ();
+a.linspace(0.0, 2.0 * capex::pi, 1000);
+capex::array<double> s = sin(a); // most math functions are overriden for array object
+s += 1.0; // adds an offset to all values of array s
+@endcode
+
+You can also add noise or smooth an array:
+
+@code
+capex::array<double> a = capex::array<double> ();
+a.linspace(0.0, 2.0 * capex::pi, 1000);
+a.noise(0.2, capex::rsGauss); // Adds a Gaussian noise to the sinus signal
+capex::array<double> b = a.smooth(5, ssGauss); // Smooth the noisy signal with a Gaussian window of 5 values
+@endcode
+
+You can do some statistics with an array:
+
+@code
+capex::array<double> a = capex::array<double> ();
+a.linspace(0.0, 2.0 * capex::pi, 1000);
+unsigned int index;
+double Max = a.max(&index); // Get the maximum value and the corresponding index
+@endoce
+
+A multiple of other operations can be done with the array class.
+
+
+Known defects {#defects}
+-------------
+
+To be completed
+
+Authors {#authors}
+-------
+
+Maxime Fontaine (maxime.fontaine AT apex-t DOT com).
