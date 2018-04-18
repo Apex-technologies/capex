@@ -37,15 +37,9 @@ using namespace capex; // If you don't want to write 'capex::...'
 
 See the file test/simple/test.cpp for an example.
 
-<<<<<<< HEAD
-### The array library 
-	
-array is a simple C++ library for manipulating number tables.
-=======
 ### The array class 
 	
 array is a simple C++ class for manipulating number tables.
->>>>>>> e5052717c5ddb2aab752436b1a9d04b78e056ae5
 
 The library is pretty small (only one class) and robust, and
 depends on a few external library to compile. It is written
