@@ -19,10 +19,10 @@ namespace capex
 	{
 
 		// Buffer for saving the standard error before redirecting it
-		extern std::streambuf *errbuf;
+		std::streambuf *errbuf;
 
 		// File for saving the error redirection data
-		extern std::ofstream err;
+		std::ofstream err;
 		
 		//! \brief Input/Output mode for file
 		enum iom

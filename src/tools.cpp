@@ -1,4 +1,3 @@
-#include "./tools.h"
 #include "./constants.h"
 
 using std::cerr;
