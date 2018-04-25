@@ -3,6 +3,12 @@
 using std::cerr;
 using std::endl;
 
+// Buffer for saving the standard error before redirecting it
+std::streambuf *errbuf;
+
+// File for saving the error redirection data
+std::ofstream err;
+
 namespace capex
 {
 

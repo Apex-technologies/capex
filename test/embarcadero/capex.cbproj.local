@@ -7,8 +7,8 @@
     <Transaction>2016/03/21 15:22:45.000.702,=C:\Users\Electronique\Documents\Embarcadero\Studio\Projects\Unit2.cpp</Transaction>
     <Transaction>2016/11/14 14:37:37.000.098,=C:\Users\Electronique\Documents\Embarcadero\Studio\Projects\Project2PCH1.h</Transaction>
     <Transaction>2016/11/14 14:37:37.000.110,=C:\Users\Electronique\Documents\Embarcadero\Studio\Projects\Unit2.cpp</Transaction>
-    <Transaction>2016/11/14 14:37:59.000.903,D:\Programmes\capex\test\embarcadero\MainWindow.dfm=C:\Users\Electronique\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
     <Transaction>2016/11/14 14:37:59.000.903,D:\Programmes\capex\test\embarcadero\MainWindow.h=C:\Users\Electronique\Documents\Embarcadero\Studio\Projects\Unit2.h</Transaction>
+    <Transaction>2016/11/14 14:37:59.000.903,D:\Programmes\capex\test\embarcadero\MainWindow.dfm=C:\Users\Electronique\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
     <Transaction>2016/11/14 14:37:59.000.903,D:\Programmes\capex\test\embarcadero\MainWindow.cpp=C:\Users\Electronique\Documents\Embarcadero\Studio\Projects\Unit2.cpp</Transaction>
     <Transaction>2016/11/14 14:38:01.000.750,D:\Programmes\capex\test\embarcadero\Project2PCH1.h=C:\Users\Electronique\Documents\Embarcadero\Studio\Projects\Project2PCH1.h</Transaction>
     <Transaction>2016/11/14 14:38:07.000.142,D:\Programmes\capex\test\embarcadero\capex.cbproj=C:\Users\Electronique\Documents\Embarcadero\Studio\Projects\Project2.cbproj</Transaction>
@@ -18,8 +18,8 @@
     <Transaction>2017/07/12 10:05:22.000.667,D:\Programmes\capex\lib\libusb_bcb.lib=</Transaction>
     <Transaction>2017/07/12 10:05:40.000.545,=D:\Programmes\capex\lib\libusb-1.0.lib</Transaction>
     <Transaction>2017/07/12 10:05:40.000.524,=D:\Programmes\capex\lib\libusb_bcb.lib</Transaction>
-    <Transaction>2017/07/12 10:05:40.000.535,=D:\Programmes\capex\lib\libusb_bcb_n.lib</Transaction>
     <Transaction>2017/07/12 10:05:40.000.501,=D:\Programmes\capex\lib\libusb.h</Transaction>
+    <Transaction>2017/07/12 10:05:40.000.535,=D:\Programmes\capex\lib\libusb_bcb_n.lib</Transaction>
     <Transaction>2017/07/13 17:04:24.000.157,D:\Programmes\capex\lib\libusb.h=</Transaction>
     <Transaction>2017/07/13 17:04:33.000.230,=D:\Programmes\capex\lib\libusb.lib</Transaction>
     <Transaction>2017/07/21 10:56:25.000.678,=D:\Programmes\capex\lib\lusb0_usb.h</Transaction>
@@ -33,6 +33,8 @@
     <Transaction>2017/09/05 10:07:28.000.558,=D:\Programmes\capex\lib\libusb-1.0.lib</Transaction>
     <Transaction>2017/09/05 10:10:00.000.796,D:\Programmes\capex\lib\libusb-1.0.lib=</Transaction>
     <Transaction>2017/09/05 10:10:07.000.242,=D:\Programmes\capex\lib\libusb_bcb-1.0.lib</Transaction>
+    <Transaction>2018/04/18 15:48:46.185,D:\Programmes\capex\src\capex.h=</Transaction>
+    <Transaction>2018/04/18 15:48:58.458,=D:\Programmes\capex\src\capex.h</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <VirtualFolder ID="{7370048E-BF65-437F-B00D-6CEDC2D29564}"/>

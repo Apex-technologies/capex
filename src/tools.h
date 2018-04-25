@@ -17,12 +17,6 @@ namespace capex
 	
 	namespace tools
 	{
-
-		// Buffer for saving the standard error before redirecting it
-		std::streambuf *errbuf;
-
-		// File for saving the error redirection data
-		std::ofstream err;
 		
 		//! \brief Input/Output mode for file
 		enum iom
