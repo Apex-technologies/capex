@@ -55,16 +55,7 @@ namespace capex
 	template <typename T>
 	CAPEX_CALL array<T>::~array()
 	{
-		try
-		{
-			this->values.release();
-		}
-		catch(...)
-		{
-			#if CAPEX_DEBUG
-				cerr << "Error for deleting array";
-			#endif
-		}
+		// The delete array is automatically done with the unique_ptr
 	}
 	// -------------------------------------------------------------------
 
@@ -452,7 +443,7 @@ namespace capex
 	template <typename T>
 	int CAPEX_CALL array<T>::nearest(T value)
 	{
-		array<T> Sub = pow(*this - value, 2.0);
+		array<T> Sub = pow2(*this - value);
 		return Sub.index(Sub.min());
 	}
 	// -------------------------------------------------------------------

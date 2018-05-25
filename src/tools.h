@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>

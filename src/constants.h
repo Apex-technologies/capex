@@ -36,6 +36,9 @@ namespace capex
 	//! \brief Lower value for the denominator of a quotient
 	const double lowerLimit = 1e-30;
 
+	//! \brief Floating point value defining Infinity number
+	const double inf = 1e30;
+
 	//! \brief Approximative value of pi
 	const double pi = 3.141592653589793;
 

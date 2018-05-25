@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{E745A259-0A07-422C-95C4-4B7AF7D98362}</ProjectGuid>
+        <ProjectGuid>{77887899-E4A5-4562-B55B-CEFA762B8EC3}</ProjectGuid>
         <ProjectVersion>15.4</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
@@ -38,12 +38,12 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
-        <IncludePath>..\src\;$(IncludePath)</IncludePath>
-        <SanitizedProjectName>libcapex</SanitizedProjectName>
-        <ProjectType>CppStaticLibrary</ProjectType>
-        <_TCHARMapping>char</_TCHARMapping>
         <Multithreaded>true</Multithreaded>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <SanitizedProjectName>libcapex</SanitizedProjectName>
+        <IncludePath>..\src\;$(IncludePath)</IncludePath>
+        <_TCHARMapping>char</_TCHARMapping>
+        <ProjectType>CppStaticLibrary</ProjectType>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <IntermediateOutputDir>.\$(Platform)\$(Config)</IntermediateOutputDir>
         <FinalOutputDir>.\$(Platform)\$(Config)</FinalOutputDir>
@@ -57,7 +57,6 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
-        <ILINK_LibraryPath>D:\Programmes\capex\lib\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <PackageImports>adortl;bcbie;bcbsmp;bdertl;bindcomp;bindcompdbx;bindcompfmx;bindcompvcl;bindengine;CloudService;CodeSiteExpressPkg;CustomIPTransport;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXInterBaseDriver;DBXMySQLDriver;DBXSqliteDriver;dsnap;dsnapcon;dsnapxml;FireDAC;FireDACADSDriver;FireDACASADriver;FireDACCommon;FireDACCommonDriver;FireDACIBDriver;FireDACMSAccDriver;FireDACMySQLDriver;FireDACODBCDriver;FireDACPgDriver;FireDACSqliteDriver;fmx;fmxase;fmxdae;fmxFireDAC;fmxobj;FMXTee;FmxTeeUI;ibxpress;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;inetdb;inetdbbde;inetdbxpress;Intraweb;MetropolisUILiveTile;nrcommd20;Package1;PackageAPEX;RESTBackendComponents;RESTComponents;rtl;soapmidas;soaprtl;soapserver;svn;Tee;TeeDB;TeeUI;tethering;vcl;vclactnband;vcldb;vcldbx;vcldsnap;vclFireDAC;vclib;vclie;vclimg;VCLRESTComponents;vclribbon;VclSmp;vcltouch;vclx;xmlrtl;$(PackageImports)</PackageImports>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
@@ -90,53 +89,25 @@
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <ItemGroup>
-        <LibFiles Include="..\lib\libusb_bcb-1.0.lib" Condition="'$(Platform)'=='Win32'">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>1</BuildOrder>
-        </LibFiles>
-        <CppCompile Include="..\src\array.cpp">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>8</BuildOrder>
-        </CppCompile>
         <None Include="..\src\array.h">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>3</BuildOrder>
-        </None>
-        <None Include="..\src\capex.h">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
+            <VirtualFolder>{7CA9C972-B751-4FC2-8799-E98B7BC5240C}</VirtualFolder>
             <BuildOrder>0</BuildOrder>
         </None>
+        <None Include="..\src\capex.h">
+            <VirtualFolder>{7CA9C972-B751-4FC2-8799-E98B7BC5240C}</VirtualFolder>
+            <BuildOrder>1</BuildOrder>
+        </None>
         <None Include="..\src\constants.h">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>4</BuildOrder>
+            <VirtualFolder>{7CA9C972-B751-4FC2-8799-E98B7BC5240C}</VirtualFolder>
+            <BuildOrder>2</BuildOrder>
         </None>
-        <CppCompile Include="..\src\ini.cpp">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>9</BuildOrder>
-        </CppCompile>
         <None Include="..\src\ini.h">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>6</BuildOrder>
+            <VirtualFolder>{7CA9C972-B751-4FC2-8799-E98B7BC5240C}</VirtualFolder>
+            <BuildOrder>3</BuildOrder>
         </None>
-        <CppCompile Include="..\src\tools.cpp">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>10</BuildOrder>
-        </CppCompile>
         <None Include="..\src\tools.h">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>8</BuildOrder>
-        </None>
-        <CppCompile Include="..\src\usb.cpp">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>11</BuildOrder>
-        </CppCompile>
-        <None Include="..\src\usb.h">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>10</BuildOrder>
-        </None>
-        <None Include="..\src\usb_status.h">
-            <VirtualFolder>{34869AB4-0D60-4CFA-8660-83E19F0181F0}</VirtualFolder>
-            <BuildOrder>11</BuildOrder>
+            <VirtualFolder>{7CA9C972-B751-4FC2-8799-E98B7BC5240C}</VirtualFolder>
+            <BuildOrder>5</BuildOrder>
         </None>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
@@ -162,7 +133,7 @@
                     <ProjectProperties Name="IndexFiles">False</ProjectProperties>
                 </ProjectProperties>
                 <VFOLDERS>
-                    <VFOLDER ID="{34869AB4-0D60-4CFA-8660-83E19F0181F0}" name="src"/>
+                    <VFOLDER ID="{7CA9C972-B751-4FC2-8799-E98B7BC5240C}" name="src"/>
                 </VFOLDERS>
             </CPlusPlusBuilder.Personality>
             <Deployment/>
