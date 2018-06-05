@@ -45,7 +45,7 @@ namespace capex
 
 
 		// -------------------------------------------------------------------
-		bool CAPEX_CALL InitLogFile(char *file)
+		bool CAPEX_CALL InitLogFile(const char *file)
 		{
 			if(file == NULL)
 				file = (char*)(&DefaultLogFile[0]);
@@ -58,13 +58,23 @@ namespace capex
 
 			cerr << GetTime() << "Error output redirected into " << std::string(file) << endl;
 
+			LogFile = std::string(file);
+
 			return opened;
 		}
 		// -------------------------------------------------------------------
 
-		
+
 		// -------------------------------------------------------------------
-		void CAPEX_CALL WriteLogFile(char *LogText)
+		std::string CAPEX_CALL GetLogFile()
+		{
+			return LogFile;
+		}
+		// -------------------------------------------------------------------
+
+
+		// -------------------------------------------------------------------
+		void CAPEX_CALL WriteLogFile(const char *LogText)
 		{
 			cerr << GetTime() << LogText << endl;
 		}

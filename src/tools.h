@@ -40,6 +40,10 @@ namespace capex
 			// \brief trims the start and the end of the string
 			tmBoth = -1
 		};
+
+
+		//! \brief The file path of the Log file
+		std::string LogFile;
 		
 
 		// ---------------------------------------------------------------------
@@ -88,6 +92,16 @@ namespace capex
 
 
 		// ---------------------------------------------------------------------
+		//! \brief Get the file path of the log file
+		//! \return a \a string representing the file path
+		//!
+		//! This function returns the file path of the log file
+		//!
+		// ---------------------------------------------------------------------
+		std::string CAPEX_CALL GetLogFile();
+
+
+		// ---------------------------------------------------------------------
 		//! \brief Write data into the log file
 		//! \param LogText string pointer to write into the log file
 		//!
@@ -99,7 +113,7 @@ namespace capex
 		//!    Day/Month/Year - Hour:Min:Sec - LogText
 		//!
 		// ---------------------------------------------------------------------
-		void CAPEX_CALL WriteLogFile(char *LogText);
+		void CAPEX_CALL WriteLogFile(const char *LogText);
 
 
 		// ---------------------------------------------------------------------
