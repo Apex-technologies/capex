@@ -19,10 +19,14 @@ object MainForm: TMainForm
     Top = 8
     Width = 1043
     Height = 665
-    ActivePage = ArraySheet
+    ActivePage = CSV_Sheet
     TabOrder = 0
     object ArraySheet: TTabSheet
       Caption = 'Array Test'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object FreqLabel: TLabel
         Left = 6
         Top = 538
@@ -240,6 +244,10 @@ object MainForm: TMainForm
     object INI_Sheet: TTabSheet
       Caption = 'INI File Test'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object OpenINI_Bt: TButton
         Left = 16
         Top = 24
@@ -1279,6 +1287,10 @@ object MainForm: TMainForm
     object LogFileSheet: TTabSheet
       Caption = 'Log File'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object LogFilePath_Edit: TEdit
         Left = 32
         Top = 48
@@ -1335,6 +1347,40 @@ object MainForm: TMainForm
         TabOrder = 5
       end
     end
+    object CSV_Sheet: TTabSheet
+      Caption = 'CSV File Test'
+      ImageIndex = 3
+      object CSVOpen_Bt: TButton
+        Left = 24
+        Top = 16
+        Width = 129
+        Height = 41
+        Caption = 'Open CSV File'
+        TabOrder = 0
+        OnClick = CSVOpen_BtClick
+      end
+      object CSVSave_Bt: TButton
+        Left = 176
+        Top = 16
+        Width = 129
+        Height = 41
+        Caption = 'Save CSV File'
+        TabOrder = 1
+        OnClick = CSVSave_BtClick
+      end
+      object CsvGrid: TStringGrid
+        Left = 24
+        Top = 96
+        Width = 985
+        Height = 489
+        ColCount = 10
+        DefaultColWidth = 100
+        FixedCols = 0
+        RowCount = 100
+        FixedRows = 0
+        TabOrder = 2
+      end
+    end
   end
   object Quit_Bt: TButton
     Left = 1000
@@ -1355,20 +1401,20 @@ object MainForm: TMainForm
         Width = 50
       end>
   end
-  object OpenIniDialog: TOpenDialog
-    Filter = 'INI FILE (*.INI)|*.ini'
-    Left = 868
-    Top = 56
+  object OpenDialog: TOpenDialog
+    Filter = 'INI FILE (*.INI)|*.ini|TEXT File (*.TXT)|*.TXT'
+    Left = 828
+    Top = 40
   end
-  object SaveIniDialog: TSaveDialog
+  object SaveDialog: TSaveDialog
     Filter = 'INI FILE (*.INI)|*.ini'
-    Left = 972
-    Top = 56
+    Left = 916
+    Top = 40
   end
   object SaveLogDialog: TSaveDialog
     Filter = 'LOG FILE (*.LOG)|*.log'
     Title = 'Save the log file'
-    Left = 972
-    Top = 120
+    Left = 996
+    Top = 40
   end
 end

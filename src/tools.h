@@ -67,7 +67,7 @@ namespace capex
 		//! of the library \b stdio.h
 		//!
 		// ---------------------------------------------------------------------
-		std::string CAPEX_CALL GetTime(char *format = NULL);
+		std::string CAPEX_CALL GetTime(const char *format = NULL);
 
 
 		// ---------------------------------------------------------------------
@@ -88,7 +88,7 @@ namespace capex
 		//! standard error output.
 		//!
 		// ---------------------------------------------------------------------
-		bool CAPEX_CALL InitLogFile(char *file = NULL);
+		bool CAPEX_CALL InitLogFile(const char *file = NULL);
 
 
 		// ---------------------------------------------------------------------
@@ -240,8 +240,36 @@ namespace capex
 		//!
 		//--------------------------------------------------------------------------
 		std::string CAPEX_CALL StrUpper(std::string strinit);
-		
-		
+
+
+        //-------------------------------------------------------------------------
+		//!
+		//! \brief    Count the number of occurences of the pattern in the string
+		//! \param    strinit string where to find patterns
+		//! \param    pattern string to look for
+		//! \return   an \e integer representing the number of occurences
+		//!
+		//! This function counts the number of occurences of the pattern found
+		//! into the given string
+		//!
+		//--------------------------------------------------------------------------
+		int CAPEX_CALL StrOccurences(std::string strinit, std::string pattern);
+
+
+		//-------------------------------------------------------------------------
+		//!
+		//! \brief    Count the number of occurences of the pattern in the string
+		//! \param    strinit string where to find patterns
+		//! \param    pattern string to look for
+		//! \return   an \e integer representing the number of occurences
+		//!
+		//! This function counts the number of occurences of the pattern found
+		//! into the given string
+		//!
+		//--------------------------------------------------------------------------
+		int CAPEX_CALL StrOccurences(std::string strinit, const char pattern);
+
+
 		//--------------------------------------------------------------------------
 		//!
 		//! \brief   Converts an integer into a string

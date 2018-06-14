@@ -16,7 +16,7 @@ namespace capex
 	{
 
 		// -------------------------------------------------------------------
-		std::string CAPEX_CALL GetTime(char *format)
+		std::string CAPEX_CALL GetTime(const char *format)
 		{
 			bool NewFormat = false;
 
@@ -24,7 +24,7 @@ namespace capex
 			{
 				format = new char[32];
 				NewFormat = true;
-				sprintf(&format[0], "%%d/%%m/%%Y - %%H:%%M:%%S - ");
+				sprintf((char*)format, "%%d/%%m/%%Y - %%H:%%M:%%S - ");
 			}
 
 			time_t rawtime;
@@ -245,7 +245,41 @@ namespace capex
 			return ustr;
 		}
 		//--------------------------------------------------------------------
-		
+
+
+		//--------------------------------------------------------------------
+		int CAPEX_CALL StrOccurences(std::string strinit, std::string pattern)
+		{
+			int Count = 0;
+
+			size_t position = strinit.find_first_of(pattern);
+			while(position != std::string::npos)
+			{
+				Count++;
+				position = strinit.find_first_of(pattern, position + 1);
+			}
+
+			return Count;
+		}
+		//--------------------------------------------------------------------
+
+
+		//--------------------------------------------------------------------
+		int CAPEX_CALL StrOccurences(std::string strinit, const char pattern)
+		{
+			int Count = 0;
+
+			size_t position = strinit.find_first_of((char)(pattern));
+			while(position != std::string::npos)
+			{
+				Count++;
+				position = strinit.find_first_of((char)(pattern), position + 1);
+			}
+
+			return Count;
+		}
+		//--------------------------------------------------------------------
+
 
 		//--------------------------------------------------------------------
 		std::string CAPEX_CALL NumToStr(int value)

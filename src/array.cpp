@@ -261,7 +261,7 @@ namespace capex
 	void CAPEX_CALL array<T>::append(T value)
 	{
 		if(this->resize(this->nb_values + 1))
-			this->values[this->nb_values] = value;
+			this->values[this->nb_values - 1] = value;
 	}
 	// -------------------------------------------------------------------
 

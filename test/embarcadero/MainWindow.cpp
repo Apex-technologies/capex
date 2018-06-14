@@ -27,7 +27,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 	this->IniGrid->Cells[0][0] = "Section";
 	this->IniGrid->Cells[1][0] = "Parameter";
 	this->IniGrid->Cells[2][0] = "Value";
-	this->OpenIniDialog->InitialDir = ExtractFilePath(Application->ExeName);
+	this->OpenDialog->InitialDir = ExtractFilePath(Application->ExeName);
 	//ShowMessage(ExtractFilePath(Application->ExeName));
 
 	this->parser = new capex::ini();
@@ -135,9 +135,10 @@ void __fastcall TMainForm::Derivative2_BtClick(TObject *Sender)
 
 void __fastcall TMainForm::OpenINI_BtClick(TObject *Sender)
 {
-	if(this->OpenIniDialog->Execute())
+	this->OpenDialog->Filter = "INI FILE (*.INI)|*.ini|TEXT File (*.TXT)|*.txt";
+	if(this->OpenDialog->Execute())
 	{
-		AnsiString fname = AnsiString(this->OpenIniDialog->FileName);
+		AnsiString fname = AnsiString(this->OpenDialog->FileName);
 		if(this->parser->Open(fname.c_str()))
 		{
 			int Line = 1;
@@ -170,7 +171,8 @@ void __fastcall TMainForm::SinusNoise_BtClick(TObject *Sender)
 
 void __fastcall TMainForm::SaveINI_BtClick(TObject *Sender)
 {
-	if(this->SaveIniDialog->Execute())
+	this->SaveDialog->Filter = "INI FILE (*.INI)|*.ini";
+	if(this->SaveDialog->Execute())
 	{
 		for(int r = 0; r < 1000; r++)
 		{
@@ -183,7 +185,7 @@ void __fastcall TMainForm::SaveINI_BtClick(TObject *Sender)
 			}
 		}
 		dictionary d = this->parser->GetDictionary();
-		AnsiString fname = AnsiString(this->SaveIniDialog->FileName);
+		AnsiString fname = AnsiString(this->SaveDialog->FileName);
 		this->parser->WriteINI(&d, fname.c_str());
 	}
 }
@@ -232,6 +234,80 @@ void __fastcall TMainForm::WriteLog_BtClick(TObject *Sender)
 	}
 
 	capex::tools::WriteLogFile(&str[0]);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::CSVOpen_BtClick(TObject *Sender)
+{
+	this->OpenDialog->Filter = "CSV FILE (*.CSV)|*.csv|TEXT File (*.TXT)|*.txt";
+	if(this->OpenDialog->Execute())
+	{
+		if(FileExists(this->OpenDialog->FileName))
+		{
+			capex::csv *parser = new capex::csv();
+			bool status = parser->Open(AnsiString(this->OpenDialog->FileName).c_str());
+			int Lines = parser->GetLinesNumber();
+			int Cols = parser->GetColumnsNumber();
+
+			for(int c = 0; c < Cols; c++)
+			{
+				std::vector<std::string> Values;
+				parser->GetColumn(c, &Values);
+				for(int i = 0; i < Values.size(); i++)
+				{
+					this->CsvGrid->Cells[c][i] = AnsiString(Values[i].c_str());
+				}
+			}
+
+			delete parser;
+		}
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::CSVSave_BtClick(TObject *Sender)
+{
+	this->SaveDialog->Filter = "CSV FILE (*.CSV)|*.csv";
+	if(this->SaveDialog->Execute())
+	{
+		capex::csv *parser = new capex::csv();
+		parser->SetSeparator(";");
+		parser->SetValue(0, 0, std::string("# Ceci est une fichier CSV auto-généré"));
+
+		int NbCols = 0;
+		int NbLines = 0;
+		for(int c = 0; c < this->CsvGrid->ColCount; c++)
+		{
+			for(int l = 0; l < this->CsvGrid->RowCount; l++)
+			{
+				if(this->CsvGrid->Cells[c][l] != "")
+				{
+					if(l > NbLines)
+						NbLines = l;
+					if(c > NbCols)
+						NbCols = c;
+				}
+			}
+		}
+
+		NbCols++;
+		NbLines++;
+
+		for(int c = 0; c < NbCols; c++)
+		{
+			std::vector<std::string> Values;
+			for(int l = 0; l < NbLines; l++)
+			{
+				Values.push_back(std::string(AnsiString(this->CsvGrid->Cells[c][l]).c_str()));
+			}
+			parser->SetColumn(c, Values, 1);
+		}
+
+		capex::csv::table t = parser->GetTable();
+		parser->WriteCSV(&t, AnsiString(this->SaveDialog->FileName).c_str());
+		delete parser;
+	}
+
 }
 //---------------------------------------------------------------------------
 

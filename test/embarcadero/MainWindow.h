@@ -70,8 +70,8 @@ __published:	// IDE-managed Components
 	TButton *Derivative2_Bt;
 	TCheckBox *DerivativeDeltaX_Check;
 	TTabSheet *INI_Sheet;
-	TOpenDialog *OpenIniDialog;
-	TSaveDialog *SaveIniDialog;
+	TOpenDialog *OpenDialog;
+	TSaveDialog *SaveDialog;
 	TButton *OpenINI_Bt;
 	TStringGrid *IniGrid;
 	TButton *SinusNoise_Bt;
@@ -84,6 +84,10 @@ __published:	// IDE-managed Components
 	TSaveDialog *SaveLogDialog;
 	TButton *WriteLog_Bt;
 	TMemo *WriteLog_Memo;
+	TTabSheet *CSV_Sheet;
+	TButton *CSVOpen_Bt;
+	TButton *CSVSave_Bt;
+	TStringGrid *CsvGrid;
 	void __fastcall Quit_BtClick(TObject *Sender);
 	void __fastcall Frequency_BarChange(TObject *Sender);
 	void __fastcall Threshold_EditChange(TObject *Sender);
@@ -99,6 +103,8 @@ __published:	// IDE-managed Components
 	void __fastcall InitLogFile_BtClick(TObject *Sender);
 	void __fastcall CloseLogFile_BtClick(TObject *Sender);
 	void __fastcall WriteLog_BtClick(TObject *Sender);
+	void __fastcall CSVOpen_BtClick(TObject *Sender);
+	void __fastcall CSVSave_BtClick(TObject *Sender);
 private:	// User declarations
 
 	array<float> x;
