@@ -240,12 +240,17 @@ namespace capex
 			//--------------------------------------------------------------------------
 			//!
 			//! \brief Get the number of values lines in the CSV File
+			//! \brief DataOnly  boolean indicating if only data lines have to be taken into account
 			//! \return   an \e integer representing the values lines number
 			//! 
 			//! This function returns an integer with the values lines number.
+			//! If 'DataOnly' is set to \b true (default value), the function returns
+			//! only the number of data lines (without comments and new lines). If
+			//! 'DataOnly' is set to \b false, the function returns the number
+			//! of all lines (with comments and new line)
 			//!
 			//--------------------------------------------------------------------------
-			int CAPEX_CALL GetLinesNumber();
+			int CAPEX_CALL GetLinesNumber(bool DataOnly = true);
 
 			//--------------------------------------------------------------------------
 			//!
@@ -281,6 +286,15 @@ namespace capex
 			//!
 			//--------------------------------------------------------------------------
 			table CAPEX_CALL GetTable(bool FromFile = false);
+
+			//--------------------------------------------------------------------------
+			//!
+			//! \brief Clear the table of the CSV class
+			//!
+			//! This function clears the table structure used in the csv class
+			//!
+			//--------------------------------------------------------------------------
+			void CAPEX_CALL ClearTable();
 			
 			//--------------------------------------------------------------------------
 			//!
@@ -464,7 +478,7 @@ namespace capex
 			//--------------------------------------------------------------------------
 			//!
 			//! \brief Writes a table into an CSV file
-			//! \param    d    the table to write
+			//! \param    t    the table to write
 			//! \param    File a char pointer to the CSV file name
 			//! \return   a \e boolean indicating if the writing operation is a success
 			//!
@@ -476,6 +490,23 @@ namespace capex
 			//!
 			//--------------------------------------------------------------------------
 			bool CAPEX_CALL WriteCSV(const table *t, const char *File = NULL);
+
+			//--------------------------------------------------------------------------
+			//!
+			//! \brief Writes a table into an CSV file
+			//! \param    t    the table to write
+			//! \param    mode the open mode to use
+			//! \param    File a char pointer to the CSV file name
+			//! \return   a \e boolean indicating if the writing operation is a success
+			//!
+			//! This function needs a pointer to the specified table, an open mode
+			//! and a pointer to the file name. If the file name pointer is NULL,
+			//! the table is written into the previously opened file.
+			//!
+			//! This function returns a boolean to indicate the success of the writing operation
+			//!
+			//--------------------------------------------------------------------------
+			bool CAPEX_CALL WriteCSV(const table *t, std::ios_base::openmode mode, const char *File = NULL);
 
 			bool CAPEX_CALL SetValue(unsigned int line, unsigned int position, std::string value);
 

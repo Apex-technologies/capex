@@ -243,7 +243,34 @@ namespace capex
 			//! If the specified section cannot be found, this function returns an empty section.
 			//!
 			//--------------------------------------------------------------------------
-			section CAPEX_CALL GetSection(const char *SectionName);
+			section CAPEX_CALL GetSection(const char *section);
+
+			//--------------------------------------------------------------------------
+			//!
+			//! \brief Get the keys name of the specified section
+			//! \return   a \e vector of \e strings with the keys name
+			//!
+			//! This function returns a vector of strings with the keys names
+			//! of the specified section. If no section is found, this function
+			//! returns an empty vector.
+			//!
+			//--------------------------------------------------------------------------
+			std::vector<std::string> CAPEX_CALL GetKeysName(const char *section);
+
+			//--------------------------------------------------------------------------
+			//!
+			//! \brief Check if  the specified key exists in the specified section
+			//! \param    section  a char pointer for the section name where to look for the key
+			//! \param    key      a char pointer for the key name to look for
+			//! \return   a \e boolean
+			//!
+			//! This function checks the existance of key in the specified section.
+			//!
+			//! This function returns a boolean, \b true if the key exists, \b false
+			//! if doesn't.
+			//!
+			//--------------------------------------------------------------------------
+			bool CAPEX_CALL KeyExists(const char* section, const char *key);
 			
 			//--------------------------------------------------------------------------
 			//!

@@ -202,25 +202,25 @@ namespace capex
 	//-------------------------------------------------------------------------
 	
 	
-	section CAPEX_CALL ini::GetSection(const char *SectionName)
+	section CAPEX_CALL ini::GetSection(const char *section)
 	{
 		std::vector<std::string> p = this->GetLines();
 		int KNumber = -1;
 
-		section s;
+		struct section s;
 		s.key = "";
 		s.parameters.clear();
 
 		for(int i = 0; i < this->GetSectionNumber(); i++)
 		{
-			if(std::strcmp(std::string(SectionName).c_str(), this->Keys->at(i).c_str()) == 0)
+			if(std::strcmp(std::string(section).c_str(), this->Keys->at(i).c_str()) == 0)
 				KNumber = i;
 		}
 
 		if(KNumber < 0)
 			return s;
 
-		s.key = std::string(SectionName);
+		s.key = std::string(section);
 		s.line = this->KeysLines->at(KNumber);
 
 		unsigned int EndLine;
@@ -267,7 +267,42 @@ namespace capex
 		return s;
 	}
 	//-------------------------------------------------------------------------
-	
+
+
+	std::vector<std::string> CAPEX_CALL ini::GetKeysName(const char *section)
+	{
+		struct section s = this->GetSection(section);
+		std::vector<std::string> Keys;
+		Keys.clear();
+
+		for(unsigned int i = 0; i < s.parameters.size(); i++)
+		{
+			Keys.push_back(s.parameters[i].name);
+		}
+
+		return Keys;
+	}
+	//-------------------------------------------------------------------------
+
+
+	bool CAPEX_CALL ini::KeyExists(const char* section, const char *key)
+	{
+		struct section s = this->GetSection(section);
+		bool Exists = false;
+
+		for(unsigned int i = 0; i < s.parameters.size(); i++)
+		{
+			if(std::strcmp(s.parameters[i].name.c_str(), std::string(key).c_str()) == 0)
+			{
+				Exists = true;
+				break;
+			}
+		}
+
+		return Exists;
+	}
+	//-------------------------------------------------------------------------
+
 	
 	dictionary CAPEX_CALL ini::GetDictionary()
 	{

@@ -31,7 +31,7 @@
 namespace capex
 {
 	//! \brief Default log file path
-	const char *DefaultLogFile = CAPEX_LOGFILE;
+	static const char *DefaultLogFile = CAPEX_LOGFILE;
 
 	//! \brief Lower value for the denominator of a quotient
 	const double lowerLimit = 1e-30;

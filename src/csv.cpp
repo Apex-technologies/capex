@@ -165,14 +165,22 @@ namespace capex
 	//-------------------------------------------------------------------------
 	
 	
-	int CAPEX_CALL csv::GetLinesNumber()
+	int CAPEX_CALL csv::GetLinesNumber(bool DataOnly)
 	{
-		this->GetLinesType();
 		int lines = 0;
-		for(int l = 0; l < this->LinesType->size(); l++)
+
+		if(DataOnly)
 		{
-			if(this->LinesType->at(l) > 0)
-				lines++;
+			this->GetLinesType();
+			for(int l = 0; l < this->tab->lines.size(); l++)
+			{
+				if(this->tab->lines[l].type == csv::ltValue)
+					lines++;
+			}
+		}
+		else
+		{
+			lines = tools::StrOccurences(this->TextFile, '\n');
 		}
 
 		return lines;
@@ -290,6 +298,14 @@ namespace capex
 		}
 
 		return *(this->tab);
+	}
+	//-------------------------------------------------------------------------
+
+
+	void CAPEX_CALL csv::ClearTable()
+	{
+		this->tab->lines.clear();
+		this->tab->comments.clear();
 	}
 	//-------------------------------------------------------------------------
 	
@@ -997,6 +1013,35 @@ namespace capex
 		{
 			std::ofstream f;
 			f.open(SaveFile.c_str(), std::ios::out);
+			std::string s = this->TableToString(t);
+			f.write(s.c_str(), s.size());
+			f.close();
+			return true;
+		}
+		catch(...)
+		{
+			return false;
+		}
+	}
+	//-------------------------------------------------------------------------
+
+
+	bool CAPEX_CALL csv::WriteCSV(const table *t, std::ios_base::openmode mode, const char *File)
+	{
+		std::string SaveFile;
+
+		if(File == NULL)
+			SaveFile = this->FileName;
+		else
+			SaveFile = std::string(File);
+
+		if(t == NULL)
+			return false;
+
+		try
+		{
+			std::ofstream f;
+			f.open(SaveFile.c_str(), mode);
 			std::string s = this->TableToString(t);
 			f.write(s.c_str(), s.size());
 			f.close();

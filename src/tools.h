@@ -43,7 +43,7 @@ namespace capex
 
 
 		//! \brief The file path of the Log file
-		std::string LogFile;
+		static std::string LogFile;
 		
 
 		// ---------------------------------------------------------------------
