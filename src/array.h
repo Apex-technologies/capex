@@ -1452,7 +1452,7 @@ namespace capex
 			Exception_OperationArray(const char *Msg, int Line)
 			{
 				std::ostringstream oss;
-				oss << "Error line " << Line << " : "
+				oss << "Error in capex::array.cpp, line " << Line << " : "
 					<< Msg;
 				this->msg = oss.str();
 			}

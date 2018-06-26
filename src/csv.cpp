@@ -227,51 +227,14 @@ namespace capex
 				l.type = csv::ltValue;
 				int Position = 0;
 
-				unsigned int CPos = SubString.length();
-				for(int c = 0; c < this->separator.length(); c++)
-				{
-					unsigned int pos = SubString.find_first_of((char)(this->separator[c]));
-					if((pos != std::string::npos) && (pos < CPos))
-					{
-						CPos = pos;
-					}
-				}
-
-				while(CPos <= SubString.length())
+				std::vector<std::string> values = capex::tools::StrSplit(strLine, this->separator.c_str(), true);
+				for(int i = 0; i < values.size(); i++)
 				{
 					csv::value v;
-					if(CPos <= SubString.length())
-					{
-						v.value = SubString.substr(0, CPos);
-						v.line = Line;
-						v.position = Position++;
-						l.values.push_back(v);
-					}
-					else
-					{
-						v.value = std::string("");
-						v.line = Line;
-						v.position = Position++;
-						l.values.push_back(v);
-					}
-					if(CPos < SubString.length())
-					{
-						SubString = SubString.substr(CPos + 1, SubString.length() - CPos);
-
-						CPos = SubString.length();
-						for(int c = 0; c < this->separator.length(); c++)
-						{
-							unsigned int pos = SubString.find_first_of((char)(this->separator[c]));
-							if((pos != std::string::npos) && (pos < CPos))
-							{
-								CPos = pos;
-							}
-						}
-					}
-					else
-					{
-						CPos = SubString.length() + 1;
-					}
+					v.value = values[i];
+					v.line = Line;
+					v.position = Position++;
+					l.values.push_back(v);
 				}
 			}
 		}
@@ -436,9 +399,7 @@ namespace capex
 					{
 						if(this->tab->lines[LIndex].values[c].position == position)
 						{
-							std::string val = this->tab->lines[LIndex].values[c].value;
 							this->tab->lines[LIndex].values[c].value = value;
-							val = this->tab->lines[LIndex].values[c].value;
 							success = true;
 							break;
 						}

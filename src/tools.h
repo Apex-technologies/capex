@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <vector>
 
 #include "./constants.h"
 
@@ -146,6 +147,44 @@ namespace capex
 		
 		
 		// ---------------------------------------------------------------------
+		//! \brief Converts an array of wavelengths into frequencies or invert
+		//! \param Array  The array to convert
+		//! \return an \e array representing the converted value
+		//!
+		//! This function converts vacuum wavelengths into frequencies or a frequencies
+		//! into vacuum wavelengths.
+		//!
+		//! Here is a table representing the conversion units :
+		//!     - m    <==>   Hz
+		//!     - mm   <==>   kHz
+		//!     - um   <==>   MHz
+		//!     - nm   <==>   GHz
+		//!     - pm   <==>   THz
+		//!
+		// ---------------------------------------------------------------------
+		array<double> CAPEX_CALL ConvertWavelengthOrFrequency(array<double> Array);
+		
+		
+		// ---------------------------------------------------------------------
+		//! \brief Converts an array of wavelengths into frequencies or invert
+		//! \param Array  The array to convert
+		//! \return an \e array representing the converted value
+		//!
+		//! This function converts vacuum wavelengths into frequencies or a frequencies
+		//! into vacuum wavelengths.
+		//!
+		//! Here is a table representing the conversion units :
+		//!     - m    <==>   Hz
+		//!     - mm   <==>   kHz
+		//!     - um   <==>   MHz
+		//!     - nm   <==>   GHz
+		//!     - pm   <==>   THz
+		//!
+		// ---------------------------------------------------------------------
+		array<float> CAPEX_CALL ConvertWavelengthOrFrequency(array<float> Array);
+		
+		
+		// ---------------------------------------------------------------------
 		//! \brief Converts a delta wavelength into delta frequency or invert
 		//! \param Delta  Delta value to convert
 		//! \param Center Center wavelength or frequency of the delta value
@@ -181,6 +220,36 @@ namespace capex
 		
 		
 		// ---------------------------------------------------------------------
+		//! \brief Converts a linear values array into a Bel values array
+		//! \param Array         The array to convert
+		//! \param Coefficient   Coefficient of the conversion (10 by default)
+		//! \return an \e array with the converted values
+		//!
+		//! This function converts a linear values array into a Bel values array.
+		//! Coefficient is the coefficient of the conversion. To get power 
+		//! decibel, coefficient has to be 10.0 (default value). To get voltage
+		//! decibel, coefficient has to be 20.0.
+		//!
+		// ---------------------------------------------------------------------
+		array<double> CAPEX_CALL ConvertLinearToBel(array<double> Array, double Coefficient = 10.0);
+		
+		
+		// ---------------------------------------------------------------------
+		//! \brief Converts a linear values array into a Bel values array
+		//! \param Array         The array to convert
+		//! \param Coefficient   Coefficient of the conversion (10 by default)
+		//! \return an \e array with the converted values
+		//!
+		//! This function converts a linear values array into a Bel values array.
+		//! Coefficient is the coefficient of the conversion. To get power 
+		//! decibel, coefficient has to be 10.0 (default value). To get voltage
+		//! decibel, coefficient has to be 20.0.
+		//!
+		// ---------------------------------------------------------------------
+		array<float> CAPEX_CALL ConvertLinearToBel(array<float> Array, double Coefficient = 10.0);
+		
+		
+		// ---------------------------------------------------------------------
 		//! \brief Converts a Bel value into a linear value
 		//! \param Value         Value to convert
 		//! \param Coefficient   Coefficient of the conversion (10 by default)
@@ -193,6 +262,38 @@ namespace capex
 		//!
 		// ---------------------------------------------------------------------
 		double CAPEX_CALL ConvertBelToLinear(double Value, double Coefficient = 10.0);
+		
+		
+		// ---------------------------------------------------------------------
+		//! \brief Converts a Bel values array into a linear values array
+		//! \param Array         The array to convert
+		//! \param Coefficient   Coefficient of the conversion (10 by default)
+		//! \return aa \e array with the converted values
+		//!
+		//! This function converts a Bel values array into a linear values array.
+		//! Coefficient is the coefficient of the conversion. To get a linear
+		//! value from a decibel power, coefficient has to be 10.0 (default value).
+		//! To get a linear value from a decibel voltage, coefficient has to be
+		//! 20.0.
+		//!
+		// ---------------------------------------------------------------------
+		array<double> CAPEX_CALL ConvertBelToLinear(array<double> Array, double Coefficient = 10.0);
+		
+		
+		// ---------------------------------------------------------------------
+		//! \brief Converts a Bel values array into a linear values array
+		//! \param Array         The array to convert
+		//! \param Coefficient   Coefficient of the conversion (10 by default)
+		//! \return aa \e array with the converted values
+		//!
+		//! This function converts a Bel values array into a linear values array.
+		//! Coefficient is the coefficient of the conversion. To get a linear
+		//! value from a decibel power, coefficient has to be 10.0 (default value).
+		//! To get a linear value from a decibel voltage, coefficient has to be
+		//! 20.0.
+		//!
+		// ---------------------------------------------------------------------
+		array<float> CAPEX_CALL ConvertBelToLinear(array<float> Array, double Coefficient = 10.0);
 		
 		
 		//-------------------------------------------------------------------------
@@ -268,6 +369,24 @@ namespace capex
 		//!
 		//--------------------------------------------------------------------------
 		int CAPEX_CALL StrOccurences(std::string strinit, const char pattern);
+
+
+		//-------------------------------------------------------------------------
+		//!
+		//! \brief    Split a string using separator as the delimiter string
+		//! \param    strinit string to split
+		//! \param    separator character(s) to use as delimiter
+		//! \param    any  boolean indicating if any of the seprators have to be used
+		//! \return   a \e vector of \e strings
+		//!
+		//! This function splits a string into sub-strings using the separator
+		//! as delimiter. If 'any' is set to \b false, the entire string will be used
+		//! as delimiter. If 'any' is set to \b true (default), any character
+		//! in 'separator' will be used as delimiter. If no separator is send,
+		//! the delimitor character is one of ' ', '\t' or '\n'
+		//!
+		//--------------------------------------------------------------------------
+		std::vector<std::string> StrSplit(std::string strinit, const char *separator = NULL, bool any = true);
 
 
 		//--------------------------------------------------------------------------

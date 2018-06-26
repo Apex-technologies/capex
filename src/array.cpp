@@ -151,7 +151,7 @@ namespace capex
 				default:
 				{
 					#if CAPEX_DEBUG
-						cerr << tools::GetTime() << "The random shape is not valid at line " << __LINE__ << endl;
+						cerr << tools::GetTime() << "capex::array - The random shape is not valid at line " << __LINE__ << endl;
 					#endif
 					// The random shape is not a valid one
 					throw(e);
@@ -198,7 +198,7 @@ namespace capex
 			default:
 			{
 				#if CAPEX_DEBUG
-					cerr << tools::GetTime() << "The random shape is not valid at line " << __LINE__ << endl;
+					cerr << tools::GetTime() << "capex::array - The random shape is not valid at line " << __LINE__ << endl;
 				#endif
 				// The random shape is not a valid one
 				throw(e);
@@ -228,8 +228,8 @@ namespace capex
 			if(buffer == NULL)
 			{
 				#if CAPEX_DEBUG
-					cerr << tools::GetTime() << "Error in array::resize at line " << __LINE__ << endl;
-					cerr << tools::GetTime() << "Cannot initialize a table with " << new_size << " elements" << endl;
+					cerr << tools::GetTime() << "capex::array - Error in array::resize at line " << __LINE__ << endl;
+					cerr << tools::GetTime() << "capex::array - Cannot initialize a table with " << new_size << " elements" << endl;
 				#endif
 				return false;
 			}
@@ -682,7 +682,7 @@ namespace capex
 		if(this->size() != right.size())
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - The arrays must have the same size for this operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -732,7 +732,7 @@ namespace capex
 		if(this->size() != right.size())
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - The arrays must have the same size for this operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -757,8 +757,8 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cerr << tools::GetTime() << "Return of an empty array" << endl;
+				cerr << tools::GetTime() << "capex::array - The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << tools::GetTime() << "capex::array - Return of an empty array" << endl;
 			#endif
 			return Sum;
 		}
@@ -780,7 +780,7 @@ namespace capex
 		if(this->size() != right.size())
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - The arrays must have the same size for this operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -832,7 +832,7 @@ namespace capex
 		if(this->size() != right.size())
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - The arrays must have the same size for this operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -857,8 +857,8 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cerr << tools::GetTime() << "Return of an empty array" << endl;
+				cerr << tools::GetTime() << "capex::array - The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << tools::GetTime() << "capex::array - Return of an empty array" << endl;
 			#endif
 			return Product;
 		}
@@ -880,7 +880,7 @@ namespace capex
 		if(this->size() != right.size())
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - The arrays must have the same size for this operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -937,7 +937,7 @@ namespace capex
 		if(this->size() != right.size())
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - The arrays must have the same size for this operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -966,8 +966,8 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cerr << tools::GetTime() << "Return of an empty array" << endl;
+				cerr << tools::GetTime() << "capex::array - The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << tools::GetTime() << "capex::array - Return of an empty array" << endl;
 			#endif
 			return Diff;
 		}
@@ -989,7 +989,7 @@ namespace capex
 		if(this->size() != right.size())
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - The arrays must have the same size for this operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -1041,7 +1041,7 @@ namespace capex
 		if(this->size() != right.size())
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - The arrays must have the same size for this operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -1066,8 +1066,8 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
-				cerr << tools::GetTime() << "Return of an empty array" << endl;
+				cerr << tools::GetTime() << "capex::array - The type of 'left' at line " << __LINE__ << " is not a good one" << endl;
+				cerr << tools::GetTime() << "capex::array - Return of an empty array" << endl;
 			#endif
 			return Quotient;
 		}
@@ -1099,7 +1099,7 @@ namespace capex
 			catch(...)
 			{
 				#if CAPEX_DEBUG
-					cerr << tools::GetTime() << "Cannot perform modulo operation at line " << __LINE__ << endl;
+					cerr << tools::GetTime() << "capex::array - Cannot perform modulo operation at line " << __LINE__ << endl;
 				#endif
 				// The arrays have not the same size
 				throw(e);
@@ -1125,7 +1125,7 @@ namespace capex
 		catch(...)
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "Cannot perform modulo operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - Cannot perform modulo operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -1142,7 +1142,7 @@ namespace capex
 		if(this->size() != right.size())
 		{
 			#if CAPEX_DEBUG
-				cerr << tools::GetTime() << "The arrays must have the same size for this operation at line " << __LINE__ << endl;
+				cerr << tools::GetTime() << "capex::array - The arrays must have the same size for this operation at line " << __LINE__ << endl;
 			#endif
 			// The arrays have not the same size
 			throw(e);
@@ -1547,7 +1547,7 @@ namespace capex
 				{
 					ValidShape = false;
 					#if CAPEX_DEBUG
-						cerr << tools::GetTime() << "The smooth shape is not valid at line " << __LINE__ << endl;
+						cerr << tools::GetTime() << "capex::array - The smooth shape is not valid at line " << __LINE__ << endl;
 					#endif
 					// The smooth shape is not a valid one
 					throw(e);

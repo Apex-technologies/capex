@@ -101,8 +101,8 @@ namespace capex
 			if(Value <= lowerLimit)
 			{
 				#if CAPEX_DEBUG
-					cerr << GetTime() << "Error in ConvertWavelengthOrFrequency at line " << __LINE__ << endl;
-					cerr << GetTime() << "Value forced to 0.0" << endl;
+					cerr << GetTime() << "capex::tools - Error in ConvertWavelengthOrFrequency at line " << __LINE__ << endl;
+					cerr << GetTime() << "capex::tools - Value forced to 0.0" << endl;
 				#endif
 				return 0.0;
 			}
@@ -110,7 +110,39 @@ namespace capex
 			return VacuumCelerity / Value;
 		}
 		// -------------------------------------------------------------------
-
+		
+		
+		// -------------------------------------------------------------------
+		array<double> CAPEX_CALL ConvertWavelengthOrFrequency(array<double> Array)
+		{
+			array<double> ConvertedArray;
+			ConvertedArray.resize(Array.size());
+			
+			for(unsigned int i = 0; i < Array.size(); i++)
+			{
+				ConvertedArray[i] = ConvertWavelengthOrFrequency(Array[i]);
+			}
+			
+			return ConvertedArray;
+		}
+		// -------------------------------------------------------------------
+		
+		
+		// -------------------------------------------------------------------
+		array<float> CAPEX_CALL ConvertWavelengthOrFrequency(array<float> Array)
+		{
+			array<float> ConvertedArray;
+			ConvertedArray.resize(Array.size());
+			
+			for(unsigned int i = 0; i < Array.size(); i++)
+			{
+				ConvertedArray[i] = ConvertWavelengthOrFrequency(Array[i]);
+			}
+			
+			return ConvertedArray;
+		}
+		// -------------------------------------------------------------------
+		
 		
 		// -------------------------------------------------------------------
 		double CAPEX_CALL ConvertDeltaWavelengthOrFrequency(double Delta, double Center)
@@ -118,8 +150,8 @@ namespace capex
 			if(Center <= lowerLimit)
 			{
 				#if CAPEX_DEBUG
-					cerr << GetTime() << "Error in ConvertDeltaWavelengthOrFrequency at line " << __LINE__ << endl;
-					cerr << GetTime() << "Value forced to 0.0" << endl;
+					cerr << GetTime() << "capex::tools - Error in ConvertDeltaWavelengthOrFrequency at line " << __LINE__ << endl;
+					cerr << GetTime() << "capex::tools - Value forced to 0.0" << endl;
 				#endif
 				return 0.0;
 			}
@@ -140,12 +172,44 @@ namespace capex
 			catch(...)
 			{
 				#if CAPEX_DEBUG
-					cerr << GetTime() << "Error in ConvertLinearToBel at line " << __LINE__ << endl;
-					cerr << GetTime() << "Value forced to -999" << endl;
+					cerr << GetTime() << "capex::tools - Error in ConvertLinearToBel at line " << __LINE__ << endl;
+					cerr << GetTime() << "capex::tools - Value forced to -capex::inf" << endl;
 				#endif
-				db = -999.0;
+				db = -capex::inf;
 			}
 			return db;
+		}
+		// -------------------------------------------------------------------
+		
+		
+		// -------------------------------------------------------------------
+		array<double> CAPEX_CALL ConvertLinearToBel(array<double> Array, double Coefficient)
+		{
+			array<double> ConvertedArray;
+			ConvertedArray.resize(Array.size());
+			
+			for(unsigned int i = 0; i < Array.size(); i++)
+			{
+				ConvertedArray[i] = ConvertLinearToBel(Array[i], Coefficient);
+			}
+			
+			return ConvertedArray;
+		}
+		// -------------------------------------------------------------------
+		
+		
+		// -------------------------------------------------------------------
+		array<float> CAPEX_CALL ConvertLinearToBel(array<float> Array, double Coefficient)
+		{
+			array<float> ConvertedArray;
+			ConvertedArray.resize(Array.size());
+			
+			for(unsigned int i = 0; i < Array.size(); i++)
+			{
+				ConvertedArray[i] = ConvertLinearToBel(Array[i], Coefficient);
+			}
+			
+			return ConvertedArray;
 		}
 		// -------------------------------------------------------------------
 		
@@ -161,12 +225,44 @@ namespace capex
 			catch(...)
 			{
 				#if CAPEX_DEBUG
-					cerr << GetTime() << "Error in ConvertBelToLinear at line " << __LINE__ << endl;
-					cerr << GetTime() << "Value forced to 0" << endl;
+					cerr << GetTime() << "capex::tools - Error in ConvertBelToLinear at line " << __LINE__ << endl;
+					cerr << GetTime() << "capex::tools - Value forced to 0" << endl;
 				#endif
 				lin = 0.0;
 			}
 			return lin;
+		}
+		// -------------------------------------------------------------------
+		
+		
+		// -------------------------------------------------------------------
+		array<double> CAPEX_CALL ConvertBelToLinear(array<double> Array, double Coefficient)
+		{
+			array<double> ConvertedArray;
+			ConvertedArray.resize(Array.size());
+			
+			for(unsigned int i = 0; i < Array.size(); i++)
+			{
+				ConvertedArray[i] = ConvertBelToLinear(Array[i], Coefficient);
+			}
+			
+			return ConvertedArray;
+		}
+		// -------------------------------------------------------------------
+		
+		
+		// -------------------------------------------------------------------
+		array<float> CAPEX_CALL ConvertBelToLinear(array<float> Array, double Coefficient)
+		{
+			array<float> ConvertedArray;
+			ConvertedArray.resize(Array.size());
+			
+			for(unsigned int i = 0; i < Array.size(); i++)
+			{
+				ConvertedArray[i] = ConvertBelToLinear(Array[i], Coefficient);
+			}
+			
+			return ConvertedArray;
 		}
 		// -------------------------------------------------------------------
 		
@@ -194,8 +290,8 @@ namespace capex
 			else
 			{
 				#if CAPEX_DEBUG
-					cerr << GetTime() << "Error in StrTrim at line " << __LINE__ << endl;
-					cerr << GetTime() << "String has not been trimmed" << endl;
+					cerr << GetTime() << "capex::tools - Error in StrTrim at line " << __LINE__ << endl;
+					cerr << GetTime() << "capex::tools - String has not been trimmed" << endl;
 				#endif
 			}
 			return strinit;
@@ -277,6 +373,104 @@ namespace capex
 			}
 
 			return Count;
+		}
+		//--------------------------------------------------------------------
+
+
+		//--------------------------------------------------------------------
+		std::vector<std::string> StrSplit(std::string strinit, const char *separator, bool any)
+		{
+			std::vector<std::string> results;
+			results.clear();
+
+			std::string sep;
+			if(separator == NULL)
+				sep = std::string(" \t\n");
+			else
+				sep = std::string(separator);
+
+			std::string str = strinit;
+
+			if(any)
+			{
+				unsigned int CPos = str.length();
+				for(int c = 0; c < sep.length(); c++)
+				{
+					unsigned int pos = str.find_first_of((char)(sep[c]));
+					if((pos != std::string::npos) && (pos < CPos))
+					{
+						CPos = pos;
+					}
+				}
+
+				while(CPos <= str.length())
+				{
+					if(CPos <= str.length())
+					{
+						results.push_back(str.substr(0, CPos));
+					}
+					else
+					{
+						results.push_back("");
+					}
+					if(CPos < str.length())
+					{
+						str = str.substr(CPos + 1, str.length() - CPos);
+
+						CPos = str.length();
+						for(int c = 0; c < sep.length(); c++)
+						{
+							unsigned int pos = str.find_first_of((char)(sep[c]));
+							if((pos != std::string::npos) && (pos < CPos))
+							{
+								CPos = pos;
+							}
+						}
+					}
+					else
+					{
+						CPos = str.length() + 1;
+					}
+				}
+			}
+			else
+			{
+				unsigned int CPos = str.length();
+				unsigned int pos = str.find(sep);
+				if((pos != std::string::npos) && (pos < CPos))
+				{
+					CPos = pos;
+				}
+
+				while(CPos <= str.length())
+				{
+					if(CPos <= str.length())
+					{
+						results.push_back(str.substr(0, CPos));
+					}
+					else
+					{
+						results.push_back("");
+					}
+					if(CPos < str.length())
+					{
+						str = str.substr(CPos + sep.length(), str.length() - CPos);
+
+						CPos = str.length();
+						unsigned int pos = str.find(sep);
+						if((pos != std::string::npos) && (pos < CPos))
+						{
+							CPos = pos;
+						}
+					}
+					else
+					{
+						CPos = str.length() + 1;
+					}
+				}
+			}
+
+			return results;
 		}
 		//--------------------------------------------------------------------
 
